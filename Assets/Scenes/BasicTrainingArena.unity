@@ -391,9 +391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806a4723ec018834f9d35d1541b77382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeedOnGround: -4.379097e+31
-  slowDownFactor: 9.43e-43
-  movementSharpnessOnGround: -4.37153e+31
+  maxSpeedOnGround: 20
+  slowDownFactor: 0.3
+  movementSharpnessOnGround: 15
 --- !u!114 &187942365
 MonoBehaviour:
   m_ObjectHideFlags: 0
