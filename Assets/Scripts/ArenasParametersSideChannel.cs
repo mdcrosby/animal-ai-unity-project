@@ -1,4 +1,4 @@
-// using MLAgents.SideChannels;
+using Unity.MLAgents.SideChannels;
 using System;
 using ArenasParameters;
 
@@ -10,7 +10,7 @@ public class ArenasParametersSideChannel : SideChannel
         ChannelId = new Guid("9c36c837-cad5-498a-b675-bc19c9370072");
     }
 
-    public override void OnMessageReceived(IncomingMessage msg)
+    protected override void OnMessageReceived(IncomingMessage msg)
     {
         // when a new message is received we trigger an event to signal the environment
         // configurations to check if they need to update

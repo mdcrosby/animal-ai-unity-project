@@ -2,9 +2,9 @@
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using MLAgents;
+using Unity.MLAgents;
 using PrefabInterface;
-using MLAgents.Sensors;
+using Unity.MLAgents.Sensors;
 
 public class TrainingAgent : Agent, IPrefab
 {

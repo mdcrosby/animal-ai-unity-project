@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-//using MLAgents;
-//using MLAgents.Sensors;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 using ArenasParameters;
 using UnityEngineExtensions;
-//using MLAgents.SideChannels;
+using Unity.MLAgents.SideChannels;
 using Random = UnityEngine.Random;
 
 public class EnvironmentManager : MonoBehaviour

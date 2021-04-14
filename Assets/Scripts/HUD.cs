@@ -12,7 +12,7 @@ public class HUD : MonoBehaviour
 
     void Start()
     {
-        Agent agent = GameObject.FindObjectOfType<Agent>();
+        // Agent agent = GameObject.FindObjectOfType<Agent>();
         // DebugUtility.HandleErrorIfNullFindObject<PlayerCharacterController, PlayerHealthBar>(playerCharacterController, this);
 
         // m_PlayerHealth = agent.GetComponent<Health>();
