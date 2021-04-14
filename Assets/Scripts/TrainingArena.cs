@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ArenaBuilders;
 using UnityEngineExtensions;
-using ArenaParameters;
+using ArenasParameters;
 using Holders;
 
 public class TrainingArena : MonoBehaviour

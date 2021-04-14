@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using MLAgents;
 //using MLAgents.Sensors;
-using ArenaParameters;
+using ArenasParameters;
 using UnityEngineExtensions;
 //using MLAgents.SideChannels;
 using Random = UnityEngine.Random;
