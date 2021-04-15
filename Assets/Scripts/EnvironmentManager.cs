@@ -35,7 +35,7 @@ public class EnvironmentManager : MonoBehaviour
 
         _arenasParametersSideChannel.NewArenasParametersReceived += _arenasConfigurations.UpdateWithConfigurationsReceived;
 
-        Academy.Instance.RegisterSideChannel(_arenasParametersSideChannel);
+        SideChannelsManager.RegisterSideChannel(_arenasParametersSideChannel);
         Academy.Instance.OnEnvironmentReset += EnvironmentReset;
     }
 
@@ -100,9 +100,9 @@ public class EnvironmentManager : MonoBehaviour
     private void ChangeResolution(int cameraWidth, int cameraHeight, bool grayscale)
     {
         CameraSensorComponent cameraSensor = arena.transform.FindChildWithTag("agent").GetComponent<CameraSensorComponent>();
-        cameraSensor.width = cameraWidth;
-        cameraSensor.height = cameraHeight;
-        cameraSensor.grayscale = grayscale;
+        cameraSensor.Width = cameraWidth;
+        cameraSensor.Height = cameraHeight;
+        cameraSensor.Grayscale = grayscale;
     }
 
     public bool GetConfiguration(int arenaID, out ArenaConfiguration arenaConfiguration)
@@ -162,7 +162,7 @@ public class EnvironmentManager : MonoBehaviour
     {
         if (Academy.IsInitialized)
         {
-            Academy.Instance.UnregisterSideChannel(_arenasParametersSideChannel);
+            SideChannelsManager.UnregisterSideChannel(_arenasParametersSideChannel);
         }
     }
 }

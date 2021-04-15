@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 using ArenaBuilders;
 using UnityEngineExtensions;
 using ArenasParameters;
@@ -58,7 +60,7 @@ public class TrainingArena : MonoBehaviour
             _arenaConfiguration.SetGameObject(prefabs.GetList());
             _builder.Spawnables = _arenaConfiguration.spawnables;
             _arenaConfiguration.toUpdate = false;
-            agent.maxStep = _arenaConfiguration.T * _agentDecisionInterval;
+            agent.MaxStep = _arenaConfiguration.T * _agentDecisionInterval;
         }
 
         _builder.Build();

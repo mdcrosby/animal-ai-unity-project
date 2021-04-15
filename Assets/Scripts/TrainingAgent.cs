@@ -54,7 +54,7 @@ public class TrainingAgent : Agent, IPrefab
     {
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
-        _rewardPerStep = maxStep > 0 ? -1f / maxStep : 0;
+        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -105,34 +105,33 @@ public class TrainingAgent : Agent, IPrefab
         _rigidBody.AddForce(directionToGo * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
-    public override float[] Heuristic()
+    public override void Heuristic(float[] actionsOut) 
     {
-        var action = new float[2];
+        actionsOut = new float[2];
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            action[0] = 1f;
+            actionsOut[0] = 1f;
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            action[0] = 2f;
+            actionsOut[0] = 2f;
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            action[1] = 1f;
+            actionsOut[1] = 1f;
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            action[1] = 2f;
+            actionsOut[1] = 2f;
         }
-        return action;
-    }
+   }
 
     public override void OnEpisodeBegin()
     {
         _previousScore = _currentScore;
         numberOfGoalsCollected = 0;
         _arena.ResetArena();
-        _rewardPerStep = maxStep > 0 ? -1f / maxStep : 0;
+        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
         _isGrounded = false;
     }
 

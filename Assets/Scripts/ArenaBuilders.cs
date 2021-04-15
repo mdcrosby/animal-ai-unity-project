@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 using UnityEngineExtensions;
 using Holders;
 using PrefabInterface;
-using ArenaParameters;
+using ArenasParameters;
 
 namespace ArenaBuilders
 {
