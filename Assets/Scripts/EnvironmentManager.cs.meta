@@ -4,8 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - arenaTraining: {fileID: 1540725604319108, guid: ac9239be0cb708d4cb04fdf1e30103d6, type: 3}
-  - arenaHeuristic: {fileID: -7635989122394311148, guid: d81dbac1c1f88194c826828107cc7aef, type: 3}
+  - arenaTraining: {fileID: 1540725604319108, guid: 5f296754086db584686a71782b4d94c9, type: 3}
+  - arenaHeuristic: {fileID: 1540725604319108, guid: 5acbd4376f8829c47a2348b03b5a48c9, type: 3}
   - playerControls: {instanceID: 0}
   - arena: {instanceID: 0}
   executionOrder: 0
