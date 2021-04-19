@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1540725604319108, guid: 95ed7bd32dcb7ff4f8f177e1db14d0a3, type: 3}
       propertyPath: m_Name
-      value: ArenaTrain
+      value: ArenaHeurisitc
       objectReference: {fileID: 0}
     - target: {fileID: 4143868646325880, guid: 95ed7bd32dcb7ff4f8f177e1db14d0a3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55,6 +55,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23325212082108328, guid: 95ed7bd32dcb7ff4f8f177e1db14d0a3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 87294f02d9437b8479f6d772f8b00a8d, type: 2}
     - target: {fileID: 9181951476684829857, guid: 95ed7bd32dcb7ff4f8f177e1db14d0a3,
         type: 3}
       propertyPath: m_BehaviorType
