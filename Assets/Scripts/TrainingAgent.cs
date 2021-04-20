@@ -8,10 +8,12 @@ using Unity.MLAgents.Sensors;
 
 public class TrainingAgent : Agent, IPrefab
 {
-    public void RandomSize() { }
     public void SetColor(Vector3 color) { }
     public void SetSize(Vector3 scale) { }
 
+    /// <summary>
+    /// Returns a random position within the range for the object.
+    /// </summary>
     public virtual Vector3 GetPosition(Vector3 position,
                                         Vector3 boundingBox,
                                         float rangeX,
@@ -28,6 +30,9 @@ public class TrainingAgent : Agent, IPrefab
         return new Vector3(xOut, yOut, zOut);
     }
 
+    ///<summary>
+    /// If rotationY set to < 0 change to random rotation.
+    ///</summary>
     public virtual Vector3 GetRotation(float rotationY)
     {
         return new Vector3(0,
@@ -46,7 +51,6 @@ public class TrainingAgent : Agent, IPrefab
     private ContactPoint _lastContactPoint;
     private TrainingArena _arena;
     private float _rewardPerStep;
-    private Color[] _allBlackImage;
     private float _previousScore = 0;
     private float _currentScore = 0;
 
@@ -54,7 +58,7 @@ public class TrainingAgent : Agent, IPrefab
     {
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
-        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
+        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default
     }
 
     public override void CollectObservations(VectorSensor sensor)
