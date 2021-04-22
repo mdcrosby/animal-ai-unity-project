@@ -21,7 +21,7 @@ namespace ArenasParameters
 
     /// <summary>
     /// We define a Spawnable item as a GameObject and a list of parameters to spawn it. These 
-    /// include whether or not colors and sizes should be rancomized, as well as lists of positions
+    /// include whether or not colors and sizes should be randomized, as well as lists of positions
     /// rotations and sizes the user can provide. Any of these parameters left empty by the user
     /// will be randomized at the time we spawn the associated GameObject
     /// </summary>

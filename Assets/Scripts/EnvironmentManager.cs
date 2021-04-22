@@ -54,21 +54,24 @@ public class EnvironmentManager : MonoBehaviour
             if (Application.isEditor)
             {
                 numberOfArenas = 1;
-                playerMode = false;
+                playerMode = true;
                 resolution = 512;
+                grayscale = true;
                 // receiveConfiguration = true;
             }
-
 
             resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
             numberOfArenas = playerMode ? 1 : numberOfArenas;
             arena = playerMode ? arenaHeuristic : arenaTraining;
-
             _arenasConfigurations.numberOfArenas = numberOfArenas;
+
+            Debug.Log("Performing first environment reset:\nPlayerMode = " + playerMode + "\nNo. Arenas: " + numberOfArenas + "\nResolution: " + resolution + "\ngrayscale: " + grayscale);
+
             _arenas = new TrainingArena[numberOfArenas];
             ChangeResolution(resolution, resolution, grayscale);
             InstantiateArenas(numberOfArenas);
             ConfigureIfPlayer(playerMode);
+
             _firstReset = false;
         }
     }

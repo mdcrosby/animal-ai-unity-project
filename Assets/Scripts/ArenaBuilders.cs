@@ -1,9 +1,7 @@
-﻿// using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using UnityEngineExtensions;
 using Holders;
 using PrefabInterface;
@@ -18,8 +16,8 @@ namespace ArenaBuilders
     /// position, the builder will check if any object is already present at this position. If not
     /// the object is then moved to the desired position, if the position is occupied the object is
     /// destroyed and therefore ignored. Positions, rotations and scales can be passed by the 
-    /// user or randomize.false In case they are randomize the builder will attempt to spawn items
-    /// a certain number of times before moving on to the next object if no free space was found.
+    /// user or randomized. In case they are randomized the builder will attempt to spawn items
+    /// a certain number of times before giving up and moving on to the next object if no free space was found.
     /// </summary>
     public class ArenaBuilder
     {

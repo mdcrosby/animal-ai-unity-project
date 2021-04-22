@@ -32,6 +32,7 @@ public class PlayerControls : MonoBehaviour
         _cameras.Add(1, _cameraAgent);
         _cameras.Add(2, _cameraFollow);
         _numActive = 0;
+        Debug.Log("Initializing Player Controls");
     }
 
     void FixedUpdate()
@@ -42,7 +43,7 @@ public class PlayerControls : MonoBehaviour
             _cameras[_numActive].enabled = false;
             _numActive = (_numActive + 1) % 3;
             _cameras[_numActive].enabled = true;
-        }
+        }   
         if (Input.GetKeyDown(KeyCode.R))
         {
             _agent.EndEpisode();
