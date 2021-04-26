@@ -21,7 +21,7 @@ public class PlayerControls : MonoBehaviour
         _cameraAbove = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _cameraAgent = _agent.transform.Find("AgentCamMid").GetComponent<Camera>();
         _cameraFollow = GameObject.FindGameObjectWithTag("camBase").GetComponent<Camera>();
-        _score = GameObject.FindObjectOfType<Text>();
+        _score = GameObject.FindObjectOfType<Text>();//@TODO ewww
 
         _cameraAbove.enabled = true;
         _cameraAgent.enabled = false;

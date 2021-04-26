@@ -22,7 +22,7 @@ public class TrainingArena : MonoBehaviour
 
     private ArenaBuilder _builder;
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
-    private EnvironmentManager _environmentManager;
+    private AAI3EnvironmentManager _environmentManager;
     private List<Fade> _fades = new List<Fade>();
     private bool _lightStatus = true;
     private int _agentDecisionInterval; // To replace with a call to DecisionRequester.DecisionPeriod if possible
@@ -34,9 +34,9 @@ public class TrainingArena : MonoBehaviour
                                     spawnedObjectsHolder,
                                     maxSpawnAttemptsForPrefabs,
                                     maxSpawnAttemptsForAgent);
-        _environmentManager = GameObject.FindObjectOfType<EnvironmentManager>();
-        agent = transform.FindChildWithTag("agent").GetComponent<Agent>();
-        _agentDecisionInterval = transform.FindChildWithTag("agent").GetComponent<DecisionPeriod>().decisionPeriod;
+        _environmentManager = GameObject.FindObjectOfType<AAI3EnvironmentManager>();
+        agent = transform.Find("AAI3Agent").Find("Agent").GetComponent<Agent>();
+        _agentDecisionInterval = transform.Find("AAI3Agent").Find("Agent").GetComponent<DecisionPeriod>().decisionPeriod;
         _fades = blackScreens.GetFades();
     }
 

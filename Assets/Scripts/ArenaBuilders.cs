@@ -61,7 +61,7 @@ namespace ArenaBuilders
                                             .GetComponent<Transform>();
             _rangeX = spawnArenaTransform.localScale.x;
             _rangeZ = spawnArenaTransform.localScale.z;
-            _agent = _arena.FindChildWithTag("agent");
+            _agent = _arena.Find("AAI3Agent").Find("Agent").gameObject;
             _agentCollider = _agent.GetComponent<Collider>();
             _agentRigidbody = _agent.GetComponent<Rigidbody>();
             _spawnedObjectsHolder = spawnedObjectsHolder;

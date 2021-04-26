@@ -178,6 +178,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 718439775431632637, guid: 5f296754086db584686a71782b4d94c9, type: 3}
+      propertyPath: DecisionPeriod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3590298625080637352, guid: 5f296754086db584686a71782b4d94c9, type: 3}
       propertyPath: followObj
       value: 
