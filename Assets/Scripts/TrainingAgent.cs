@@ -6,6 +6,8 @@ using Unity.MLAgents;
 using PrefabInterface;
 using Unity.MLAgents.Sensors;
 
+/// Actions are currently discrete. 2 branches of 0,1,2, 0,1,2
+///
 public class TrainingAgent : Agent, IPrefab
 {
     public void SetColor(Vector3 color) { }
@@ -69,8 +71,6 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        Debug.Log(vectorAction[0]);
-        Debug.Log(vectorAction[1]);
         int actionForward = Mathf.FloorToInt(vectorAction[0]);
         int actionRotate = Mathf.FloorToInt(vectorAction[1]);
         Debug.Log("Action Received " + actionForward + " " + actionRotate);
@@ -115,7 +115,8 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void Heuristic(float[] actionsOut) 
     {
-        actionsOut = new float[2];
+        actionsOut[0] = 0;
+        actionsOut[1] = 0;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             actionsOut[0] = 1f;
@@ -132,8 +133,7 @@ public class TrainingAgent : Agent, IPrefab
         {
             actionsOut[1] = 2f;
         }
-        actionsOut[0] = 1f;
-        Debug.Log("Heuristic actions: " + actionsOut[0]);
+        Debug.Log("Heuristic actions: " + actionsOut[0] + " " + actionsOut[1]);
    }
 
     public override void OnEpisodeBegin()
