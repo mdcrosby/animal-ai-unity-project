@@ -245,7 +245,7 @@ namespace ArenaBuilders
                 k++;
 
             }
-
+            Debug.Log("Tried " + k + " times and " + canSpawn);
             if (canSpawn)
             {
                 return new PositionRotation(positionOut, rotationOut);
