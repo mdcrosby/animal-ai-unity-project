@@ -73,8 +73,7 @@ public class TrainingAgent : Agent, IPrefab
     {
         int actionForward = Mathf.FloorToInt(vectorAction[0]);
         int actionRotate = Mathf.FloorToInt(vectorAction[1]);
-        Debug.Log("Action Received " + actionForward + " " + actionRotate);
-
+        
         moveAgent(actionForward, actionRotate);
 
         AddReward(_rewardPerStep);
@@ -110,7 +109,6 @@ public class TrainingAgent : Agent, IPrefab
 
         transform.Rotate(rotateDirection, Time.fixedDeltaTime * rotationSpeed);
         _rigidBody.AddForce(directionToGo * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-        Debug.Log("Agent Moved" + actionForward + " " + actionRotate);
     }
 
     public override void Heuristic(float[] actionsOut) 
@@ -133,7 +131,6 @@ public class TrainingAgent : Agent, IPrefab
         {
             actionsOut[1] = 2f;
         }
-        Debug.Log("Heuristic actions: " + actionsOut[0] + " " + actionsOut[1]);
    }
 
     public override void OnEpisodeBegin()

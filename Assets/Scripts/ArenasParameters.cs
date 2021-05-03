@@ -129,7 +129,6 @@ namespace ArenasParameters
         public Dictionary<int, ArenaConfiguration> configurations;
         public int numberOfArenas = 1;
         public int seed;
-        public bool toUpdate = true;
 
         public ArenasConfigurations()
         {
@@ -164,7 +163,6 @@ namespace ArenasParameters
                 {
                     Add(i, arenasConfigurationsProto.Arenas[-1]);
                 }
-                toUpdate = true;
             }
             else
             {
@@ -174,13 +172,11 @@ namespace ArenasParameters
                     {
                         // we only update the arenas for which a new configuration was received
                         Add(arenaConfiguration.Key, arenaConfiguration.Value);
-                        toUpdate = true;
                     }
                     else
                     {
                         // need to check what to do if we don t have the key already
                         Add(arenaConfiguration.Key, arenaConfiguration.Value);
-                        toUpdate = true;
                     }
                 }
             }

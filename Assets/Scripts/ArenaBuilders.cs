@@ -88,10 +88,12 @@ namespace ArenaBuilders
         private void InstatiateSpawnables(GameObject spawnedObjectsHolder)
         {
 
+            Debug.Log("Spawnables has " + Spawnables.Capacity + " entries");
             List<Spawnable> agentSpawnablesFromUser = Spawnables.Where(x => x.gameObject != null
                                                                 && x.gameObject.CompareTag("agent"))
                                                                 .ToList();
 
+            Debug.Log("Spawning " + agentSpawnablesFromUser.Capacity + " objects.");
             // If we are provided with an agent's caracteristics we want to instantiate it first and
             // then ignore any item spawning at the same spot. Otherwise we spawn it last to allow 
             // more objects to spawn
@@ -191,6 +193,7 @@ namespace ArenaBuilders
                                      PositionRotation spawnLocRot,
                                      Vector3 color)
         {
+            Debug.Log("Spawning: " + spawnable.name);
             if (spawnLocRot != null)
             {
                 gameObjectInstance.transform.localPosition = spawnLocRot.Position;

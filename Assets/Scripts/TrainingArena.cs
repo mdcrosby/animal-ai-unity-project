@@ -42,6 +42,7 @@ public class TrainingArena : MonoBehaviour
 
     public void ResetArena()
     {
+        Debug.Log("Resetting Arena");
         foreach (GameObject holder in transform.FindChildrenWithTag("spawnedObjects"))
         {
             holder.SetActive(false);
