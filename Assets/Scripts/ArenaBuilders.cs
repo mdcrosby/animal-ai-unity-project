@@ -80,12 +80,12 @@ namespace ArenaBuilders
                                                                      false);
             spawnedObjectsHolder.transform.parent = _arena;
 
-            InstatiateSpawnables(spawnedObjectsHolder);
+            InstantiateSpawnables(spawnedObjectsHolder);
 
             updateGoodGoalsMulti();
         }
 
-        private void InstatiateSpawnables(GameObject spawnedObjectsHolder)
+        private void InstantiateSpawnables(GameObject spawnedObjectsHolder)
         {
 
             Debug.Log("Spawnables has " + Spawnables.Capacity + " entries");
@@ -236,7 +236,12 @@ namespace ArenaBuilders
                                                                     _rangeX,
                                                                     _rangeZ);
                 rotationOut = gameObjectInstanceIPrefab.GetRotation(rotationY);
-
+                Debug.Log("*********************");
+                Debug.Log(positionOut);
+                Debug.Log(_arena.position);
+                Debug.Log(gameObjectBoundingBox);
+                Debug.Log(Quaternion.Euler(rotationOut));
+                Debug.Log("*********************");
                 Collider[] colliders = Physics.OverlapBox(positionOut + _arena.position,
                                                             gameObjectBoundingBox,
                                                             Quaternion.Euler(rotationOut),
