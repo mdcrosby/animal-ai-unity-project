@@ -236,16 +236,12 @@ namespace ArenaBuilders
                                                                     _rangeX,
                                                                     _rangeZ);
                 rotationOut = gameObjectInstanceIPrefab.GetRotation(rotationY);
-                Debug.Log("*********************");
-                Debug.Log(positionOut);
-                Debug.Log(_arena.position);
-                Debug.Log(gameObjectBoundingBox);
-                Debug.Log(Quaternion.Euler(rotationOut));
-                Debug.Log("*********************");
+
                 Collider[] colliders = Physics.OverlapBox(positionOut + _arena.position,
                                                             gameObjectBoundingBox,
                                                             Quaternion.Euler(rotationOut),
                                                             1 << 0);
+                Debug.Log(positionOut + " " + _arena.position + " " + gameObjectBoundingBox + " " + Quaternion.Euler(rotationOut) + colliders.Length);
                 canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"));
                 k++;
 

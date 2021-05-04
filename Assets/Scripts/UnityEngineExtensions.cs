@@ -39,9 +39,11 @@ namespace UnityEngineExtensions
         {
             Bounds bound = new Bounds();
             bool boundFound = false;
+            int k = 0;
 
             foreach (Collider coll in gameObj.GetComponents<Collider>())
             {
+                k += 1;
                 if (boundFound)
                 {
                     bound.Encapsulate(coll.bounds);
@@ -55,6 +57,7 @@ namespace UnityEngineExtensions
 
             foreach (Transform child in gameObj.transform)
             {
+                k += 1;
                 if (child.childCount > 0)
                 {
                     if (boundFound)
@@ -70,6 +73,7 @@ namespace UnityEngineExtensions
 
                 foreach (Collider coll in child.GetComponents<Collider>())
                 {
+                    k += 1;
                     if (boundFound)
                     {
                         bound.Encapsulate(coll.bounds);
@@ -81,6 +85,8 @@ namespace UnityEngineExtensions
                     }
                 }
             }
+            Debug.Log(k + ": Returning bounds " + bound);
+
             return bound;
         }
 

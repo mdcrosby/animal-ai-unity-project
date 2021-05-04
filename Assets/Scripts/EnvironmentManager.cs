@@ -101,7 +101,7 @@ public class EnvironmentManager : MonoBehaviour
 
     private void ChangeResolution(int cameraWidth, int cameraHeight, bool grayscale)
     {
-        CameraSensorComponent cameraSensor = arena.transform.FindChildWithTag("agent").GetComponent<CameraSensorComponent>();
+        CameraSensorComponent cameraSensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<CameraSensorComponent>();
         cameraSensor.Width = cameraWidth;
         cameraSensor.Height = cameraHeight;
         cameraSensor.Grayscale = grayscale;
