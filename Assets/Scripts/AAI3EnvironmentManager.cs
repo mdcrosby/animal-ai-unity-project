@@ -23,6 +23,8 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
+    public GameObject playerControls; 
+    [HideInInspector]
     public bool playerMode;
 
     //@TODO Add back in option to have player controls (over just heuristic controls).
@@ -122,7 +124,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         GameObject.FindGameObjectWithTag("score").SetActive(playerMode);//@TODO not implemented
         if (playerMode)
         {
-            //playerControls.SetActive(true);
+            playerControls.SetActive(true);
         }
     }
 

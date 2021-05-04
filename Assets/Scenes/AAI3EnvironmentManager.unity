@@ -263,6 +263,7 @@ MonoBehaviour:
   maximumResolution: 512
   minimumResolution: 4
   defaultResolution: 84
+  playerControls: {fileID: 1065671190}
   playerMode: 0
 --- !u!1 &1065671190
 GameObject:
