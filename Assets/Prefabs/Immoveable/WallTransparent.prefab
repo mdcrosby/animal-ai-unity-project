@@ -112,7 +112,7 @@ MonoBehaviour:
   rotationRange: {x: 0, y: 360}
   sizeMin: {x: 0.1, y: 0.1, z: 0.1}
   sizeMax: {x: 40, y: 10, z: 40}
-  canRandomizeColor: 1
+  canRandomizeColor: 0
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
 --- !u!54 &3038050628839231131

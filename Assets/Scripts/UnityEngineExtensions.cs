@@ -37,6 +37,7 @@ namespace UnityEngineExtensions
     {
         public static Bounds GetBoundsWithChildren(this GameObject gameObj)
         {
+            Debug.Log(gameObj.name);
             Bounds bound = new Bounds();
             bool boundFound = false;
             int k = 0;
@@ -85,7 +86,7 @@ namespace UnityEngineExtensions
                     }
                 }
             }
-            Debug.Log(k + ": Returning bounds " + bound);
+            Debug.Log("Returning bounds " + bound + " with depth of search " + k);
 
             return bound;
         }
