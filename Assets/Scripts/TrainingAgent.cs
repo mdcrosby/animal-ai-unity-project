@@ -74,13 +74,13 @@ public class TrainingAgent : Agent, IPrefab
         int actionForward = Mathf.FloorToInt(vectorAction[0]);
         int actionRotate = Mathf.FloorToInt(vectorAction[1]);
         
-        moveAgent(actionForward, actionRotate);
+        MoveAgent(actionForward, actionRotate);
 
         AddReward(_rewardPerStep);
         _currentScore = GetCumulativeReward();
     }
 
-    private void moveAgent(int actionForward, int actionRotate)
+    private void MoveAgent(int actionForward, int actionRotate)
     {
         Vector3 directionToGo = Vector3.zero;
         Vector3 rotateDirection = Vector3.zero;

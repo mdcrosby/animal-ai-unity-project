@@ -93,7 +93,6 @@ namespace ArenaBuilders
                                                                 && x.gameObject.CompareTag("agent"))
                                                                 .ToList();
 
-            Debug.Log("Spawning " + agentSpawnablesFromUser.Capacity + " objects.");
             // If we are provided with an agent's caracteristics we want to instantiate it first and
             // then ignore any item spawning at the same spot. Otherwise we spawn it last to allow 
             // more objects to spawn
@@ -241,12 +240,10 @@ namespace ArenaBuilders
                                                             gameObjectBoundingBox,
                                                             Quaternion.Euler(rotationOut),
                                                             1 << 0);
-                Debug.Log(positionOut + " " + _arena.position + " " + gameObjectBoundingBox + " " + Quaternion.Euler(rotationOut) + colliders.Length);
                 canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"));
                 k++;
 
             }
-            Debug.Log("Tried " + k + " times and " + canSpawn);
             if (canSpawn)
             {
                 return new PositionRotation(positionOut, rotationOut);
