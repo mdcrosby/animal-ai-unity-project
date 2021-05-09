@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23420395782277310}
   m_Layer: 0
   m_Name: fence2
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 23276362391981078}
   m_Layer: 0
   m_Name: fence1
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 23579623321301234}
   m_Layer: 0
   m_Name: fence2
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 23684447423270974}
   m_Layer: 0
   m_Name: fence3
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 23677587847743784}
   m_Layer: 0
   m_Name: fence2
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -474,7 +474,7 @@ GameObject:
   - component: {fileID: 23438045651392864}
   m_Layer: 0
   m_Name: fence1
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 23325212082108328}
   m_Layer: 0
   m_Name: fence3
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 23134783474033756}
   m_Layer: 0
   m_Name: fence2
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -906,7 +906,7 @@ GameObject:
   - component: {fileID: 23972190296371908}
   m_Layer: 0
   m_Name: fence3
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -987,7 +987,7 @@ GameObject:
   - component: {fileID: 23687091875322172}
   m_Layer: 0
   m_Name: fence3
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1163,7 +1163,7 @@ GameObject:
   - component: {fileID: 23300317420220610}
   m_Layer: 0
   m_Name: fence1
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1429,7 +1429,7 @@ GameObject:
   - component: {fileID: 23254907865219182}
   m_Layer: 0
   m_Name: fence1
-  m_TagString: Untagged
+  m_TagString: OuterWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

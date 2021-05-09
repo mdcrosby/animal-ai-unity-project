@@ -3,7 +3,30 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - score
+  - arena
+  - agent
+  - InnerWall
+  - badGoal
+  - goodGoal
+  - spawnedObjects
+  - spawnArena
+  - camBase
+  - CylinderTunnel
+  - CylinderTunnelTransparent
+  - Ramp
+  - Wall
+  - WallTransparent
+  - Cardbox
+  - LObject
+  - UObject
+  - BadGoal
+  - GoodGoal
+  - GoodGoalMulti
+  - HotZone
+  - DeathZone
+  - OuterWall
   layers:
   - Default
   - TransparentFX

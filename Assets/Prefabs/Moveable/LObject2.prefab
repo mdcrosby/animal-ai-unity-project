@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 4489711801502536768}
   m_Layer: 0
   m_Name: LObject2
-  m_TagString: Untagged
+  m_TagString: LObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
