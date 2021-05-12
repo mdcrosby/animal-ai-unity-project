@@ -263,6 +263,8 @@ MonoBehaviour:
   maximumResolution: 512
   minimumResolution: 4
   defaultResolution: 84
+  defaultRaysPerSide: 2
+  defaultRayMaxDegrees: 60
   playerControls: {fileID: 1065671190}
   playerMode: 0
 --- !u!1 &1065671190

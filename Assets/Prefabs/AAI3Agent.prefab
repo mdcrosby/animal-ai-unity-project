@@ -168,7 +168,6 @@ GameObject:
   - component: {fileID: 6854058171075518781}
   - component: {fileID: 718439775431632637}
   - component: {fileID: 1120385695744362398}
-  - component: {fileID: 4913435205954591700}
   - component: {fileID: 211971954025645881}
   m_Layer: 0
   m_Name: Agent
@@ -286,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     VectorActionSize: 0300000003000000
     VectorActionDescriptions: []
@@ -362,22 +361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decisionPeriod: 1
---- !u!114 &4913435205954591700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1956805098100504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
 --- !u!114 &211971954025645881
 MonoBehaviour:
   m_ObjectHideFlags: 0

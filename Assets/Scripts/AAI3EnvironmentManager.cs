@@ -23,12 +23,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
-    public GameObject playerControls; 
+    public int defaultRaysPerSide = 2;
+    public int defaultRayMaxDegrees = 60;
+    public GameObject playerControls; //Just for camera and reset controls ...@TODO Don't think this should be a GameObject in the scene and linked there (carried over from v2.0)
     [HideInInspector]
     public bool playerMode;
-
-    //@TODO Add back in option to have player controls (over just heuristic controls).
-    //public GameObject playerControls; //Just for camera and reset controls ...@TODO Don't think this should be a GameObject in the scene and linked there (carried over from v2.0)
 
     private bool _firstReset = true;
     private ArenasConfigurations _arenasConfigurations;
@@ -59,6 +58,9 @@ public class AAI3EnvironmentManager : MonoBehaviour
             int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
             int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
             bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
+            int rays_per_side = environmentParameters.TryGetValue("rays_per_side", out paramValue) ? paramValue : defaultRaysPerSide;
+            int ray_max_degrees = environmentParameters.TryGetValue("ray_max_degrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
+
 
             if (Application.isEditor)//Default settings for tests in Editor
             {
@@ -77,6 +79,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
             _arenas = new TrainingArena[numberOfArenas];//A new training arena loads all objects.
             ChangeResolution(resolution, resolution, grayscale);
+            ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
             InstantiateArenas(numberOfArenas);
             ConfigureIfPlayer(playerMode);
 
@@ -84,6 +87,13 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
             Debug.Log("Performed first environment reset:\nPlayerMode = " + playerMode + "\nNo. Arenas: " + numberOfArenas + "\nResolution: " + resolution + "\ngrayscale: " + grayscale);
         }
+    }
+
+    private void ChangeRayCasts(int no_raycasts, int max_degrees)
+    {
+        RayPerceptionSensorComponent3D raySensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<RayPerceptionSensorComponent3D>();//@TODO update
+        raySensor.RaysPerDirection = no_raycasts;
+        raySensor.MaxRayDegrees = max_degrees;
     }
 
     private void ChangeResolution(int cameraWidth, int cameraHeight, bool grayscale)

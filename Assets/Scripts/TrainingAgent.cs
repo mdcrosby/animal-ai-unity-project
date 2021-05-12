@@ -65,9 +65,10 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        Debug.Log(sensor.GetObservationShape());
         Vector3 localVel = transform.InverseTransformDirection(_rigidBody.velocity);
         sensor.AddObservation(localVel);
+        Vector3 localPos = transform.position;
+        sensor.AddObservation(localPos);
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -113,7 +114,8 @@ public class TrainingAgent : Agent, IPrefab
     }
 
     public override void Heuristic(float[] actionsOut) 
-    {        
+    {
+        Debug.Log(this.GetObservations());
         actionsOut[0] = 0;
         actionsOut[1] = 0;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
