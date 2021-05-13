@@ -49,6 +49,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
     public void EnvironmentReset()
     {
+        Debug.Log("Environment Reset");
         if (_firstReset)//On the first reset, set all the parameters that will last throughout training
         {
             Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
@@ -72,14 +73,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
             resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
             numberOfArenas = playerMode ? 1 : numberOfArenas;
-            //Previous version had different arena for player or agent - arena = playerMode ? arenaHeuristic : arenaTraining;
-            //Now we just assign the only arena prefab to arena in the Unity editor.
-            //@TODO revisit why previous version needed 2 identical(?!) arena prefabs
             _arenasConfigurations.numberOfArenas = numberOfArenas;
 
             _arenas = new TrainingArena[numberOfArenas];//A new training arena loads all objects.
             ChangeResolution(resolution, resolution, grayscale);
-            ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
+            //ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
             InstantiateArenas(numberOfArenas);
             ConfigureIfPlayer(playerMode);
 

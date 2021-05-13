@@ -115,7 +115,6 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void Heuristic(float[] actionsOut) 
     {
-        Debug.Log(this.GetObservations());
         actionsOut[0] = 0;
         actionsOut[1] = 0;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
