@@ -4,11 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/AAI3EnvironmentManager.unity
-    guid: ac52bf55baeb8fe4ba4f488ce3f94fcb
+  m_Scenes: []
   m_configObjects: {}

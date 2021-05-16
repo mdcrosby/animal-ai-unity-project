@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 6854058171075518781}
   - component: {fileID: 718439775431632637}
   - component: {fileID: 1120385695744362398}
+  - component: {fileID: 8679969811055685185}
   m_Layer: 0
   m_Name: Agent
   m_TagString: agent
@@ -291,7 +292,7 @@ MonoBehaviour:
     VectorActionSpaceType: 0
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: AnimalAI
   TeamId: 0
   m_UseChildSensors: 1
@@ -310,7 +311,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 10000
   speed: 30
   rotationSpeed: 100
   rotationAngle: 0.25
@@ -360,6 +361,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decisionPeriod: 3
+--- !u!114 &8679969811055685185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956805098100504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: RayPerceptionSensor
+  m_DetectableTags:
+  - CylinderTunnel
+  - CylinderTunnelTransparent
+  - Ramp
+  - InnerWall
+  - Cardbox
+  - LObject
+  - UObject
+  - badGoal
+  - DeathZone
+  - goodGoal
+  - HotZone
+  m_RaysPerDirection: 3
+  m_MaxRayDegrees: 70
+  m_SphereCastRadius: 0.5
+  m_RayLength: 60
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  m_ObservationStacks: 1
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
 --- !u!1 &672733935705455044
 GameObject:
   m_ObjectHideFlags: 0

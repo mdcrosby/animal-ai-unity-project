@@ -61,13 +61,13 @@ public class AAI3EnvironmentManager : MonoBehaviour
             bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
             int rays_per_side = environmentParameters.TryGetValue("rays_per_side", out paramValue) ? paramValue : defaultRaysPerSide;
             int ray_max_degrees = environmentParameters.TryGetValue("ray_max_degrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
-
+            bool useRayCasts = (environmentParameters.TryGetValue("useRayCasts", out paramValue) ? paramValue : 0) > 0;
 
             if (Application.isEditor)//Default settings for tests in Editor
             {
                 numberOfArenas = 1;
                 playerMode = true;
-                resolution = 512;
+                // resolution = 500;
                 grayscale = false;
             }
 
@@ -76,8 +76,18 @@ public class AAI3EnvironmentManager : MonoBehaviour
             _arenasConfigurations.numberOfArenas = numberOfArenas;
 
             _arenas = new TrainingArena[numberOfArenas];//A new training arena loads all objects.
-            ChangeResolution(resolution, resolution, grayscale);
-            //ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
+            if(useRayCasts){
+                Debug.Log("using Ray Casts");
+                ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
+                CameraSensorComponent cameraSensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<CameraSensorComponent>();//@TODO update
+                cameraSensor.enabled = false;
+            }
+            else{
+                Debug.Log("using camera with res " + resolution);   
+                ChangeResolution(resolution, resolution, grayscale);
+                RayPerceptionSensorComponent3D raySensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<RayPerceptionSensorComponent3D>();//@TODO update
+                raySensor.enabled = false;
+            }
             InstantiateArenas(numberOfArenas);
             ConfigureIfPlayer(playerMode);
 
@@ -97,7 +107,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
     private void ChangeResolution(int cameraWidth, int cameraHeight, bool grayscale)
     {
         CameraSensorComponent cameraSensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<CameraSensorComponent>();//@TODO update
-        //agent.transform.FindChildWithTag("agent").GetComponent<CameraSensorComponent>();//@Todo update
         cameraSensor.Width = cameraWidth;
         cameraSensor.Height = cameraHeight;
         cameraSensor.Grayscale = grayscale;
@@ -149,6 +158,12 @@ public class AAI3EnvironmentManager : MonoBehaviour
         Dictionary<string, int> environmentParameters = new Dictionary<string, int>();
 
         string[] args = System.Environment.GetCommandLineArgs();
+        Debug.Log("Command Line Args: " + args);
+        Debug.Log(Application.isEditor);
+        if(Application.isEditor){
+            environmentParameters.Add("resolution", 36);
+            environmentParameters.Add("useRayCasts", 1);
+        }
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
@@ -170,6 +185,9 @@ public class AAI3EnvironmentManager : MonoBehaviour
                     break;
                 case "--grayscale":
                     environmentParameters.Add("grayscale", 1);
+                    break;
+                case "--useRayCasts":
+                    environmentParameters.Add("useRayCasts", 1);
                     break;
             }
         }
