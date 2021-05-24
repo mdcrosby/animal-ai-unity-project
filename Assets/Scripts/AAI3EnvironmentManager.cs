@@ -4,8 +4,10 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.SideChannels;
+using Unity.MLAgents.Policies;
 using ArenasParameters;
 using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check necessary/good practice.
+
 
 ///
 /// Training scene must start automatically on launch by training process
@@ -55,7 +57,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
             Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
 
             int paramValue;
-            playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
+            playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
             int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
             int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
             bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
@@ -67,7 +69,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
             {
                 numberOfArenas = 1;
                 playerMode = true;
-                // resolution = 500;
+                resolution = 500;
                 grayscale = false;
             }
 
@@ -142,6 +144,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
         if (playerMode)
         {
             playerControls.SetActive(true);
+            //The following does nothing under normal execution - but when loading the built version
+            //with the load_config_and_play script it sets the BehaviorType back to Heursitic 
+            //from default as loading this autotamically attaches Academy for training (since mlagents 0.16.0)
+            //@TODO must be a better way to do this.
+            arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.HeuristicOnly;//@TODO update
         }
     }
 
@@ -159,11 +166,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
         string[] args = System.Environment.GetCommandLineArgs();
         Debug.Log("Command Line Args: " + args);
-        Debug.Log(Application.isEditor);
-        if(Application.isEditor){
-            environmentParameters.Add("resolution", 36);
-            environmentParameters.Add("useRayCasts", 1);
-        }
+        // if(Application.isEditor){//Used for debugging in Editor
+        //     environmentParameters.Add("resolution", 36);
+        //     environmentParameters.Add("useRayCasts", 1);
+        // }
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
@@ -191,6 +197,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
                     break;
             }
         }
+        Debug.Log("Environment Parameters: " + string.Join(Environment.NewLine, environmentParameters));
         return environmentParameters;
     }
 
