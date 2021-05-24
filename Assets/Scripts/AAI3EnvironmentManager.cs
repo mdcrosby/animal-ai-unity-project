@@ -45,7 +45,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
         _arenasParametersSideChannel.NewArenasParametersReceived += _arenasConfigurations.UpdateWithConfigurationsReceived;
 
-        SideChannelsManager.RegisterSideChannel(_arenasParametersSideChannel);
+        SideChannelManager.RegisterSideChannel(_arenasParametersSideChannel);
         Academy.Instance.OnEnvironmentReset += EnvironmentReset;//When ML-Agents Academy resets environment append our method.
     }
 
@@ -216,7 +216,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
     {
         if (Academy.IsInitialized)
         {
-            SideChannelsManager.UnregisterSideChannel(_arenasParametersSideChannel);
+            SideChannelManager.UnregisterSideChannel(_arenasParametersSideChannel);
         }
     }
 

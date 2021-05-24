@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 using PrefabInterface;
 using Unity.MLAgents.Sensors;
 
@@ -71,10 +72,10 @@ public class TrainingAgent : Agent, IPrefab
         sensor.AddObservation(localPos);
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public override void OnActionReceived(ActionBuffers action)
     {
-        int actionForward = Mathf.FloorToInt(vectorAction[0]);
-        int actionRotate = Mathf.FloorToInt(vectorAction[1]);
+        int actionForward = Mathf.FloorToInt(action.DiscreteActions[0]);
+        int actionRotate = Mathf.FloorToInt(action.DiscreteActions[1]);
         
         MoveAgent(actionForward, actionRotate);
 
@@ -113,25 +114,26 @@ public class TrainingAgent : Agent, IPrefab
         _rigidBody.AddForce(directionToGo * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
-    public override void Heuristic(float[] actionsOut) 
+    public override void Heuristic(in ActionBuffers actionsOut) 
     {
-        actionsOut[0] = 0;
-        actionsOut[1] = 0;
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        discreteActionsOut[0] = 0;
+        discreteActionsOut[1] = 0;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            actionsOut[0] = 1f;
+            discreteActionsOut[0] = 1;
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            actionsOut[0] = 2f;
+            discreteActionsOut[0] = 2;
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            actionsOut[1] = 1f;
+            discreteActionsOut[1] = 1;
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            actionsOut[1] = 2f;
+            discreteActionsOut[1] = 2;
         }
    }
 
