@@ -140,6 +140,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
     private void ConfigureIfPlayer(bool playerMode)
     {
+        Debug.Log("Setting playerMode: " + playerMode);
         GameObject.FindGameObjectWithTag("score").SetActive(playerMode);//@TODO not implemented
         if (playerMode)
         {
