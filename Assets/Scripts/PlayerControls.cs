@@ -35,7 +35,7 @@ public class PlayerControls : MonoBehaviour
         Debug.Log("Initializing Player Controls");
     }
 
-    void FixedUpdate()
+    void Update()
     {
         bool cDown = Input.GetKeyDown(KeyCode.C);
         if (cDown)
