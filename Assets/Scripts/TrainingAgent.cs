@@ -57,16 +57,25 @@ public class TrainingAgent : Agent, IPrefab
     private float _previousScore = 0;
     private float _currentScore = 0;
 
-    protected override void OnEnable(){
-        GetComponent<CameraSensorComponent>().enabled = false;//This is where we need to do this before the agent is initialised and automatically gains access to the sensor component.
-        // GetComponent<RayPerceptionSensorComponent3D>().enabled = false;//This is where we need to do this before the agent is initialised and automatically gains access to the sensor component.
-        
+    private void Awake(){
+        Debug.Log("Waking and Destroying Components");
+        //DestroyImmediate(GetComponent<CameraSensorComponent>());//This destroys in the editor but it still returns part of the observations??
+        ;//This destroys in the editor but it still returns part of the observations??
+    }
+
+    protected override void OnEnable(){//Destroying here doesn't remove from observations...
+        Debug.Log("enabling agent");
+
         base.OnEnable();
     }
 
 
     public override void Initialize()
     {
+        //Because mlagents (2.0) finds the attached sensors during OnEnable->LazyInitialize we have to make sure they are already setup correctly.
+        //This is the latest point when it is possible to remove them.
+        // DestroyImmediate(GetComponent<CameraSensorComponent>());//This destroys in the editor but it still returns part of the observations??
+        // DestroyImmediate(GetComponent<RayPerceptionSensorComponent3D>());
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default

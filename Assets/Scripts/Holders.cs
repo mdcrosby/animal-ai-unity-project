@@ -16,13 +16,13 @@ namespace Holders
         }
     }
 
-    [System.Serializable]
-    public class ListOfBlackScreens
-    {
-        public List<GameObject> allBlackScreens;
-        public List<Fade> GetFades()
-        {
-            return (from blackScreen in allBlackScreens select blackScreen.GetComponentInChildren<Fade>()).ToList();
-        }
-    }
+    // [System.Serializable]
+    // public class ListOfBlackScreens
+    // {
+    //     public List<GameObject> allBlackScreens;
+    //     public List<Fade> GetFades()
+    //     {
+    //         return (from blackScreen in allBlackScreens select blackScreen.GetComponentInChildren<Fade>()).ToList();
+    //     }
+    // }
 }

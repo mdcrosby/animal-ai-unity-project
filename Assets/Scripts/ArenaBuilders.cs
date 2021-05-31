@@ -52,7 +52,7 @@ namespace ArenaBuilders
         public List<Spawnable> Spawnables { get; set; }
 
 
-        public ArenaBuilder(GameObject arenaGameObject, GameObject spawnedObjectsHolder,
+        public ArenaBuilder(GameObject arenaGameObject, GameObject spawnedObjectsHolder, GameObject agent,
                             int maxSpawnAttemptsForPrefabs, int maxSpawnAttemptsForAgent)
         {
             _arena = arenaGameObject.GetComponent<Transform>();
@@ -61,7 +61,7 @@ namespace ArenaBuilders
                                             .GetComponent<Transform>();
             _rangeX = spawnArenaTransform.localScale.x;
             _rangeZ = spawnArenaTransform.localScale.z;
-            _agent = _arena.Find("AAI3Agent").Find("Agent").gameObject;
+            _agent = agent;
             _agentCollider = _agent.GetComponent<Collider>();
             _agentRigidbody = _agent.GetComponent<Rigidbody>();
             _spawnedObjectsHolder = spawnedObjectsHolder;
