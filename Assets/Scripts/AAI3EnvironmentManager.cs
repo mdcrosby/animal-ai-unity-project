@@ -31,7 +31,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
     [HideInInspector]
     public bool playerMode;
 
-    private bool _firstReset = true;
     private ArenasConfigurations _arenasConfigurations;
     private TrainingArena[] _arenas;
     private ArenasParametersSideChannel _arenasParametersSideChannel;
@@ -46,58 +45,61 @@ public class AAI3EnvironmentManager : MonoBehaviour
         _arenasParametersSideChannel.NewArenasParametersReceived += _arenasConfigurations.UpdateWithConfigurationsReceived;
 
         SideChannelManager.RegisterSideChannel(_arenasParametersSideChannel);
-        Academy.Instance.OnEnvironmentReset += EnvironmentReset;//When ML-Agents Academy resets environment append our method.
-    }
+        
+        Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
 
-    public void EnvironmentReset()
-    {
-        Debug.Log("Environment Reset");
-        if (_firstReset)//On the first reset, set all the parameters that will last throughout training
+        int paramValue;
+        playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
+        int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
+        int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
+        bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
+        int rays_per_side = environmentParameters.TryGetValue("rays_per_side", out paramValue) ? paramValue : defaultRaysPerSide;
+        int ray_max_degrees = environmentParameters.TryGetValue("ray_max_degrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
+        bool useRayCasts = (environmentParameters.TryGetValue("useRayCasts", out paramValue) ? paramValue : 0) > 0;
+
+        if (Application.isEditor)//Default settings for tests in Editor
         {
-            Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
-
-            int paramValue;
-            playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
-            int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
-            int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
-            bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
-            int rays_per_side = environmentParameters.TryGetValue("rays_per_side", out paramValue) ? paramValue : defaultRaysPerSide;
-            int ray_max_degrees = environmentParameters.TryGetValue("ray_max_degrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
-            bool useRayCasts = (environmentParameters.TryGetValue("useRayCasts", out paramValue) ? paramValue : 0) > 0;
-
-            if (Application.isEditor)//Default settings for tests in Editor
-            {
-                numberOfArenas = 1;
-                playerMode = true;
-                resolution = 500;
-                grayscale = false;
-            }
-
-            resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
-            numberOfArenas = playerMode ? 1 : numberOfArenas;
-            _arenasConfigurations.numberOfArenas = numberOfArenas;
-
-            _arenas = new TrainingArena[numberOfArenas];//A new training arena loads all objects.
-            if(useRayCasts){
-                Debug.Log("using Ray Casts");
-                ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
-                CameraSensorComponent cameraSensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<CameraSensorComponent>();//@TODO update
-                cameraSensor.enabled = false;
-            }
-            else{
-                Debug.Log("using camera with res " + resolution);   
-                ChangeResolution(resolution, resolution, grayscale);
-                RayPerceptionSensorComponent3D raySensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<RayPerceptionSensorComponent3D>();//@TODO update
-                raySensor.enabled = false;
-            }
-            InstantiateArenas(numberOfArenas);
-            ConfigureIfPlayer(playerMode);
-
-            _firstReset = false;
-
-            Debug.Log("Performed first environment reset:\nPlayerMode = " + playerMode + "\nNo. Arenas: " + numberOfArenas + "\nResolution: " + resolution + "\ngrayscale: " + grayscale);
+            numberOfArenas = 1;
+            playerMode = true;
+            resolution = 500;
+            grayscale = false;
         }
+
+        resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
+        numberOfArenas = playerMode ? 1 : numberOfArenas;
+        _arenasConfigurations.numberOfArenas = numberOfArenas;
+
+        _arenas = new TrainingArena[numberOfArenas];//A new training arena loads all objects. 
+        // if(useRayCasts){
+        //     Debug.Log("using Ray Casts");
+        //     ChangeRayCasts(rays_per_side, ray_max_degrees);//Number per side
+        //     CameraSensorComponent cameraSensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<CameraSensorComponent>();//@TODO update
+        //     cameraSensor.enabled = false;//@TODO even disabled seems to still be used as part of the observation space.
+        //     Debug.Log(cameraSensor.isActiveAndEnabled);
+        // }
+        // else{
+        Debug.Log("using camera with res " + resolution);   
+        ChangeResolution(resolution, resolution, grayscale);
+        RayPerceptionSensorComponent3D raySensor = arena.transform.Find("AAI3Agent").Find("Agent").GetComponent<RayPerceptionSensorComponent3D>();//@TODO update
+        raySensor.enabled = false;//Note disabling rayperception does not work.
+        // }
+
+        InstantiateArenas(numberOfArenas);
+        ConfigureIfPlayer(playerMode);
+
+        Debug.Log("Performed first environment reset:\nPlayerMode = " + playerMode + "\nNo. Arenas: " + numberOfArenas + "\nResolution: " + resolution + "\ngrayscale: " + grayscale);
+
+        // Academy.Instance.OnEnvironmentReset += EnvironmentReset;//When ML-Agents Academy resets environment append our method.
     }
+
+    // public void EnvironmentReset()
+    // {
+    //     Debug.Log("Environment Reset");
+    //     if (_firstReset)//On the first reset, set all the parameters that will last throughout training
+    //     {
+            
+    //     }
+    // }
 
     private void ChangeRayCasts(int no_raycasts, int max_degrees)
     {

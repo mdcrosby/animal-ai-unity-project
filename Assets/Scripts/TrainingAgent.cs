@@ -57,6 +57,14 @@ public class TrainingAgent : Agent, IPrefab
     private float _previousScore = 0;
     private float _currentScore = 0;
 
+    protected override void OnEnable(){
+        GetComponent<CameraSensorComponent>().enabled = false;//This is where we need to do this before the agent is initialised and automatically gains access to the sensor component.
+        // GetComponent<RayPerceptionSensorComponent3D>().enabled = false;//This is where we need to do this before the agent is initialised and automatically gains access to the sensor component.
+        
+        base.OnEnable();
+    }
+
+
     public override void Initialize()
     {
         _arena = GetComponentInParent<TrainingArena>();
@@ -64,6 +72,7 @@ public class TrainingAgent : Agent, IPrefab
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default
     }
 
+    //@TODO check if switching these fields to add the [Observable] attribute to fields and properties on the Agent is better practice for these obs.
     public override void CollectObservations(VectorSensor sensor)
     {
         Vector3 localVel = transform.InverseTransformDirection(_rigidBody.velocity);
@@ -139,6 +148,7 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void OnEpisodeBegin()
     {
+        Debug.Log("Episode Begin");
         _previousScore = _currentScore;
         numberOfGoalsCollected = 0;
         _arena.ResetArena();
@@ -181,6 +191,7 @@ public class TrainingAgent : Agent, IPrefab
 
     public void AgentDeath(float reward)
     {
+        Debug.Log("Agent Died");
         AddReward(reward);
         _currentScore = GetCumulativeReward();
         EndEpisode();
