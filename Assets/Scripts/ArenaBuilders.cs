@@ -192,7 +192,7 @@ namespace ArenaBuilders
                                      PositionRotation spawnLocRot,
                                      Vector3 color)
         {
-            Debug.Log("Spawning: " + spawnable.name);
+            // Debug.Log("Spawning: " + spawnable.name);
             if (spawnLocRot != null)
             {
                 gameObjectInstance.transform.localPosition = spawnLocRot.Position;

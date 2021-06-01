@@ -57,19 +57,6 @@ public class TrainingAgent : Agent, IPrefab
     private float _previousScore = 0;
     private float _currentScore = 0;
 
-    private void Awake(){
-        Debug.Log("Waking and Destroying Components");
-        //DestroyImmediate(GetComponent<CameraSensorComponent>());//This destroys in the editor but it still returns part of the observations??
-        ;//This destroys in the editor but it still returns part of the observations??
-    }
-
-    protected override void OnEnable(){//Destroying here doesn't remove from observations...
-        Debug.Log("enabling agent");
-
-        base.OnEnable();
-    }
-
-
     public override void Initialize()
     {
         //Because mlagents (2.0) finds the attached sensors during OnEnable->LazyInitialize we have to make sure they are already setup correctly.
