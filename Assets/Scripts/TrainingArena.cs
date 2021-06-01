@@ -9,35 +9,35 @@ using Holders;
 
 public class TrainingArena : MonoBehaviour
 {
-    public GameObject agent;
     public ListOfPrefabs prefabs = new ListOfPrefabs();
     public GameObject spawnedObjectsHolder;
     public int maxSpawnAttemptsForAgent = 100;
     public int maxSpawnAttemptsForPrefabs = 20;
-    // public ListOfBlackScreens blackScreens = new ListOfBlackScreens();
+    public ListOfBlackScreens blackScreens = new ListOfBlackScreens();
     [HideInInspector]
     public int arenaID = -1;
     [HideInInspector]
-    public GameObject _agent;
+    public Agent _agent;
     private ArenaBuilder _builder;
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
     private AAI3EnvironmentManager _environmentManager;
-    // private List<Fade> _fades = new List<Fade>();
+    private List<Fade> _fades = new List<Fade>();
     private bool _lightStatus = true;
-    // private int _agentDecisionInterval; // To replace with a call to DecisionRequester.DecisionPeriod if possible
+    private int _agentDecisionInterval; // To replace with a call to DecisionRequester.DecisionPeriod if possible
     // (not possible at the moment as it's internal and we cannot call GetComponent on internals) 
 
     internal void Awake()
     {
         _builder = new ArenaBuilder(gameObject,
                                     spawnedObjectsHolder,
-                                    agent.transform.Find("Agent").gameObject,
                                     maxSpawnAttemptsForPrefabs,
                                     maxSpawnAttemptsForAgent);
         _environmentManager = GameObject.FindObjectOfType<AAI3EnvironmentManager>();
-        _agent = Instantiate(agent, transform);
-        // _agentDecisionInterval = _agent.GetComponentInChildren<DecisionPeriod>().decisionPeriod;
-        // _fades = blackScreens.GetFades();
+        Debug.Log("Finding Agent");
+        _agent = FindObjectsOfType<Agent>(true)[0];
+        Debug.Log(_agent);
+        _agentDecisionInterval = _agent.GetComponentInChildren<DecisionPeriod>().decisionPeriod;
+        _fades = blackScreens.GetFades();
     }
 
     public void ResetArena()
@@ -61,7 +61,7 @@ public class TrainingArena : MonoBehaviour
             _arenaConfiguration.SetGameObject(prefabs.GetList());
             _builder.Spawnables = _arenaConfiguration.spawnables;
             _arenaConfiguration.toUpdate = false;
-            // agent.MaxStep = _arenaConfiguration.T * _agentDecisionInterval;
+            _agent.MaxStep = _arenaConfiguration.T * _agentDecisionInterval;
         }
 
         _builder.Build();
@@ -70,16 +70,16 @@ public class TrainingArena : MonoBehaviour
 
     public void UpdateLigthStatus()
     {
-        // int stepCount = agent.StepCount;
-        // bool newLight = _arenaConfiguration.lightsSwitch.LightStatus(stepCount, _agentDecisionInterval);
-        // if (newLight != _lightStatus)
-        // {
-        //     _lightStatus = newLight;
-        //     foreach (Fade fade in _fades)
-        //     {
-        //         fade.StartFade();
-        //     }
-        // }
+        int stepCount = _agent.StepCount;
+        bool newLight = _arenaConfiguration.lightsSwitch.LightStatus(stepCount, _agentDecisionInterval);
+        if (newLight != _lightStatus)
+        {
+            _lightStatus = newLight;
+            foreach (Fade fade in _fades)
+            {
+                fade.StartFade();
+            }
+        }
     }
 
     void FixedUpdate()

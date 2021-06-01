@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.SideChannels;
+using Unity.MLAgents.Policies;
 using ArenasParameters;
 using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check necessary/good practice.
 
@@ -90,11 +91,18 @@ public class AAI3EnvironmentManager : MonoBehaviour
             else{
                 ChangeResolution(a.GetComponentInChildren<CameraSensorComponent>(), resolution, resolution, grayscale);
             }
+            if(playerMode){
+                //The following does nothing under normal execution - but when loading the built version
+                //with the load_config_and_play script it sets the BehaviorType back to Heursitic 
+                //from default as loading this autotamically attaches Academy for training (since mlagents 0.16.0)
+                //@TODO must be a better way to do this.
+                a.GetComponentInChildren<BehaviorParameters>().BehaviorType = BehaviorType.HeuristicOnly;//@TODO update
+            }
         }
 
         //Enable all the agents now that their sensors have been set.
         foreach (TrainingArena arena in _instantiatedArenas){
-            arena._agent.transform.Find("Agent").gameObject.SetActive(true);
+            arena._agent.gameObject.SetActive(true);
         }
 
         Debug.Log("Environment loaded with options:" + 
@@ -153,11 +161,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
         if (playerMode)
         {
             playerControls.SetActive(true);
-            //The following does nothing under normal execution - but when loading the built version
-            //with the load_config_and_play script it sets the BehaviorType back to Heursitic 
-            //from default as loading this autotamically attaches Academy for training (since mlagents 0.16.0)
-            //@TODO must be a better way to do this.
-            // _arenas[0].agent.GetComponent<BehaviorParameters>().BehaviorType = BehaviorType.HeuristicOnly;//@TODO update
         }
     }
 
