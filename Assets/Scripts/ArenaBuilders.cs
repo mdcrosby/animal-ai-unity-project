@@ -200,7 +200,7 @@ namespace ArenaBuilders
                 gameObjectInstance.SetLayer(0);
                 gameObjectInstance.GetComponent<IPrefab>().SetColor(color);
 
-                if (gameObjectInstance.CompareTag("goodGoal"))
+                if (gameObjectInstance.CompareTag("goodGoalMulti") || gameObjectInstance.CompareTag("goodGoal"))
                 {
                     _goodGoalsMultiSpawned.Add(gameObjectInstance.GetComponent<Goal>());
                 }

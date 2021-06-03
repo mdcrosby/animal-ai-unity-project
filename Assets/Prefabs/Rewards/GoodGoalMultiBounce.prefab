@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2756416220506427725}
   m_Layer: 0
   m_Name: GoodGoalMultiBounce
-  m_TagString: goodGoal
+  m_TagString: goodGoalMulti
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

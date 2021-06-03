@@ -1569,6 +1569,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8679969811055685185, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
+      propertyPath: m_DetectableTags.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8679969811055685185, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
+      propertyPath: m_DetectableTags.Array.data[4]
+      value: goodGoalMulti
+      objectReference: {fileID: 0}
+    - target: {fileID: 8679969811055685185, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: m_DetectableTags.Array.data[5]
       value: badGoal
       objectReference: {fileID: 0}
