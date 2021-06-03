@@ -13,20 +13,14 @@ TagManager:
   - spawnedObjects
   - spawnArena
   - camBase
-  - CylinderTunnel
-  - CylinderTunnelTransparent
+  - Immovable
+  - Movable
   - Ramp
-  - Wall
-  - WallTransparent
-  - Cardbox
-  - LObject
-  - UObject
-  - BadGoal
-  - GoodGoal
-  - GoodGoalMulti
-  - HotZone
+  - Pushable
   - DeathZone
+  - HotZone
   - OuterWall
+  - goodGoalMulti
   layers:
   - Default
   - TransparentFX

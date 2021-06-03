@@ -363,17 +363,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SensorName: RayPerceptionSensor
   m_DetectableTags:
-  - CylinderTunnel
-  - CylinderTunnelTransparent
-  - Ramp
-  - InnerWall
-  - Cardbox
-  - LObject
-  - UObject
-  - badGoal
-  - DeathZone
+  - arena
+  - Immovable
+  - Movable
   - goodGoal
-  - HotZone
+  - badGoal
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 70
   m_SphereCastRadius: 0.5

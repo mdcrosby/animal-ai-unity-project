@@ -63,6 +63,8 @@ public class AAI3EnvironmentManager : MonoBehaviour
             playerMode = true;
             resolution = 500;
             grayscale = false;
+            useRayCasts = true;
+            raysPerSide = 2;
         }
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
@@ -93,10 +95,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
             }
             if(playerMode){
                 //The following does nothing under normal execution - but when loading the built version
-                //with the load_config_and_play script it sets the BehaviorType back to Heursitic 
+                //with the play script it sets the BehaviorType back to Heursitic 
                 //from default as loading this autotamically attaches Academy for training (since mlagents 0.16.0)
                 //@TODO must be a better way to do this.
-                a.GetComponentInChildren<BehaviorParameters>().BehaviorType = BehaviorType.HeuristicOnly;//@TODO update
+                a.GetComponentInChildren<BehaviorParameters>().BehaviorType = BehaviorType.HeuristicOnly;
             }
         }
 
