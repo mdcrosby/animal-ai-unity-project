@@ -80,14 +80,16 @@ public class ProgressBar : MonoBehaviour
         bar.fillAmount = val / 100;
         txtTitle.text = Title + " " + String.Format("{0:0}", val) + "%";
 
-        if (Alert >= val)
-        {
-            bar.color = BarAlertColor;
-        }
-        else
-        {
-            bar.color = BarColor;
-        }
+        bar.color = bar.fillAmount * BarColor + (1 - bar.fillAmount) * BarAlertColor + (0.5f - Mathf.Abs(bar.fillAmount - 0.5f)) * Color.white;
+
+        //if (Alert >= val)
+        //{
+        //    bar.color = BarAlertColor;
+        //}
+        //else
+        //{
+        //    bar.color = BarColor;
+        //}
 
     }
 
