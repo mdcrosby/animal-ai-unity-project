@@ -19,7 +19,7 @@ public class HotZone : Goal
 
     protected override float AdjustY(float yIn)
     {
-        return -0.05f;
+        return -0.5f;
     }
 
     public override void OnTriggerEnter(Collider collision)
