@@ -10,7 +10,7 @@ public class PlayerControls : MonoBehaviour
     private Camera _cameraAgent;
     private Camera _cameraFollow;
     private TrainingAgent _agent;
-    private Text _score;
+    public Text score; // This should be assigned to 'Score Text' in-editor
     private int _numActive = 0;
     private Dictionary<int, Camera> _cameras;
     public float prevScore = 0;
@@ -21,7 +21,6 @@ public class PlayerControls : MonoBehaviour
         _cameraAbove = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _cameraAgent = _agent.transform.Find("AgentCamMid").GetComponent<Camera>();
         _cameraFollow = GameObject.FindGameObjectWithTag("camBase").GetComponent<Camera>();
-        _score = GameObject.FindObjectOfType<Text>();//@TODO ewww
 
         _cameraAbove.enabled = true;
         _cameraAgent.enabled = false;
@@ -49,7 +48,7 @@ public class PlayerControls : MonoBehaviour
             _agent.EndEpisode();
         }
 
-        _score.text = "Prev reward: " + _agent.GetPreviousScore().ToString("0.000") + "\n"
+        score.text = "Prev reward: " + _agent.GetPreviousScore().ToString("0.000") + "\n"
                         + "Reward: " + _agent.GetCumulativeReward().ToString("0.000");
     }
 }

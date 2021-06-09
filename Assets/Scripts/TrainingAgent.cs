@@ -48,6 +48,7 @@ public class TrainingAgent : Agent, IPrefab
     public float rotationAngle = 0.25f;
     [HideInInspector]
     public int numberOfGoalsCollected = 0;
+    public ProgressBar progBar;
 
     private Rigidbody _rigidBody;
     private bool _isGrounded;
@@ -56,6 +57,7 @@ public class TrainingAgent : Agent, IPrefab
     private float _rewardPerStep;
     private float _previousScore = 0;
     private float _currentScore = 0;
+    private float _maxHealth = 100;
 
     public override void Initialize()
     {
@@ -66,6 +68,7 @@ public class TrainingAgent : Agent, IPrefab
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default
+        progBar = GameObject.Find("UI ProgressBar").GetComponent<ProgressBar>();
     }
 
     //@TODO check if switching these fields to add the [Observable] attribute to fields and properties on the Agent is better practice for these obs.
@@ -150,6 +153,7 @@ public class TrainingAgent : Agent, IPrefab
         _arena.ResetArena();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
         _isGrounded = false;
+        progBar.BarValue = _maxHealth;
     }
 
 
@@ -196,6 +200,10 @@ public class TrainingAgent : Agent, IPrefab
     public void AddExtraReward(float rewardFactor)
     {
         AddReward(Math.Min(rewardFactor * _rewardPerStep, -0.00001f));
+        if (progBar != null)
+        {
+            progBar.ReduceHealth(0.05f);
+        }
     }
 
     public float GetPreviousScore()
