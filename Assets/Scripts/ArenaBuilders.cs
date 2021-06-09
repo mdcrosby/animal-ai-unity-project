@@ -240,7 +240,7 @@ namespace ArenaBuilders
                                                             gameObjectBoundingBox,
                                                             Quaternion.Euler(rotationOut),
                                                             1 << 0);
-                canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"));
+                canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"), gameObjectInstance.tag.EndsWith("Zone"));
                 k++;
 
             }
@@ -251,9 +251,11 @@ namespace ArenaBuilders
             return null;
         }
 
-        private bool IsSpotFree(Collider[] colliders, bool isAgent)
+        private bool IsSpotFree(Collider[] colliders, bool isAgent, bool isZone = false)
         {
-            return colliders.Length == 0 ||
+            if (isZone) return colliders.Length == 0 ||
+                    (colliders.All(collider => collider.isTrigger || !collider.gameObject.CompareTag("arena")) && !isAgent);
+            else return colliders.Length == 0 ||
                     (colliders.All(collider => collider.isTrigger) && !isAgent);
         }
 
