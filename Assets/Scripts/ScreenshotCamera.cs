@@ -11,25 +11,27 @@ public class ScreenshotCamera : MonoBehaviour
     public string FilePath = "ScreenshotTest"; // of the form "/folder1/folder2/.../folderN/"
     public string FileName = "capture"; // of the form "name" (NO EXTENSION)
     private Camera ScreenshotCam;
+    public bool TEST = false; // temporary for override of the enable/disable stuff
 
     private void Awake()
     {
         FileCounter = 0;
         ScreenshotCam = GetComponent<Camera>();
 
-        //Debug.Log(RT.sRGB + " sRGB test"); // @TO-DO: this returns False, but ideally should be True, yet read-only ??
-        ScreenshotCam.targetTexture = new RenderTexture(RT.width, RT.height, RT.depth, RT.format, RenderTextureReadWrite.sRGB);
+        if (!TEST)
+        {
+            ScreenshotCam.targetTexture = new RenderTexture(RT.width, RT.height, RT.depth, RT.format, RenderTextureReadWrite.sRGB);
+            Debug.Log(ScreenshotCam.targetTexture);
+            Debug.Log(ScreenshotCam.targetTexture.width);
+            Debug.Log(ScreenshotCam.targetTexture.height);
+        }
 
-        Debug.Log(ScreenshotCam.targetTexture);
-        Debug.Log(ScreenshotCam.targetTexture.width);
-        Debug.Log(ScreenshotCam.targetTexture.height);
-
-        Activate(false);
+        if (!TEST) { Activate(false); }
     }
 
     // called by self or other object to activate (or deactivate!) screenshot camera
     // which will cause it to capture a single screenshot (see LateUpdate())
-    public void Activate(bool toggle=true)
+    public void Activate(bool toggle = true)
     {
         // enable camera ready to be picked up by LateUpdate() call
         ScreenshotCam.enabled = toggle;
@@ -52,7 +54,7 @@ public class ScreenshotCamera : MonoBehaviour
     private void LateUpdate()
     {
         // if we have activated to capture a frame, then capture it
-        if (ScreenshotCam.enabled)
+        if (ScreenshotCam.enabled && !TEST)
         {
             CameraCapture();
             Debug.Log("capturing from ScreenshotCamera . . .");
@@ -67,7 +69,7 @@ public class ScreenshotCamera : MonoBehaviour
         // actually need to tell it to render because it won't have done up to this point
         ScreenshotCam.Render();
         RenderTexture.active = ScreenshotCam.targetTexture;
-        Debug.Log(RenderTexture.active + (RenderTexture.active!=null ? " SUCCESS !" : " FAILURE"));
+        Debug.Log(RenderTexture.active + (RenderTexture.active != null ? " SUCCESS !" : " FAILURE"));
 
         Texture2D image = new Texture2D(ScreenshotCam.targetTexture.width, ScreenshotCam.targetTexture.height, TextureFormat.RGB24, true);
         image.ReadPixels(new Rect(0, 0, ScreenshotCam.targetTexture.width, ScreenshotCam.targetTexture.height), 0, 0);

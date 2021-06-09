@@ -9,6 +9,7 @@ public class PlayerControls : MonoBehaviour
     private Camera _cameraAbove;
     private Camera _cameraAgent;
     private Camera _cameraFollow;
+    private ScreenshotCamera _screenshotCam; // Don't include in _cameras
     private TrainingAgent _agent;
     public Text score; // This should be assigned to 'Score Text' in-editor
     private int _numActive = 0;
@@ -18,6 +19,9 @@ public class PlayerControls : MonoBehaviour
     void Start()
     {
         _agent = GameObject.FindGameObjectWithTag("agent").GetComponent<TrainingAgent>();
+        GameObject ssCamGO = GameObject.FindGameObjectWithTag("ScreenshotCam");
+        _screenshotCam = GameObject.FindGameObjectWithTag("ScreenshotCam").GetComponent<ScreenshotCamera>();
+
         _cameraAbove = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         _cameraAgent = _agent.transform.Find("AgentCamMid").GetComponent<Camera>();
         _cameraFollow = GameObject.FindGameObjectWithTag("camBase").GetComponent<Camera>();
@@ -42,10 +46,14 @@ public class PlayerControls : MonoBehaviour
             _cameras[_numActive].enabled = false;
             _numActive = (_numActive + 1) % 3;
             _cameras[_numActive].enabled = true;
-        }   
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             _agent.EndEpisode();
+        }
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            _screenshotCam.Activate();
         }
 
         score.text = "Prev reward: " + _agent.GetPreviousScore().ToString("0.000") + "\n"
