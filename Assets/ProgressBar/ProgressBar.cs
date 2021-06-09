@@ -33,6 +33,7 @@ public class ProgressBar : MonoBehaviour
     private float nextPlay;
     // private AudioSource audiosource;
     private Text txtTitle;
+    private TrainingAgent agent;
     private float barValue;
     public float BarValue
     {
@@ -90,6 +91,9 @@ public class ProgressBar : MonoBehaviour
 
     }
 
+    // assigns training agent to this progress bar once instantiated
+    public void AssignAgent(TrainingAgent training_agent) { agent = training_agent; }
+
 
     private void FixedUpdate()
     {
@@ -118,11 +122,15 @@ public class ProgressBar : MonoBehaviour
         {
             ReduceHealth(HungerDrainRate);
         }
+
+        if (OutOfHealth() & agent != null) { agent.AgentDeath(-1.0f); }
     }
 
     public void ReduceHealth(float drainAmount)
     {
         BarValue = (barValue - drainAmount);
     }
+
+    public bool OutOfHealth() { return BarValue <= 0; }
 
 }

@@ -69,6 +69,7 @@ public class TrainingAgent : Agent, IPrefab
         _rigidBody = GetComponent<Rigidbody>();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default
         progBar = GameObject.Find("UI ProgressBar").GetComponent<ProgressBar>();
+        progBar.AssignAgent(this);
     }
 
     //@TODO check if switching these fields to add the [Observable] attribute to fields and properties on the Agent is better practice for these obs.
