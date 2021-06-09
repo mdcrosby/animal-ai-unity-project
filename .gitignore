@@ -74,3 +74,5 @@ LinuxPlayer_s.debug
 Packages/manifest.json
 Packages/packages-lock.json
 .vsconfig
+
+Assets/ML-Agents/Tiemrs/AAI3EnvironmentManager_timers.json
