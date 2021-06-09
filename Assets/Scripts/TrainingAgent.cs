@@ -57,7 +57,6 @@ public class TrainingAgent : Agent, IPrefab
     private float _rewardPerStep;
     private float _previousScore = 0;
     private float _currentScore = 0;
-    private float _maxHealth = 100;
 
     public override void Initialize()
     {
@@ -154,7 +153,6 @@ public class TrainingAgent : Agent, IPrefab
         _arena.ResetArena();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
         _isGrounded = false;
-        progBar.BarValue = _maxHealth;
     }
 
 
@@ -200,11 +198,7 @@ public class TrainingAgent : Agent, IPrefab
 
     public void AddExtraReward(float rewardFactor)
     {
-        AddReward(Math.Min(rewardFactor * _rewardPerStep, -0.00001f));
-        if (progBar != null)
-        {
-            progBar.ReduceHealth(0.05f);
-        }
+        AddReward(Math.Min(rewardFactor * _rewardPerStep, -0.001f));
     }
 
     public float GetPreviousScore()

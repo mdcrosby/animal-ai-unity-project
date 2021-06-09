@@ -134,6 +134,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI ProgressBar
       objectReference: {fileID: 0}
+    - target: {fileID: 114769781544105922, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
+      propertyPath: PassMark
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114769781544105922, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
+      propertyPath: MaxHealth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114769781544105922, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
+      propertyPath: MinHealth
+      value: -1
+      objectReference: {fileID: 0}			
     - target: {fileID: 224020355541654544, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.80000305

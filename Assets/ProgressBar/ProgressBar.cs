@@ -15,86 +15,133 @@ public class ProgressBar : MonoBehaviour
     public int TitleFontSize = 10;
 
     [Header("Bar Setting")]
-    public Color BarColor;
+    public Color BarFullColor;
+    public Color BarNormalColor;
+    public Color BarEmptyColor;
     public Color BarBackGroundColor;
     public Sprite BarBackGroundSprite;
-    [Range(1f, 100f)]
-    public int Alert = 20;
-    public Color BarAlertColor;
-    public bool HungerDrain = true;
-    public float HungerDrainRate = 0.05f;
+    public int MaxHealth = 100;
+    public int MinHealth = -100;
+    public int StartHealth = 0;
+    public int PassMark = 0;
+    //public bool HungerDrain = true;
+    //public float HungerDrainRate = 0.05f;
 
     // [Header("Sound Alert")]
     // public AudioClip sound;
     // public bool repeat = false;
     // public float RepeatRate = 1f;
 
-    private Image bar, barBackground;
-    private float nextPlay;
+    private Image _bar, _barBackground;
+    private RectTransform _passMarker;
+    private float _nextPlay;
     // private AudioSource audiosource;
-    private Text txtTitle;
-    private TrainingAgent agent;
-    private float barValue;
+    private Text _txtTitle;
+    private TrainingAgent _agent;
+
+    private float _pass_mark_proportion;
+    private float _min_pass_color_pivot;
+    private float _pass_max_color_pivot;
+
+    private int _barSize;
+    private float _barValue;
     public float BarValue
     {
-        get { return barValue; }
+        get { return _barValue; }
 
         set
         {
-            value = Mathf.Clamp(value, 0, 100);
-            barValue = value;
-            UpdateValue(barValue);
+            value = Mathf.Clamp(value, MinHealth, MaxHealth);
+            _barValue = value;
+            UpdateValue(_barValue);
 
         }
     }
 
-
-
     private void Awake()
     {
-        bar = transform.Find("Bar").GetComponent<Image>();
-        barBackground = GetComponent<Image>();
-        txtTitle = transform.Find("Text").GetComponent<Text>();
-        barBackground = transform.Find("BarBackground").GetComponent<Image>();
+        _bar = transform.Find("Bar").GetComponent<Image>();
+        _barBackground = GetComponent<Image>();
+        _txtTitle = transform.Find("Text").GetComponent<Text>();
+        _barBackground = transform.Find("BarBackground").GetComponent<Image>();
+        _passMarker = transform.Find("PassMarker").GetComponent<RectTransform>();
         // audiosource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        txtTitle.text = Title;
-        txtTitle.color = TitleColor;
-        txtTitle.font = TitleFont;
-        txtTitle.fontSize = TitleFontSize;
+        _txtTitle.text = Title;
+        _txtTitle.color = TitleColor;
+        _txtTitle.font = TitleFont;
+        _txtTitle.fontSize = TitleFontSize;
 
-        bar.color = BarColor;
-        barBackground.color = BarBackGroundColor;
-        barBackground.sprite = BarBackGroundSprite;
+        // min health can be negative (agent wastes time/HotZones) so !(size =nec.= MaxHealth)
+        // _barSize is used to calculate proportions for bar fillAmount and color
+        _barSize = MaxHealth - MinHealth;
 
-        UpdateValue(barValue);
+        // ensures Start/Pass health values are within bounds
+        StartHealth = Clamp(StartHealth); Debug.Log("StartHealth is " + StartHealth);
+        PassMark = Clamp(PassMark); Debug.Log("PassMark is " + PassMark);
+        _pass_mark_proportion = HealthProportion(PassMark); Debug.Log("Pass Proportion is " + _pass_mark_proportion);
+        // color-pivots are precomputed for optimisation
+        // they are used in color interpolation and never changed
+        _min_pass_color_pivot = _pass_mark_proportion / 2; Debug.Log("Min->Pass Pivot is " + _min_pass_color_pivot);
+        _pass_max_color_pivot = (_pass_mark_proportion + 1) / 2; Debug.Log("Pass->Max Pivot is " + _pass_max_color_pivot);
 
+        Debug.Log(_passMarker.transform.localPosition);
+        _passMarker.anchoredPosition = new Vector2(77.5f * 2 * (_pass_mark_proportion - 0.5f), 0);
+        Debug.Log(_passMarker.transform.localPosition);
+        _bar.fillAmount = HealthProportion(StartHealth);
+
+        UpdateColor(_bar.fillAmount);
+        _barBackground.color = BarBackGroundColor;
+        _barBackground.sprite = BarBackGroundSprite;
+
+        UpdateValue(StartHealth);
 
     }
+
+    // given a health value, returns proportion of health bar
+    // works with negative values
+    // e.g. on health bar ranging from [-100,100], HealthProportion(-50.0f) => (-50.0f+100)/200 = 0.25f
+    private float HealthProportion(float x) { return ((x - MinHealth) / _barSize); }
+
+    private int Clamp(int h) { return Mathf.Clamp(h, MinHealth, MaxHealth); }
+    private float Clamp(float h) { return Mathf.Clamp(h, MinHealth, MaxHealth); }
 
     void UpdateValue(float val)
     {
-        bar.fillAmount = val / 100;
-        txtTitle.text = Title + " " + String.Format("{0:0}", val) + "%";
+        if (val != Mathf.Clamp(val, MinHealth, MaxHealth)) { Debug.Log("intended progress bar value out of bounds! Clamping . . ."); val = Mathf.Clamp(val, 0, MaxHealth); }
+        float health_proportion = HealthProportion(val);
+        _bar.fillAmount = health_proportion;
+        //_txtTitle.text = Title + " " + String.Format("{0:0}", health_proportion * 100 /*i.e. health percentage */) + "%";
+        _txtTitle.text = Title + ": " + val.ToString("F1");
 
-        bar.color = bar.fillAmount * BarColor + (1 - bar.fillAmount) * BarAlertColor + (0.5f - Mathf.Abs(bar.fillAmount - 0.5f)) * Color.white;
+        UpdateColor(_bar.fillAmount);
+    }
 
-        //if (Alert >= val)
-        //{
-        //    bar.color = BarAlertColor;
-        //}
-        //else
-        //{
-        //    bar.color = BarColor;
-        //}
-
+    // given fill, updates color accordingly
+    private void UpdateColor(float fill)
+    {
+        if (fill != Mathf.Clamp(fill, 0, 1)) { Debug.Log("UpdateColor passed a bad fill proprtion! Clamping . . ."); fill = Mathf.Clamp(fill, 0, 1); }
+        // if within 'min -> pass' range, interpolates between red (empty) and green (pass)
+        if (fill < _pass_mark_proportion)
+        {
+            fill = (fill / _pass_mark_proportion); // treat as linear interpolation from 0 to 1 even though actually from 0 to PASSMARK
+            _bar.color = fill * BarNormalColor + (1 - fill) * BarEmptyColor
+                + (0.5f - Mathf.Abs(fill - 0.5f)) * Color.white;
+        }
+        // if within 'pass -> max' range, interpolates between green (pass) and blue (max)
+        else
+        {
+            fill = ((fill - _pass_mark_proportion) / (1 - _pass_mark_proportion)); // treat as linear interpolation from 0 to 1 even though actually from PASSMARK to 1
+            _bar.color = fill * BarFullColor + (1 - fill) * BarNormalColor
+                + (0.5f - Mathf.Abs(fill - 0.5f)) * Color.white * 0.5f /*last component is constant for aesthetics*/;
+        }
     }
 
     // assigns training agent to this progress bar once instantiated
-    public void AssignAgent(TrainingAgent training_agent) { agent = training_agent; }
+    public void AssignAgent(TrainingAgent training_agent) { _agent = training_agent; }
 
 
     private void FixedUpdate()
@@ -102,14 +149,14 @@ public class ProgressBar : MonoBehaviour
         if (!Application.isPlaying)
         {
             UpdateValue(50);
-            txtTitle.color = TitleColor;
-            txtTitle.font = TitleFont;
-            txtTitle.fontSize = TitleFontSize;
+            _txtTitle.color = TitleColor;
+            _txtTitle.font = TitleFont;
+            _txtTitle.fontSize = TitleFontSize;
 
-            bar.color = BarColor;
-            barBackground.color = BarBackGroundColor;
+            _bar.color = BarNormalColor;
+            _barBackground.color = BarBackGroundColor;
 
-            barBackground.sprite = BarBackGroundSprite;
+            _barBackground.sprite = BarBackGroundSprite;
         }
         // else
         // {
@@ -120,19 +167,23 @@ public class ProgressBar : MonoBehaviour
         //     }
         // }
 
-        if (HungerDrain & BarValue > 0)
-        {
-            ReduceHealth(HungerDrainRate);
-        }
+        if (_agent != null) { BarValue = _agent.GetCumulativeReward(); }
 
-        if (OutOfHealth() & agent != null) { agent.AgentDeath(-1.0f); }
+        //if (HungerDrain & BarValue > MinHealth)
+        //{
+        //    ReduceHealth(HungerDrainRate);
+        //}
+
+        if (OutOfHealth() & _agent != null) { _agent.AgentDeath(-1.0f); }
     }
 
+    /*
     public void ReduceHealth(float drainAmount)
     {
-        BarValue = (barValue - drainAmount);
+        BarValue = (_barValue - drainAmount);
     }
+    */
 
-    public bool OutOfHealth() { return BarValue <= 0; }
+    public bool OutOfHealth() { return BarValue <= MinHealth; }
 
 }
