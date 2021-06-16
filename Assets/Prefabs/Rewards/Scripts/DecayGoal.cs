@@ -21,7 +21,7 @@ public class DecayGoal : BallGoal
     [ColorUsage(true, true)]
     public Color badColour;
 
-    public float decayRate = -0.005f;
+    public float decayRate = -0.001f;
     public bool flipDecayDirection = false;
 
     private Material _mat;
@@ -98,7 +98,7 @@ public class DecayGoal : BallGoal
     private bool HasFinalDecayBeenReached() { return flipDecayDirection ? reward >= finalReward : reward <= finalReward; }
     private bool StillInInitDecayState() { return flipDecayDirection ? reward <= initialReward : reward >= initialReward; }
 
-    void UpdateGoal(float rate = -0.005f /*i.e. decayRate*/)
+    void UpdateGoal(float rate = -0.001f /*i.e. decayRate*/)
     {
         UpdateValue(rate);
         UpdateColour(getProportion(reward));
@@ -112,22 +112,22 @@ public class DecayGoal : BallGoal
     // (assume we have just updated value before executing UpdateColour(), i.e. just as in UpdateGoal())
     private void UpdateColour(float p)
     {
+        //Debug.Log("p is: " + p + ", and middleDecayProportion is: " + middleDecayProportion);
         if (p != Mathf.Clamp(p, 0, 1)) { Debug.Log("UpdateColour passed a bad proprtion! Clamping . . ."); p = Mathf.Clamp(p, 0, 1); }
         // if within 'bad -> neutral' range, interpolates between red (bad) and yellow (neutral)
         if (p < middleDecayProportion)
         {
             p = (p / middleDecayProportion); // treat as linear interpolation from 0 to 1 even though actually from 0 to PASSMARK
             _mat.SetColor("_EmissionColor", p * neutralColour + (1 - p) * badColour
-                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.5f /*last component is constant for aesthetics*/);
+                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
         }
         // if within 'neutral -> good' range, interpolates between yellow (neutral) and green (good)
         else
         {
             p = ((p - middleDecayProportion) / (1 - middleDecayProportion)); // treat as linear interpolation from 0 to 1 even though actually from PASSMARK to 1
             _mat.SetColor("_EmissionColor", p * goodColour + (1 - p) * neutralColour
-                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.5f /*last component is constant for aesthetics*/);
+                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
         }
-        _mat.SetColor("_EmissionColor", flipDecayDirection ? badColour : goodColour);
     }
     float getProportion(float r) { return (r - Mathf.Min(initialReward, finalReward)) / decayWidth; }
 }

@@ -75,7 +75,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fd1a487f0bd7810459323a19c962a4b8, type: 2}
+  - {fileID: 2100000, guid: acce0111776515d409aa313eda8a3a22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,5 +142,5 @@ MonoBehaviour:
   goodColour: {r: 0.5058824, g: 0.7490196, b: 0.25490198, a: 1}
   neutralColour: {r: 0.9098039, g: 0.7254902, b: 0.13725491, a: 1}
   badColour: {r: 0.62352943, g: 0.09803922, b: 0.09803922, a: 1}
-  decayRate: -0.005
+  decayRate: -0.001
   flipDecayDirection: 0
