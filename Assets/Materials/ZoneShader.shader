@@ -28,7 +28,7 @@ Shader "Custom/ZoneShader"
 		{
 			Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
 			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite Off
+			ZWrite On
 			Cull Off
 
 			Pass
@@ -56,7 +56,7 @@ Shader "Custom/ZoneShader"
 					o.pos = UnityObjectToClipPos(v.vertex);
 
 					// Gets the xy position of the vertex in worldspace.
-					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz + mul(unity_ObjectToWorld, v.vertex).y;
+					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz + mul(unity_ObjectToWorld, v.vertex).yy;
 					// Use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture
 					o.uv = TRANSFORM_TEX(worldXY, _MainTex);
 					o.uv2 = v.texcoord;

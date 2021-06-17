@@ -19,7 +19,7 @@ public class DeathZone : Goal
 
     protected override float AdjustY(float yIn)
     {
-        return -0.05f;
+        return -0.15f;
     }
 
 }
