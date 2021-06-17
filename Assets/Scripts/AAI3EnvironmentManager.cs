@@ -19,6 +19,7 @@ using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check
 public class AAI3EnvironmentManager : MonoBehaviour
 {
     public GameObject arena; // A prefab for the training arena setup
+    public EditorSettings editorSettings;
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
@@ -59,13 +60,19 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
         if (Application.isEditor)//Default settings for tests in Editor @TODO replace this with custom config settings in editor window for easier testing.
         {
-            numberOfArenas = 1;
-            playerMode = true;
-            resolution = 500;
-            grayscale = false;
-            useRayCasts = true;
-            raysPerSide = 2;
+            playerMode = editorSettings.playerMode;
+            numberOfArenas = editorSettings.numberOfArenas;
+         
+            useCamera = editorSettings.useCamera;
+            resolution = editorSettings.cameraResolution;
+            grayscale = editorSettings.grayscale;
+
+            useRayCasts = editorSettings.useRayCasts;
+            raysPerSide = editorSettings.raysPerSide;
+
+            string configPath = editorSettings.configPath;        
         }
+
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
         numberOfArenas = playerMode ? 1 : numberOfArenas;//Only ever use 1 arena in playerMode
@@ -169,7 +176,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
     ///<summary>
     ///Parses command line arguments for:
     ///--playerMode: if true then can change camera angles and have control of agent
-    ///--receiveConfiguration - adds the configuration file to load
     ///--numberOfArenas - the number of Arenas to spawn (always set to 1 in playerMode)
     ///--useCamera - if true adds camera obseravations
     ///--resolution - the resolution for camera observations (default 84, min4, max 512)
@@ -191,9 +197,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
                 case "--playerMode":
                     int playerMode = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 1;
                     environmentParameters.Add("playerMode", playerMode);
-                    break;
-                case "--receiveConfiguration":
-                    environmentParameters.Add("receiveConfiguration", 0);
                     break;
                 case "--numberOfArenas":
                     int nArenas = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 1;
