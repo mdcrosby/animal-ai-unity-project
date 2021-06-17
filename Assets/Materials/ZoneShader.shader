@@ -7,7 +7,8 @@ Shader "Custom/ZoneShader"
 		_MainTex("Fog Texture:", 2D) = "white" {}
 		_Mask("Mask Layer:", 2D) = "white" {}
 		_Colour("Base Colour:", color) = (1., 1., 1., 1.)
-		_AdditiveAlpha("Additive Alpha Constant:", Range(-1.,1.)) = 1.
+		_AdditiveAlpha("Additive Alpha Constant:", Range(0.,1.)) = 1.
+		_MinAlpha("Minimum Internal Alpha:", Range(0.,1.)) = 0.2
 		_UVScale("UV Scale Factor:", float) = 1.
 
 		[Header(Behaviour)]
@@ -63,6 +64,7 @@ Shader "Custom/ZoneShader"
 				fixed _ScrollDirY;
 				fixed4 _EmissionColour;
 				float _AdditiveAlpha;
+				float _MinAlpha;
 				float _UVScale;
 
 				fixed4 frag(v2f i) : SV_Target
@@ -70,8 +72,8 @@ Shader "Custom/ZoneShader"
 					float2 uv = i.uv * _UVScale + fixed2(_ScrollDirX, _ScrollDirY) * _Speed * _Time.x;
 					fixed4 col = tex2D(_MainTex, uv) * _EmissionColour * i.vertCol;
 					col.a *= tex2D(_Mask, i.uv2).r;
-					col.a *= 1 - (i.pos.z / i.pos.w);
-					col.a = max(min(1.0, col.a + _AdditiveAlpha), 0.0);
+					col.a *= max(1 - (i.pos.z / i.pos.w), _MinAlpha);
+					col.a = max(min(1.0, col.a + _AdditiveAlpha), _MinAlpha);
 					return col;
 				}
 				ENDCG
