@@ -73,9 +73,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
             string configPath = editorSettings.configPath;        
         }
 
-
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
-        numberOfArenas = playerMode ? 1 : numberOfArenas;//Only ever use 1 arena in playerMode
         _arenasConfigurations.numberOfArenas = numberOfArenas;
 
         _instantiatedArenas = new TrainingArena[numberOfArenas];

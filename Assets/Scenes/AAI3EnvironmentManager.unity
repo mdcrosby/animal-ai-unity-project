@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -145,7 +145,7 @@ PrefabInstance:
     - target: {fileID: 114769781544105922, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
       propertyPath: MinHealth
       value: -1
-      objectReference: {fileID: 0}			
+      objectReference: {fileID: 0}
     - target: {fileID: 224020355541654544, guid: 5eefba205a58c8c4a937c97b87c185a3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.80000305
@@ -292,6 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 462738126}
   - component: {fileID: 462738127}
+  - component: {fileID: 462738128}
   m_Layer: 0
   m_Name: EnvironmentManager
   m_TagString: Untagged
@@ -326,6 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arena: {fileID: 1540725604319108, guid: cb05c844a0de0cd4880c39b9a1aedeef, type: 3}
+  editorSettings: {fileID: 462738128}
   maximumResolution: 512
   minimumResolution: 4
   defaultResolution: 84
@@ -333,6 +335,27 @@ MonoBehaviour:
   defaultRayMaxDegrees: 60
   playerControls: {fileID: 1065671190}
   playerMode: 0
+--- !u!114 &462738128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462738125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b593640415bedfb5835cca3dae2861e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMode: 1
+  numberOfArenas: 1
+  useCamera: 1
+  cameraResolution: 84
+  grayscale: 0
+  useRayCasts: 1
+  raysPerSide: 2
+  rayMaxDegrees: 60
+  configPath: 
 --- !u!1 &722205333
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +555,7 @@ MonoBehaviour:
   RT: {fileID: 8400000, guid: 828dad2906405da4aa4792c126792419, type: 2}
   FilePath: ScreenshotTest
   FileName: capture
-	TEST: 0
+  TEST: 0
 --- !u!1 &1065671190
 GameObject:
   m_ObjectHideFlags: 0
