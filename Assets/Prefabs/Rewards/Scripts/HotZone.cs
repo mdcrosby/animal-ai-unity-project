@@ -1,9 +1,19 @@
 // using System.Collections;
 // using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HotZone : Goal
 {
+    private GameObject hotZoneFogOverlayObject;
+    private Image hotZoneFog;
+
+    private void Start()
+    {
+        hotZoneFogOverlayObject = GameObject.FindGameObjectWithTag("EffectCanvas").transform.Find("HotZoneFog").gameObject;
+        hotZoneFog = hotZoneFogOverlayObject.GetComponent<Image>();
+        Debug.Log(hotZoneFog.name);
+    }
 
     public override void SetSize(Vector3 size)
     {
@@ -28,6 +38,11 @@ public class HotZone : Goal
         {
             collision.GetComponent<TrainingAgent>().AddExtraReward(reward);
         }
+
+        if (collision.gameObject.GetComponent<Camera>() == Camera.current)
+        {
+            hotZoneFog.enabled = true;
+        }
     }
 
     public void OnTriggerStay(Collider collision)
@@ -35,6 +50,14 @@ public class HotZone : Goal
         if (collision.gameObject.CompareTag("agent"))
         {
             collision.GetComponent<TrainingAgent>().AddExtraReward(reward);
+        }
+    }
+
+    public void OnTriggerExit(Collider collision)
+    {
+        if (collision.gameObject.GetComponent<Camera>() == Camera.current)
+        {
+            hotZoneFog.enabled = false;
         }
     }
 }

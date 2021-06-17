@@ -117,3 +117,4 @@ MonoBehaviour:
   numberOfGoals: 1
   reward: 10
   isMulti: 0
+  hotZoneFogOverlayObject: {fileID: 0}
