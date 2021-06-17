@@ -71,7 +71,7 @@ Shader "Custom/ZoneShader"
 					fixed4 col = tex2D(_MainTex, uv) * _EmissionColour * i.vertCol;
 					col.a *= tex2D(_Mask, i.uv2).r;
 					col.a *= 1 - (i.pos.z / i.pos.w);
-					col.a = min(1.0, col.a + _AdditiveAlpha);
+					col.a = max(min(1.0, col.a + _AdditiveAlpha), 0.0);
 					return col;
 				}
 				ENDCG
