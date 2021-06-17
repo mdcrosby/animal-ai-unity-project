@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
@@ -70,7 +71,13 @@ public class AAI3EnvironmentManager : MonoBehaviour
             useRayCasts = editorSettings.useRayCasts;
             raysPerSide = editorSettings.raysPerSide;
 
-            string configPath = editorSettings.configPath;        
+            string configPath = "/Assets/Configs/" + editorSettings.configPath;
+            if(File.Exists(configPath)){
+                Debug.Log("Exists");
+            }     
+            else{
+                Debug.Log("File Not Found");
+            }
         }
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));

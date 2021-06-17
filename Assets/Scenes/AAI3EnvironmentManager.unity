@@ -355,7 +355,7 @@ MonoBehaviour:
   useRayCasts: 1
   raysPerSide: 2
   rayMaxDegrees: 60
-  configPath: 
+  configPath: competition/1-1-1
 --- !u!1 &722205333
 GameObject:
   m_ObjectHideFlags: 0
