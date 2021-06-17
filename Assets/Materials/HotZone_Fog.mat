@@ -130,7 +130,7 @@ Material:
     - _Speed: 0.8
     - _SrcBlend: 5
     - _Surface: 1
-    - _UVScale: 1.5
+    - _UVScale: 1
     - _UVSec: 0
     - _WorkflowMode: 1
     - _ZWrite: 0

@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "Custom/ZoneShader"
 {
 	Properties
@@ -52,7 +54,11 @@ Shader "Custom/ZoneShader"
 				{
 					v2f o;
 					o.pos = UnityObjectToClipPos(v.vertex);
-					o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+
+					// Gets the xy position of the vertex in worldspace.
+					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz + mul(unity_ObjectToWorld, v.vertex).y;
+					// Use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture
+					o.uv = TRANSFORM_TEX(worldXY, _MainTex);
 					o.uv2 = v.texcoord;
 					o.vertCol = v.color;
 					return o;
