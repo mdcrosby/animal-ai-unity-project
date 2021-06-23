@@ -7,12 +7,14 @@ public class HotZone : Goal
 {
     private GameObject hotZoneFogOverlayObject;
     private Image hotZoneFog;
+    public PlayerControls playerControls;
 
-    private void Start()
+    private void Awake()
     {
         hotZoneFogOverlayObject = GameObject.FindGameObjectWithTag("EffectCanvas").transform.Find("HotZoneFog").gameObject;
         hotZoneFog = hotZoneFogOverlayObject.GetComponent<Image>();
-        Debug.Log(hotZoneFog.name);
+        hotZoneFog.enabled = false;
+        playerControls = GameObject.FindGameObjectWithTag("PlayerControls").GetComponent<PlayerControls>();
     }
 
     public override void SetSize(Vector3 size)
@@ -38,11 +40,6 @@ public class HotZone : Goal
         {
             collision.GetComponent<TrainingAgent>().AddExtraReward(reward);
         }
-
-        if (collision.gameObject.GetComponent<Camera>() == Camera.current)
-        {
-            hotZoneFog.enabled = true;
-        }
     }
 
     public void OnTriggerStay(Collider collision)
@@ -55,9 +52,20 @@ public class HotZone : Goal
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.GetComponent<Camera>() == Camera.current)
-        {
-            hotZoneFog.enabled = false;
-        }
+        // Used to contain hotZone fog stuff, but replaced with better alternative actually relevant to the active camera
+        // Leaving void here because could be useful in future: if (collision.gameObject.GetComponentInChildren<Camera>() == playerControls.getActiveCam())
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 p = playerControls.getActiveCam().gameObject.transform.position;
+
+        Vector3 posToCheck = p;
+        Vector3 offset = this.GetComponent<BoxCollider>().bounds.center - p;
+        Ray inputRay = new Ray(posToCheck, offset.normalized);
+        RaycastHit rHit;
+        Debug.DrawRay(posToCheck, offset);
+
+        hotZoneFog.enabled = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
     }
 }

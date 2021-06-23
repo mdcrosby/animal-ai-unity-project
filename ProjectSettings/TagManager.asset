@@ -24,6 +24,7 @@ TagManager:
   - ScreenshotCam
   - ProgressBar
   - EffectCanvas
+  - PlayerControls
   layers:
   - Default
   - TransparentFX
