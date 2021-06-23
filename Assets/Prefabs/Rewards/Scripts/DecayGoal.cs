@@ -9,10 +9,13 @@ public class DecayGoal : BallGoal
     public float initialReward;
     public float middleReward; // used to calculate where the 'neutralColour' should be, for colour interpolation
     public float finalReward;
+    public bool useMiddle; // might not want to have a initial, middle and final, but just go initial -> final
     // if reward above goodEndingThreshold when agent reaches it, end episode like GoodGoal
     public float goodRewardEndThreshold;
     // if reward below badEndingThreshold when agent reaches it, end episode like BadGoal
     public float badRewardEndThreshold;
+    public bool useGoodEpisodeEndThreshold; // might not want to end the episode with thresholds
+    public bool useBadEpisodeEndThreshold; // might not want to end the episode with thresholds
 
     [ColorUsage(true, true)]
     public Color goodColour;
@@ -38,13 +41,18 @@ public class DecayGoal : BallGoal
         // if (negative) decay but rate is positive, or (positive) 'anti-decaying' but rate is negative, then flip the rate value provided
         if (flipDecayDirection ? decayRate < 0 : decayRate > 0) { decayRate *= -1; Debug.Log("Had to flip decay rate"); }
 
-        // check middle value (for yellow)
-        if (middleReward < Mathf.Min(initialReward, finalReward) || middleReward > Mathf.Max(initialReward, finalReward)) {
-            Debug.Log("middleReward not in expected range. Clamping . . .");
-            middleReward = Mathf.Clamp(middleReward, Mathf.Min(initialReward, finalReward), Mathf.Max(initialReward, finalReward));
+        if (useMiddle) {
+            // check middle value (for yellow)
+            if (middleReward < Mathf.Min(initialReward, finalReward) || middleReward > Mathf.Max(initialReward, finalReward))
+            {
+                Debug.Log("middleReward not in expected range. Clamping . . .");
+                middleReward = Mathf.Clamp(middleReward, Mathf.Min(initialReward, finalReward), Mathf.Max(initialReward, finalReward));
+            }
         }
+        
         decayWidth = Mathf.Abs(initialReward - finalReward);
-        middleDecayProportion = (flipDecayDirection ? (middleReward - initialReward) : (middleReward - finalReward))/decayWidth;
+
+        if (useMiddle) { middleDecayProportion = (flipDecayDirection ? (middleReward - initialReward) : (middleReward - finalReward)) / decayWidth; }
 
         reward = initialReward;
         SetTag();
@@ -65,14 +73,14 @@ public class DecayGoal : BallGoal
         else { this.gameObject.tag = "goodGoalMulti"; }
     }
 
-    bool IsGoodGoal() { return reward >= goodRewardEndThreshold; }
-    bool IsBadGoal() { return reward <= badRewardEndThreshold; }
+    bool IsGoodGoal() { return useGoodEpisodeEndThreshold && reward >= goodRewardEndThreshold; }
+    bool IsBadGoal() { return useBadEpisodeEndThreshold && reward <= badRewardEndThreshold; }
 
     // assumes linear decay (for now - @TO-DO could maybe add other decay functions?)
     void FixedUpdate()
     {
         // if goal reward value sufficiently good/bad, then it could be episode-ending, like GoodGoal or BadGoal
-        if (reward >= goodRewardEndThreshold || reward <= badRewardEndThreshold)
+        if (IsGoodGoal() || IsBadGoal())
         {
             SetEpisodeEnds(true);
         }
@@ -115,17 +123,22 @@ public class DecayGoal : BallGoal
         //Debug.Log("p is: " + p + ", and middleDecayProportion is: " + middleDecayProportion);
         if (p != Mathf.Clamp(p, 0, 1)) { Debug.Log("UpdateColour passed a bad proprtion! Clamping . . ."); p = Mathf.Clamp(p, 0, 1); }
         // if within 'bad -> neutral' range, interpolates between red (bad) and yellow (neutral)
-        if (p < middleDecayProportion)
+        if (useMiddle && p < middleDecayProportion)
         {
             p = (p / middleDecayProportion); // treat as linear interpolation from 0 to 1 even though actually from 0 to PASSMARK
             _mat.SetColor("_EmissionColor", p * neutralColour + (1 - p) * badColour
                 + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
         }
         // if within 'neutral -> good' range, interpolates between yellow (neutral) and green (good)
-        else
+        else if (useMiddle)
         {
             p = ((p - middleDecayProportion) / (1 - middleDecayProportion)); // treat as linear interpolation from 0 to 1 even though actually from PASSMARK to 1
             _mat.SetColor("_EmissionColor", p * goodColour + (1 - p) * neutralColour
+                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
+        }
+        else
+        {
+            _mat.SetColor("_EmissionColor", p * goodColour + (1 - p) * badColour
                 + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
         }
     }

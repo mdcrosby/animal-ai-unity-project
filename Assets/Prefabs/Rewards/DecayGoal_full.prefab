@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 54054735976619294}
   - component: {fileID: -6389317971302522539}
   m_Layer: 0
-  m_Name: DecayGoal
+  m_Name: DecayGoal_full
   m_TagString: goodGoal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,18 +132,18 @@ MonoBehaviour:
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
   numberOfGoals: 1
-  reward: 4
-  isMulti: 1
-  initialReward: 4
+  reward: 1
+  isMulti: 0
+  initialReward: 1
   middleReward: 0
-  finalReward: 0
+  finalReward: -1
   useMiddle: 0
   goodRewardEndThreshold: 0.5
   badRewardEndThreshold: -0.5
   useGoodEpisodeEndThreshold: 0
   useBadEpisodeEndThreshold: 0
-  goodColour: {r: 1, g: 0.78431374, b: 0.19607843, a: 1}
-  neutralColour: {r: 0, g: 0, b: 0, a: 1}
-  badColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
-  decayRate: -0.002
+  goodColour: {r: 0.5058824, g: 0.7490196, b: 0.25490198, a: 1}
+  neutralColour: {r: 0.9098039, g: 0.7254902, b: 0.13725491, a: 1}
+  badColour: {r: 0.62352943, g: 0.09803922, b: 0.09803922, a: 1}
+  decayRate: -0.001
   flipDecayDirection: 0
