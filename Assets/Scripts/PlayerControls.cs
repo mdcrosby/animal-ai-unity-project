@@ -15,6 +15,7 @@ public class PlayerControls : MonoBehaviour
     private int _numActive = 0;
     private Dictionary<int, Camera> _cameras;
     public float prevScore = 0;
+    public Canvas effectCanvas;
 
     void Start()
     {
@@ -35,7 +36,9 @@ public class PlayerControls : MonoBehaviour
         _cameras.Add(1, _cameraAgent);
         _cameras.Add(2, _cameraFollow);
         _numActive = 0;
-        Debug.Log("Initializing Player Controls");
+        effectCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        effectCanvas.worldCamera = getActiveCam();
+        effectCanvas.planeDistance = choosePlaneDistance(); // has to be within clip volume of all cameras (3rd person one is set to 0.3)
     }
 
     void Update()
@@ -43,9 +46,7 @@ public class PlayerControls : MonoBehaviour
         bool cDown = Input.GetKeyDown(KeyCode.C);
         if (cDown)
         {
-            _cameras[_numActive].enabled = false;
-            _numActive = (_numActive + 1) % 3;
-            _cameras[_numActive].enabled = true;
+            UpdateCam();
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -58,5 +59,25 @@ public class PlayerControls : MonoBehaviour
 
         score.text = "Prev reward: " + _agent.GetPreviousScore().ToString("0.000") + "\n"
                         + "Reward: " + _agent.GetCumulativeReward().ToString("0.000");
+    }
+
+    public Camera getActiveCam()
+    {
+        return _cameras[_numActive];
+    }
+
+    private float choosePlaneDistance()
+    {
+        return _numActive == 1 ? 0.02f : 0.31f;
+    }
+
+    void UpdateCam()
+    {
+        _cameras[_numActive].enabled = false;
+        _numActive = (_numActive + 1) % 3;
+        _cameras[_numActive].enabled = true;
+
+        effectCanvas.worldCamera = getActiveCam();
+        effectCanvas.planeDistance = choosePlaneDistance();
     }
 }

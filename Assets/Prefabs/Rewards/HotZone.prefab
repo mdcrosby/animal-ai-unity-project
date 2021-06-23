@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7041498159436349378}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -110,10 +110,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationRange: {x: 0, y: 360}
   sizeMin: {x: 1, y: 1, z: 1}
-  sizeMax: {x: 40, y: 1, z: 40}
+  sizeMax: {x: 40, y: 10, z: 40}
   canRandomizeColor: 0
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
   numberOfGoals: 1
   reward: 10
   isMulti: 0
+  hotZoneFogOverlayObject: {fileID: 0}

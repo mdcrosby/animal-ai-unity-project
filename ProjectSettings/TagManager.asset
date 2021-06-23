@@ -21,6 +21,10 @@ TagManager:
   - HotZone
   - OuterWall
   - goodGoalMulti
+  - ScreenshotCam
+  - ProgressBar
+  - EffectCanvas
+  - PlayerControls
   layers:
   - Default
   - TransparentFX
