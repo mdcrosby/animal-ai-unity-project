@@ -59,12 +59,9 @@ public class HotZone : Goal
     private void FixedUpdate()
     {
         Vector3 p = playerControls.getActiveCam().gameObject.transform.position;
-
-        Vector3 posToCheck = p;
         Vector3 offset = this.GetComponent<BoxCollider>().bounds.center - p;
-        Ray inputRay = new Ray(posToCheck, offset.normalized);
+        Ray inputRay = new Ray(p, offset.normalized);
         RaycastHit rHit;
-        Debug.DrawRay(posToCheck, offset);
 
         hotZoneFog.enabled = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
     }
