@@ -38,7 +38,7 @@ public class PlayerControls : MonoBehaviour
         _numActive = 0;
         effectCanvas.renderMode = RenderMode.ScreenSpaceCamera;
         effectCanvas.worldCamera = getActiveCam();
-        effectCanvas.planeDistance = 0.4f; // has to be within clip volume of all cameras (3rd person one is set to 0.3)
+        effectCanvas.planeDistance = choosePlaneDistance(); // has to be within clip volume of all cameras (3rd person one is set to 0.3)
     }
 
     void Update()
@@ -66,6 +66,11 @@ public class PlayerControls : MonoBehaviour
         return _cameras[_numActive];
     }
 
+    private float choosePlaneDistance()
+    {
+        return _numActive == 1 ? 0.02f : 0.31f;
+    }
+
     void UpdateCam()
     {
         _cameras[_numActive].enabled = false;
@@ -73,5 +78,6 @@ public class PlayerControls : MonoBehaviour
         _cameras[_numActive].enabled = true;
 
         effectCanvas.worldCamera = getActiveCam();
+        effectCanvas.planeDistance = choosePlaneDistance();
     }
 }
