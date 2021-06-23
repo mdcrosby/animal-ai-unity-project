@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 54054735976619294}
   - component: {fileID: -6389317971302522539}
   m_Layer: 0
-  m_Name: DecayGoal_full
+  m_Name: FullDecayGoal
   m_TagString: goodGoal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 135831286041315876}
   - component: {fileID: 23446274134440080}
   - component: {fileID: 54054735976619294}
-  - component: {fileID: -6389317971302522539}
+  - component: {fileID: 4211236304195966414}
   m_Layer: 0
   m_Name: DecayGoal
   m_TagString: goodGoal
@@ -113,7 +113,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-6389317971302522539
+--- !u!114 &4211236304195966414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,28 +122,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1311020654520240}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce41f001b9ada2844bf96b1e66e29735, type: 3}
+  m_Script: {fileID: 11500000, guid: a73f721d3ddddff4dbcb36d254907321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationRange: {x: 0, y: 0}
-  sizeMin: {x: 0.5, y: 0.5, z: 0.5}
-  sizeMax: {x: 5, y: 5, z: 5}
-  canRandomizeColor: 0
+  sizeMin: {x: 0, y: 0, z: 0}
+  sizeMax: {x: 0, y: 0, z: 0}
+  canRandomizeColor: 1
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
   numberOfGoals: 1
-  reward: 4
+  reward: 3
   isMulti: 1
-  initialReward: 4
-  middleReward: 0
+  initialReward: 3
   finalReward: 0
-  useMiddle: 0
-  goodRewardEndThreshold: 0.5
-  badRewardEndThreshold: -0.5
-  useGoodEpisodeEndThreshold: 0
-  useBadEpisodeEndThreshold: 0
-  goodColour: {r: 1, g: 0.78431374, b: 0.19607843, a: 1}
-  neutralColour: {r: 0, g: 0, b: 0, a: 1}
-  badColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
-  decayRate: -0.002
+  initialColour: {r: 0.55506897, g: 0, b: 1, a: 1}
+  finalColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
+  decayRate: -0.005
   flipDecayDirection: 0

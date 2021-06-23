@@ -1,64 +1,54 @@
-// using System.Collections;
-// using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System;
-using Random = UnityEngine.Random;
 
 public class DecayGoal : BallGoal
 {
     public float initialReward;
-    public float middleReward; // used to calculate where the 'neutralColour' should be, for colour interpolation
     public float finalReward;
-    public bool useMiddle; // might not want to have a initial, middle and final, but just go initial -> final
-    // if reward above goodEndingThreshold when agent reaches it, end episode like GoodGoal
-    public float goodRewardEndThreshold;
-    // if reward below badEndingThreshold when agent reaches it, end episode like BadGoal
-    public float badRewardEndThreshold;
-    public bool useGoodEpisodeEndThreshold; // might not want to end the episode with thresholds
-    public bool useBadEpisodeEndThreshold; // might not want to end the episode with thresholds
 
     [ColorUsage(true, true)]
-    public Color goodColour;
+    public Color initialColour;
     [ColorUsage(true, true)]
-    public Color neutralColour;
-    [ColorUsage(true, true)]
-    public Color badColour;
+    public Color finalColour;
 
     public float decayRate = -0.001f;
     public bool flipDecayDirection = false;
 
     private Material _mat;
     private bool isDecaying = false;
-    private float middleDecayProportion;
     private float decayWidth;
 
     void Awake()
     {
         _mat = this.gameObject.GetComponent<MeshRenderer>().material;
         _mat.EnableKeyword("_EMISSION");
-        _mat.SetColor("_EmissionColor", flipDecayDirection ? badColour : goodColour);
+        _mat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
+
+        canRandomizeColor = false;
+        SetEpisodeEnds(false);
 
         // if (negative) decay but rate is positive, or (positive) 'anti-decaying' but rate is negative, then flip the rate value provided
         if (flipDecayDirection ? decayRate < 0 : decayRate > 0) { decayRate *= -1; Debug.Log("Had to flip decay rate"); }
 
-        if (useMiddle) {
-            // check middle value (for yellow)
-            if (middleReward < Mathf.Min(initialReward, finalReward) || middleReward > Mathf.Max(initialReward, finalReward))
-            {
-                Debug.Log("middleReward not in expected range. Clamping . . .");
-                middleReward = Mathf.Clamp(middleReward, Mathf.Min(initialReward, finalReward), Mathf.Max(initialReward, finalReward));
-            }
-        }
-        
+        this.gameObject.tag = "goodGoalMulti";
+        Debug.Log("intitialReward: "+initialReward);
+        reward = initialReward;
+        sizeMax = sizeMin = new Vector3(reward, reward, reward);
+
         decayWidth = Mathf.Abs(initialReward - finalReward);
 
-        if (useMiddle) { middleDecayProportion = (flipDecayDirection ? (middleReward - initialReward) : (middleReward - finalReward)) / decayWidth; }
-
-        reward = initialReward;
-        SetTag();
-
         UpdateColour(1);
+    }
+
+    private void Start()
+    {
         StartDecay();
+    }
+
+    public override void SetSize(Vector3 size)
+    {
+        base.SetSize(size); Debug.Log("Just ran SetSize for size: " + size);
     }
 
     // StartDecay()/StopDecay() functions by default do not change reward value,
@@ -66,31 +56,14 @@ public class DecayGoal : BallGoal
     void StartDecay(bool reset = false) { isDecaying = true; if (reset) { reward = initialReward; } }
     void StopDecay(bool reset = false) { isDecaying = false; if (reset) { reward = finalReward; } }
 
-    void SetTag()
-    {
-        if (IsGoodGoal()) { this.gameObject.tag = "goodGoal"; }
-        else if (IsBadGoal()) { this.gameObject.tag = "badGoal"; }
-        else { this.gameObject.tag = "goodGoalMulti"; }
-    }
-
-    bool IsGoodGoal() { return useGoodEpisodeEndThreshold && reward >= goodRewardEndThreshold; }
-    bool IsBadGoal() { return useBadEpisodeEndThreshold && reward <= badRewardEndThreshold; }
-
     // assumes linear decay (for now - @TO-DO could maybe add other decay functions?)
     void FixedUpdate()
     {
-        // if goal reward value sufficiently good/bad, then it could be episode-ending, like GoodGoal or BadGoal
-        if (IsGoodGoal() || IsBadGoal())
-        {
-            SetEpisodeEnds(true);
-        }
-        else { SetEpisodeEnds(false); }
 
         // if still decaying
         if (isDecaying)
         {
             UpdateGoal(decayRate);
-            SetTag();
         }
 
         // if ball has reached end of its decay but we haven't stopped decay yet . . .
@@ -111,7 +84,7 @@ public class DecayGoal : BallGoal
         UpdateValue(rate);
         UpdateColour(getProportion(reward));
     }
-    
+
     private void UpdateValue(float rate)
     {
         // apply step-change to reward value w/given rate, but clamp at extremes
@@ -123,24 +96,11 @@ public class DecayGoal : BallGoal
         //Debug.Log("p is: " + p + ", and middleDecayProportion is: " + middleDecayProportion);
         if (p != Mathf.Clamp(p, 0, 1)) { Debug.Log("UpdateColour passed a bad proprtion! Clamping . . ."); p = Mathf.Clamp(p, 0, 1); }
         // if within 'bad -> neutral' range, interpolates between red (bad) and yellow (neutral)
-        if (useMiddle && p < middleDecayProportion)
-        {
-            p = (p / middleDecayProportion); // treat as linear interpolation from 0 to 1 even though actually from 0 to PASSMARK
-            _mat.SetColor("_EmissionColor", p * neutralColour + (1 - p) * badColour
-                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
-        }
-        // if within 'neutral -> good' range, interpolates between yellow (neutral) and green (good)
-        else if (useMiddle)
-        {
-            p = ((p - middleDecayProportion) / (1 - middleDecayProportion)); // treat as linear interpolation from 0 to 1 even though actually from PASSMARK to 1
-            _mat.SetColor("_EmissionColor", p * goodColour + (1 - p) * neutralColour
-                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
-        }
-        else
-        {
-            _mat.SetColor("_EmissionColor", p * goodColour + (1 - p) * badColour
-                + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
-        }
+
+        _mat.SetColor("_EmissionColor", p * initialColour + (1 - p) * finalColour
+            + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
+
     }
     float getProportion(float r) { return (r - Mathf.Min(initialReward, finalReward)) / decayWidth; }
 }
+
