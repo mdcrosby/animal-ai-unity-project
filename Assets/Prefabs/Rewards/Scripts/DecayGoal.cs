@@ -34,7 +34,7 @@ public class DecayGoal : BallGoal
         this.gameObject.tag = "goodGoalMulti";
         Debug.Log("intitialReward: "+initialReward);
         reward = initialReward;
-        sizeMax = sizeMin = new Vector3(reward, reward, reward);
+        sizeMax = sizeMin = (flipDecayDirection ? finalReward : initialReward) * Vector3.one;
 
         decayWidth = Mathf.Abs(initialReward - finalReward);
 
