@@ -240,7 +240,7 @@ namespace ArenaBuilders
                                                             gameObjectBoundingBox,
                                                             Quaternion.Euler(rotationOut),
                                                             1 << 0);
-                canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"), gameObjectInstance.tag.EndsWith("Zone"));
+                canSpawn = IsSpotFree(colliders, gameObjectInstance.CompareTag("agent"), gameObjectInstance.name.Contains("Zone")); //@To-DO maybe find a better way to do this zone name-check
                 k++;
 
             }
@@ -253,6 +253,7 @@ namespace ArenaBuilders
 
         private bool IsSpotFree(Collider[] colliders, bool isAgent, bool isZone = false)
         {
+            if (isZone) Debug.Log("IsZone set to TRUE");
             if (isZone) return colliders.Length == 0 ||
                     (colliders.All(collider => collider.isTrigger || !collider.gameObject.CompareTag("arena")) && !isAgent);
             else return colliders.Length == 0 ||
