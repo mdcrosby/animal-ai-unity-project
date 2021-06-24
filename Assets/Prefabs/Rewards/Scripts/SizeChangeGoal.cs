@@ -63,7 +63,7 @@ public class SizeChangeGoal : BallGoal
                 if ((int)interpolationMethod == 0/*Constant*/) { SetSize((_height + sizeChangeRate) * Vector3.one); }
                 else if ((int)interpolationMethod > 0)/*Polynomial*/ { PolyInterpolationUpdate(); }
 
-                if (_height <= finalSize) { SetSize(finalSize * Vector3.one); finishedSizeChange = true; }
+                if (isShrinking ? _height <= finalSize : _height >= finalSize) { SetSize(finalSize * Vector3.one); finishedSizeChange = true; }
             }
         }
     }

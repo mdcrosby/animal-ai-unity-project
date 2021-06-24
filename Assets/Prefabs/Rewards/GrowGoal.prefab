@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 54197712693996860}
   - component: {fileID: -228958769421370408}
   m_Layer: 0
-  m_Name: ShrinkGoal
+  m_Name: GrowGoal
   m_TagString: goodGoalMulti
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,10 +132,10 @@ MonoBehaviour:
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
   numberOfGoals: 1
-  reward: 5
+  reward: 2
   isMulti: 1
-  initialSize: 5
-  finalSize: 2
+  initialSize: 2
+  finalSize: 8
   sizeChangeRate: -0.01
   interpolationMethod: 0
   rewardSizeTracking: 1
