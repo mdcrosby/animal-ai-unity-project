@@ -22,7 +22,7 @@ public class DeathZone : Goal
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
 
-        GetComponent<Renderer>().material.mainTextureScale = new Vector2(sizeX, sizeZ);
+        GetComponent<Renderer>().material.SetVector("_ObjScale", new Vector3(sizeX, sizeY, sizeZ));
     }
 
     protected override float AdjustY(float yIn)

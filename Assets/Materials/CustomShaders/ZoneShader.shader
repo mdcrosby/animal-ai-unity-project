@@ -12,7 +12,8 @@ Shader "Custom/ZoneShader"
 		_AdditiveAlpha("Additive Alpha Constant:", Range(0.,1.)) = 1.
 		_MinAlpha("Minimum Internal Alpha:", Range(0.,1.)) = 0.2
 		_UVScale("UV Scale Factor:", float) = 1.
-		_Cull("Face Culling Mode", Float) = 0.0
+		_ObjScale("Object Scale Factor:", Vector) = (1.,1.,1.,1.)
+		_Cull("Face Culling Mode", float) = 0.0
 
 		[Header(Behaviour)]
 		[Space]
@@ -46,22 +47,46 @@ Shader "Custom/ZoneShader"
 					fixed4 vertCol : COLOR0;
 					float2 uv : TEXCOORD0;
 					float2 uv2 : TEXCOORD1;
+					float3 normal : NORMAL;
 				};
 
 				sampler2D _MainTex;
 				float4 _MainTex_ST;
+
+				float2 calcPlane(float3 w, float3 n)
+				{
+					
+					float2 p = float2(0.,0.);
+					if (abs(n.x) > 0.5) {
+						p = w.yz;
+					}
+					else if (abs(n.y) > 0.5) {
+						p = w.xz;
+					}
+					else if (abs(n.z) > 0.5) {
+						p = w.xy;
+					}
+					return p;
+					//float2 p = w.xz;
+					//return p;
+				}
 
 				v2f vert(appdata_full v)
 				{
 					v2f o;
 					o.pos = UnityObjectToClipPos(v.vertex);
 
-					// Gets the xy position of the vertex in worldspace.
-					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz /*+ mul(unity_ObjectToWorld, v.vertex).yy*/;
-					// To use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture, substitute v.texcoord for worldXY
-					o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+					// Gets the position of the vertex in worldspace.
+					float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz/* + mul(unity_ObjectToWorld, v.vertex).yy*/;
+					float2 planePos = calcPlane(worldPos, v.normal);
+					
+					// To use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture, substitute v.texcoord for planePos
+					o.uv = TRANSFORM_TEX(planePos, _MainTex);
 					o.uv2 = v.texcoord;
 					o.vertCol = v.color;
+
+					//o.localPos = worldPos - mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+					
 					return o;
 				}
 
@@ -73,10 +98,11 @@ Shader "Custom/ZoneShader"
 				float _AdditiveAlpha;
 				float _MinAlpha;
 				float _UVScale;
+				float3 _ObjScale;
 
 				fixed4 frag(v2f i) : SV_Target
 				{
-					float2 uv = i.uv * _UVScale + fixed2(_ScrollDirX, _ScrollDirY) * _Speed * _Time.x;
+					float2 uv = i.uv * _UVScale /** _ObjScale.xz*/ + fixed2(_ScrollDirX, _ScrollDirY) * _Speed * _Time.x;
 					fixed4 col = tex2D(_MainTex, uv) * _EmissionColour * i.vertCol;
 					col.a *= tex2D(_Mask, i.uv2).r;
 					col.a *= max(1 - (i.pos.z / i.pos.w), _MinAlpha);
