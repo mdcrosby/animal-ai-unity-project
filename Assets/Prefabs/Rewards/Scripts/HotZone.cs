@@ -8,6 +8,7 @@ public class HotZone : Goal
     private GameObject hotZoneFogOverlayObject;
     private Image hotZoneFog;
     public PlayerControls playerControls;
+    private bool insideHotZone;
 
     private void Awake()
     {
@@ -63,6 +64,8 @@ public class HotZone : Goal
         Ray inputRay = new Ray(p, offset.normalized);
         RaycastHit rHit;
 
-        hotZoneFog.enabled = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
+        insideHotZone = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
+        hotZoneFog.enabled = insideHotZone;
+        //this.GetComponent<Renderer>().material.SetFloat("_Cull", insideHotZone ? 1f : 2f); // FEATURE TEST (not very good atm)
     }
 }
