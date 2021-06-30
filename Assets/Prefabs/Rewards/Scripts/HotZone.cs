@@ -66,6 +66,6 @@ public class HotZone : Goal
 
         insideHotZone = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
         hotZoneFog.enabled = insideHotZone;
-        //this.GetComponent<Renderer>().material.SetFloat("_Cull", insideHotZone ? 1f : 2f); // FEATURE TEST (not very good atm)
+        this.GetComponent<Renderer>().material.SetFloat("_Cull", playerControls.cameraID==0 ? 2f : 0f);
     }
 }

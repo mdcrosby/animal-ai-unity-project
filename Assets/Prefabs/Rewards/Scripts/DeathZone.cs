@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DeathZone : Goal
 {
+    public PlayerControls playerControls;
+
+    private void Awake()
+    {
+        playerControls = GameObject.FindGameObjectWithTag("PlayerControls").GetComponent<PlayerControls>();
+    }
 
     public override void SetSize(Vector3 size)
     {
@@ -20,6 +26,11 @@ public class DeathZone : Goal
     protected override float AdjustY(float yIn)
     {
         return -0.15f;
+    }
+
+    private void FixedUpdate()
+    {
+        this.GetComponent<Renderer>().material.SetFloat("_Cull", playerControls.cameraID == 0 ? 2f : 0f);
     }
 
 }
