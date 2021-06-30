@@ -28,6 +28,8 @@ public class HotZone : Goal
         transform.localScale = new Vector3(sizeX * ratioSize.x,
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
+
+        GetComponent<Renderer>().material.mainTextureScale = new Vector2(sizeX, sizeZ);
     }
 
     protected override float AdjustY(float yIn)

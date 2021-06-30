@@ -57,9 +57,9 @@ Shader "Custom/ZoneShader"
 					o.pos = UnityObjectToClipPos(v.vertex);
 
 					// Gets the xy position of the vertex in worldspace.
-					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz + mul(unity_ObjectToWorld, v.vertex).yy;
-					// Use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture
-					o.uv = TRANSFORM_TEX(worldXY, _MainTex);
+					float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xz /*+ mul(unity_ObjectToWorld, v.vertex).yy*/;
+					// To use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture, substitute v.texcoord for worldXY
+					o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 					o.uv2 = v.texcoord;
 					o.vertCol = v.color;
 					return o;
