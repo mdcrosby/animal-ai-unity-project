@@ -12,6 +12,7 @@ Shader "Custom/ZoneShader"
 		_AdditiveAlpha("Additive Alpha Constant:", Range(0.,1.)) = 1.
 		_MinAlpha("Minimum Internal Alpha:", Range(0.,1.)) = 0.2
 		_UVScale("UV Scale Factor:", float) = 1.
+		_Cull("Face Culling Mode", Float) = 0.0
 
 		[Header(Behaviour)]
 		[Space]
@@ -26,10 +27,10 @@ Shader "Custom/ZoneShader"
 
 		SubShader
 		{
-			Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
+			Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" "LightMode" = "UniversalForward"}
 			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite On
-			Cull Off
+			ZWrite Off
+			Cull[_Cull]
 
 			Pass
 			{
@@ -76,13 +77,14 @@ Shader "Custom/ZoneShader"
 				fixed4 frag(v2f i) : SV_Target
 				{
 					float2 uv = i.uv * _UVScale + fixed2(_ScrollDirX, _ScrollDirY) * _Speed * _Time.x;
-					fixed4 col = tex2D(_MainTex, uv) * _EmissionColour * i.vertCol;
+					fixed4 col = tex2D(_MainTex, uv) * _EmissionColour /** i.vertCol*/;
 					col.a *= tex2D(_Mask, i.uv2).r;
 					col.a *= max(1 - (i.pos.z / i.pos.w), _MinAlpha);
 					col.a = max(min(1.0, col.a + _AdditiveAlpha), _MinAlpha);
 					return col;
 				}
 				ENDCG
+
 			}
 		}
 }
