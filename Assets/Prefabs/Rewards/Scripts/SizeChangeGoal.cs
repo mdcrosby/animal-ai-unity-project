@@ -9,6 +9,9 @@ public class SizeChangeGoal : BallGoal
     public float initialSize = 5;
     public float finalSize = 2;
     private bool isShrinking;
+    private bool freeToGrow = true;
+    //private Collider[] immovableColliders;
+    //private List<Tuple<GameObject,Vector3>> immoveableObstacles = new List<Tuple<GameObject, Vector3>>();
     private bool allowSizeChanges = false;
     public float sizeChangeRate; // can be either a constant amount, or an interpolation proportion
     private float sizeProportion = 0; // used only if linear interpolation
@@ -51,14 +54,59 @@ public class SizeChangeGoal : BallGoal
         //if ((int)interpolationMethod > 0) { sizeProportion = (isShrinking ? 1 : 0); } // start at 1 if shrinking, 0 if growing
     }
 
+    override public void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+
+        if (collision.gameObject.tag == "Immovable")
+        {
+            //immoveableObstacles.Add(new Tuple<GameObject, Vector3>(collision.gameObject, collision.GetContact(0).point));
+        }
+    }
+
     void FixedUpdate()
     {
+        /*=== RAY COLLISIONS FOR IMMOVEABLES GO HERE ===*/
+        if (!isShrinking)
+        {
+            Vector3 rayDir; string debug = "";
+            /*
+            foreach (Tuple<GameObject, Vector3> immoveableTuple in immoveableObstacles)
+            {
+                debug += immoveableTuple.Item1.name + " @ " + immoveableTuple.Item2 + ". ";
+                /*
+                for (int c = 0; c < immoveable.contactCount; c++)
+                {
+                    // get direction of ray towards collision contact point
+                    rayDir = immoveable.GetContact(c).point - this.transform.position;
+
+
+                }/
+                
+            }
+            Debug.Log(debug);/
+
+            immovableColliders = Physics.OverlapSphere(transform.position, transform.localScale.x);
+            foreach (Collider c in immovableColliders)
+            {
+                debug += c.gameObject.name+", ";
+            }
+            Debug.Log(debug);*/
+
+            freeToGrow = !Physics.Raycast(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Mathf.Abs(sizeChangeRate));
+            //Debug.DrawLine(Vector3.zero, new Vector3(10, 10, 10), Color.green, 0.1f, false);
+            //Debug.DrawRay(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Color.green, 0.1f, true);
+            //Debug.Log(freeToGrow);
+        }
+
+
+        /*=== delay and size change operations here ===*/
         if (delayCounter > 0) { delayCounter--; }
         else
         {
-            if (delayCounter == 0) { Debug.Log("delayCounter reached zero. Starting size shrinking"); }
+            if (delayCounter == 1) { Debug.Log("delayCounter will now hit zero. Starting size change!"); }
 
-            if (!finishedSizeChange)
+            if (!finishedSizeChange && freeToGrow)
             {
                 if ((int)interpolationMethod == 0/*Constant*/) { SetSize((_height + sizeChangeRate) * Vector3.one); }
                 else if ((int)interpolationMethod > 0)/*Polynomial*/ { PolyInterpolationUpdate(); }
