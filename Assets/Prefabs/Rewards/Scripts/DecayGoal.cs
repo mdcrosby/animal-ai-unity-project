@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DecayGoal : BallGoal
 {
@@ -11,6 +12,7 @@ public class DecayGoal : BallGoal
     public Color initialColour;
     [ColorUsage(true, true)]
     public Color finalColour;
+    public Image timerImage;
 
     public float decayRate = -0.001f;
     public bool flipDecayDirection = false;
@@ -24,6 +26,8 @@ public class DecayGoal : BallGoal
         _mat = this.gameObject.GetComponent<MeshRenderer>().material;
         _mat.EnableKeyword("_EMISSION");
         _mat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
+
+        timerImage = this.GetComponentInChildren<Image>();
 
         canRandomizeColor = false;
         SetEpisodeEnds(false);
