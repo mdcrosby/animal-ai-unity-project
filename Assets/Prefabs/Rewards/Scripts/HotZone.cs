@@ -17,13 +17,14 @@ public class HotZone : Goal
         playerControls = GameObject.FindGameObjectWithTag("PlayerControls").GetComponent<PlayerControls>();
     }
 
-    public override void SetSize(Vector3 size)
+    public override void SetSize(Vector3 size)//This switches back to grandparent method @TODO change prefab.cs to allow direct access and have other children of Prefab.cs override separate method.
     {
         Vector3 clippedSize = Vector3.Max(sizeMin, Vector3.Min(sizeMax, size)) * sizeAdjustement;
         float sizeX = size.x < 0 ? Random.Range(sizeMin[0], sizeMax[0]) : clippedSize.x;
-        float sizeY = size.x < 0 ? Random.Range(sizeMin[1], sizeMax[1]) : clippedSize.y;
+        float sizeY = size.y < 0 ? Random.Range(sizeMin[1], sizeMax[1]) : clippedSize.y;
         float sizeZ = size.z < 0 ? Random.Range(sizeMin[2], sizeMax[2]) : clippedSize.z;
 
+        _height = sizeY;
         transform.localScale = new Vector3(sizeX * ratioSize.x,
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
