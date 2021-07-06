@@ -48,7 +48,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
 
         int paramValue;
-        playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
+        playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
         int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
         bool useCamera = (environmentParameters.TryGetValue("useCamera", out paramValue) ? paramValue: 0) > 0;
         int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
