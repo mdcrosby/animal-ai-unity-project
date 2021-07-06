@@ -75,4 +75,4 @@ Packages/manifest.json
 Packages/packages-lock.json
 .vsconfig
 
-Assets/ML-Agents/Timers/AAI3EnvironmentManager_timers.json
+Assets/ML-Agents/Timers/*
