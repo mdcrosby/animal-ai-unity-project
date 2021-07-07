@@ -12,22 +12,25 @@ public class DecayGoal : BallGoal
     public Color initialColour;
     [ColorUsage(true, true)]
     public Color finalColour;
-    public Image timerImage;
 
     public float decayRate = -0.001f;
     public bool flipDecayDirection = false;
 
-    private Material _mat;
+    private Material _basemat;
+    private Material _radialmat;
     private bool isDecaying = false;
     private float decayWidth;
+    private float loAlpha = 0.11f;
+    private float hiAlpha = 0.35f;
 
     void Awake()
     {
-        _mat = this.gameObject.GetComponent<MeshRenderer>().material;
-        _mat.EnableKeyword("_EMISSION");
-        _mat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
+        _basemat = this.gameObject.GetComponent<MeshRenderer>().material;
+        _basemat.EnableKeyword("_EMISSION");
+        _basemat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
 
-        timerImage = this.GetComponentInChildren<Image>();
+        _radialmat = this.gameObject.GetComponent<MeshRenderer>().materials[1];
+        _radialmat.SetFloat("_Cutoff", isDecaying ? loAlpha : hiAlpha);
 
         canRandomizeColor = false;
         SetEpisodeEnds(false);
@@ -101,9 +104,10 @@ public class DecayGoal : BallGoal
         if (p != Mathf.Clamp(p, 0, 1)) { Debug.Log("UpdateColour passed a bad proprtion! Clamping . . ."); p = Mathf.Clamp(p, 0, 1); }
         // if within 'bad -> neutral' range, interpolates between red (bad) and yellow (neutral)
 
-        _mat.SetColor("_EmissionColor", p * initialColour + (1 - p) * finalColour
+        _basemat.SetColor("_EmissionColor", p * initialColour + (1 - p) * finalColour
             + (0.5f - Mathf.Abs(p - 0.5f)) * Color.white * 0.1f /*last component is constant for aesthetics*/);
 
+        _radialmat.SetFloat("_Cutoff", Mathf.Clamp(p*loAlpha + (1-p)*hiAlpha, loAlpha, hiAlpha));
     }
     float getProportion(float r) { return (r - Mathf.Min(initialReward, finalReward)) / decayWidth; }
 }

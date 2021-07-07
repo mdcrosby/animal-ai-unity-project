@@ -76,6 +76,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: acce0111776515d409aa313eda8a3a22, type: 2}
+  - {fileID: 2100000, guid: f26f4feac4c107246b1ea059f1d49c3c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -138,5 +139,6 @@ MonoBehaviour:
   finalReward: 3
   initialColour: {r: 0.55506897, g: 0, b: 1, a: 1}
   finalColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
+  timerImage: {fileID: 0}
   decayRate: -0.005
   flipDecayDirection: 1
