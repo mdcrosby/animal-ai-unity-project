@@ -13,6 +13,7 @@ public class PlayerControls : MonoBehaviour
     private TrainingAgent _agent;
     public Text score; // This should be assigned to 'Score Text' in-editor
     private int _numActive = 0;
+    public int cameraID { get { return _numActive; } }
     private Dictionary<int, Camera> _cameras;
     public float prevScore = 0;
     public Canvas effectCanvas;

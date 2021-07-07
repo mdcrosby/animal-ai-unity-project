@@ -16,6 +16,8 @@ public class DeathZone : Goal
         transform.localScale = new Vector3(sizeX * ratioSize.x,
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
+
+        GetComponent<Renderer>().material.SetVector("_ObjScale", new Vector3(sizeX, sizeY, sizeZ));
     }
 
     protected override float AdjustY(float yIn)
