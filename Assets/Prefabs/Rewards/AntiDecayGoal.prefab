@@ -133,7 +133,7 @@ MonoBehaviour:
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
   numberOfGoals: 1
-  reward: 0
+  reward: 2.5
   isMulti: 1
   initialReward: 0
   finalReward: 3
@@ -141,3 +141,4 @@ MonoBehaviour:
   finalColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
   decayRate: -0.005
   flipDecayDirection: 1
+  fixedFrameDelay: 150
