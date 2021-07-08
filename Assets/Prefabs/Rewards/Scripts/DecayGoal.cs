@@ -5,14 +5,17 @@ using UnityEngine.UI;
 
 public class DecayGoal : BallGoal
 {
+    [Header("Reward Params")]
     public float initialReward;
     public float finalReward;
 
+    [Header("Colour Params")]
     [ColorUsage(true, true)]
     public Color initialColour;
     [ColorUsage(true, true)]
     public Color finalColour;
 
+    [Header("Decay Params")]
     public float decayRate = -0.001f;
     public bool flipDecayDirection = false;
 
@@ -22,6 +25,9 @@ public class DecayGoal : BallGoal
     private float decayWidth;
     private float loAlpha = 0.11f;
     private float hiAlpha = 0.35f;
+
+    public int fixedFrameDelay = 150; // controls extent of delay before (anti-)decay commences
+    private int delayCounter;
 
     void Awake()
     {
@@ -37,6 +43,7 @@ public class DecayGoal : BallGoal
 
         // if (negative) decay but rate is positive, or (positive) 'anti-decaying' but rate is negative, then flip the rate value provided
         if (flipDecayDirection ? decayRate < 0 : decayRate > 0) { decayRate *= -1; Debug.Log("Had to flip decay rate"); }
+        delayCounter = fixedFrameDelay;
 
         this.gameObject.tag = "goodGoalMulti";
         Debug.Log("intitialReward: "+initialReward);
@@ -45,17 +52,12 @@ public class DecayGoal : BallGoal
 
         decayWidth = Mathf.Abs(initialReward - finalReward);
 
-        UpdateColour(1);
-    }
-
-    private void Start()
-    {
-        StartDecay();
+        UpdateColour(flipDecayDirection?0:1);
     }
 
     public override void SetSize(Vector3 size)
     {
-        base.SetSize(size); Debug.Log("Just ran SetSize for size: " + size);
+        base.SetSize(size);
     }
 
     // StartDecay()/StopDecay() functions by default do not change reward value,
@@ -66,6 +68,11 @@ public class DecayGoal : BallGoal
     // assumes linear decay (for now - @TO-DO could maybe add other decay functions?)
     void FixedUpdate()
     {
+        if (StillInInitDecayState() && !isDecaying)
+        {
+            if (delayCounter > 0) { delayCounter--; }
+            else { StartDecay(); UpdateGoal(0); }
+        }
 
         // if still decaying
         if (isDecaying)
