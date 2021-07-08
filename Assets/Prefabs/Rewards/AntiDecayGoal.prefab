@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311020654520240}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 6891028187734869254, guid: dcdd37785903db543b1d657afd500d44, type: 3}
 --- !u!135 &135831286041315876
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -139,6 +139,5 @@ MonoBehaviour:
   finalReward: 3
   initialColour: {r: 0.55506897, g: 0, b: 1, a: 1}
   finalColour: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
-  timerImage: {fileID: 0}
   decayRate: -0.005
   flipDecayDirection: 1
