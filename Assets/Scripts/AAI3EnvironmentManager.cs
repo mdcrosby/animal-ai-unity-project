@@ -19,6 +19,7 @@ using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check
 public class AAI3EnvironmentManager : MonoBehaviour
 {
     public GameObject arena; // A prefab for the training arena setup
+    public GameObject uiCanvas;
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
@@ -61,7 +62,8 @@ public class AAI3EnvironmentManager : MonoBehaviour
         {
             numberOfArenas = 1;
             playerMode = true;
-            resolution = 500;
+            useCamera= true;
+            resolution = 84;
             grayscale = false;
             useRayCasts = true;
             raysPerSide = 2;
@@ -76,7 +78,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         
         //Add playerControls if in play mode
         playerControls.SetActive(playerMode);
-
+        uiCanvas.GetComponent<Canvas>().enabled = playerMode;
         
         //Destroy the sensors that aren't being used and update the values of those that are
         //HACK - mlagents automatically registers cameras when the agent script is initialised so have to:

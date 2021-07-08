@@ -322,6 +322,7 @@ MonoBehaviour:
   rotationSpeed: 100
   rotationAngle: 0.25
   numberOfGoalsCollected: 0
+  progBar: {fileID: 0}
 --- !u!114 &718439775431632637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 3
+  DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
 --- !u!114 &1120385695744362398
 MonoBehaviour:
@@ -348,7 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd46ec688de01e41ac0838fddcdb59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decisionPeriod: 3
+  decisionPeriod: 5
 --- !u!114 &8679969811055685185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +372,7 @@ MonoBehaviour:
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 70
   m_SphereCastRadius: 0.5
-  m_RayLength: 60
+  m_RayLength: 200
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
