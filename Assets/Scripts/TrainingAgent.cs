@@ -60,10 +60,6 @@ public class TrainingAgent : Agent, IPrefab
 
     public override void Initialize()
     {
-        //Because mlagents (2.0) finds the attached sensors during OnEnable->LazyInitialize we have to make sure they are already setup correctly.
-        //This is the latest point when it is possible to remove them.
-        // DestroyImmediate(GetComponent<CameraSensorComponent>());//This destroys in the editor but it still returns part of the observations??
-        // DestroyImmediate(GetComponent<RayPerceptionSensorComponent3D>());
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
         _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default

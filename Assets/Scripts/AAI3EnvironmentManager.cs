@@ -73,7 +73,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
         _instantiatedArenas = new TrainingArena[numberOfArenas];
         InstantiateArenas(numberOfArenas);//Instantiate every new arena with agent and objects. Agents are currently deactivated until we set the sensors.
-        ConfigureIfPlayer(playerMode);
+        
+        //Add playerControls if in play mode
+        playerControls.SetActive(playerMode);
+
         
         //Destroy the sensors that aren't being used and update the values of those that are
         //HACK - mlagents automatically registers cameras when the agent script is initialised so have to:
@@ -154,16 +157,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("MainCamera").transform.localPosition =
             new Vector3(n * width / 2, 50 * (float)n, (float)n * height / 2);
-    }
-
-    private void ConfigureIfPlayer(bool playerMode)
-    {
-        Debug.Log("Setting playerMode: " + playerMode);
-        GameObject.FindGameObjectWithTag("score").SetActive(playerMode);//@TODO not implemented
-        if (playerMode)
-        {
-            playerControls.SetActive(true);
-        }
     }
 
     ///<summary>
