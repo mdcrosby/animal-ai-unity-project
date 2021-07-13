@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
 using ArenaBuilders;
 using UnityEngineExtensions;
 using ArenasParameters;
@@ -23,8 +22,7 @@ public class TrainingArena : MonoBehaviour
     private AAI3EnvironmentManager _environmentManager;
     private List<Fade> _fades = new List<Fade>();
     private bool _lightStatus = true;
-    private int _agentDecisionInterval; // To replace with a call to DecisionRequester.DecisionPeriod if possible
-    // (not possible at the moment as it's internal and we cannot call GetComponent on internals) 
+    private int _agentDecisionInterval; // How many frames between decisions, reads from agent's decision requester
 
     internal void Awake()
     {
@@ -36,7 +34,7 @@ public class TrainingArena : MonoBehaviour
         Debug.Log("Finding Agent");
         _agent = FindObjectsOfType<Agent>(true)[0];
         Debug.Log(_agent);
-        _agentDecisionInterval = _agent.GetComponentInChildren<DecisionPeriod>().decisionPeriod;
+        _agentDecisionInterval = _agent.GetComponentInChildren<DecisionRequester>().DecisionPeriod;
         _fades = blackScreens.GetFades();
     }
 
