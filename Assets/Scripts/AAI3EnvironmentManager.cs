@@ -25,6 +25,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public int defaultResolution = 84;
     public int defaultRaysPerSide = 2;
     public int defaultRayMaxDegrees = 60;
+    public int defaultDecisionPeriod = 3;
     public GameObject playerControls; //Just for camera and reset controls ...@TODO Don't think this should be a GameObject in the scene and linked there (carried over from v2.0)
 
     [HideInInspector]
@@ -57,6 +58,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         bool useRayCasts = (environmentParameters.TryGetValue("useRayCasts", out paramValue) ? paramValue : 0) > 0;
         int raysPerSide = environmentParameters.TryGetValue("raysPerSide", out paramValue) ? paramValue : defaultRaysPerSide;
         int rayMaxDegrees = environmentParameters.TryGetValue("rayMaxDegrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
+        int decisionPeriod = environmentParameters.TryGetValue("decisionPeriod", out paramValue) ? paramValue : defaultDecisionPeriod;
 
         if (Application.isEditor)//Default settings for tests in Editor @TODO replace this with custom config settings in editor window for easier testing.
         {
@@ -85,7 +87,9 @@ public class AAI3EnvironmentManager : MonoBehaviour
         //  1) use FindObjectsOfType as this returns deactivated objects
         //  2) start with agent deactivated and then set active after editing sensors
         //  3) use DestroyImmediate so that it is destroyed before agent is initialised
+        // also sets agent decision period and the correct behaviour type for play mode
         foreach(Agent a in FindObjectsOfType<Agent>(true)){
+            a.GetComponentInChildren<DecisionRequester>().DecisionPeriod = decisionPeriod;
             if(!useRayCasts){
                 DestroyImmediate(a.GetComponentInChildren<RayPerceptionSensorComponent3D>());
             }
@@ -172,6 +176,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
     ///--useRayCasts - if true adds raycast observations
     ///--raysPerSide - sets the number of rays per side (total = 2n+1)
     ///--rayAngle - sets the maximum angle of the rays (defaults to 60)
+    ///--decisionPeriod - The frequency with which the agent requests a decision. 
+    ///     A DecisionPeriod of 5 means that the Agent will request a decision every 5 Academy steps.
+    ///     Range: (1, 20)
+    ///     Default: 3
     /// ///</summary>
     private Dictionary<string, int> RetrieveEnvironmentParameters()
     {
@@ -214,6 +222,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
                 case "--rayMaxDegrees":
                     int rmd = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 60;
                     environmentParameters.Add("rayMaxDegrees", rmd);
+                    break;
+                case "--decisionPeriod":
+                    int dp = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 3;
+                    environmentParameters.Add("decisionPeriod", dp);
                     break;
             }
         }

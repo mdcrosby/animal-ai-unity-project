@@ -166,7 +166,6 @@ GameObject:
   - component: {fileID: 9181951476684829857}
   - component: {fileID: 7020771223157296603}
   - component: {fileID: 718439775431632637}
-  - component: {fileID: 1120385695744362398}
   - component: {fileID: 8679969811055685185}
   - component: {fileID: 4177324108388760848}
   m_Layer: 0
@@ -337,19 +336,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 5
   TakeActionsBetweenDecisions: 1
---- !u!114 &1120385695744362398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1956805098100504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dd46ec688de01e41ac0838fddcdb59e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  decisionPeriod: 5
 --- !u!114 &8679969811055685185
 MonoBehaviour:
   m_ObjectHideFlags: 0
