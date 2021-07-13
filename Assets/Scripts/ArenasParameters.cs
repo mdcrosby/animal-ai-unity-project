@@ -68,7 +68,7 @@ namespace ArenasParameters
     }
 
     /// <summary>
-    /// An ArenaConfiguration contains the list of items taht can be spawned in the arena, the 
+    /// An ArenaConfiguration contains the list of items that can be spawned in the arena, the 
     /// maximum number of steps which can vary from one episode to the next (T) and whether all
     /// sizes and colors can be randomized
     /// </summary>

@@ -20,22 +20,14 @@ public class ProgressBar : MonoBehaviour
     public Color BarEmptyColor;
     public Color BarBackGroundColor;
     public Sprite BarBackGroundSprite;
-    public int MaxHealth = 100;
-    public int MinHealth = -100;
-    public int StartHealth = 0;
+    public int MaxHealth = 100; //Currently coupled with agent code - should remove to read frmo agent maxHealth
+    public int MinHealth = 0; //""
+    public int StartHealth = 0;//""
     public int PassMark = 0;
-    //public bool HungerDrain = true;
-    //public float HungerDrainRate = 0.05f;
-
-    // [Header("Sound Alert")]
-    // public AudioClip sound;
-    // public bool repeat = false;
-    // public float RepeatRate = 1f;
 
     private Image _bar, _barBackground;
     private RectTransform _passMarker;
     private float _nextPlay;
-    // private AudioSource audiosource;
     private Text _txtTitle;
     private TrainingAgent _agent;
 
@@ -65,7 +57,6 @@ public class ProgressBar : MonoBehaviour
         _txtTitle = transform.Find("Text").GetComponent<Text>();
         _barBackground = transform.Find("BarBackground").GetComponent<Image>();
         _passMarker = transform.Find("PassMarker").GetComponent<RectTransform>();
-        // audiosource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -158,32 +149,8 @@ public class ProgressBar : MonoBehaviour
 
             _barBackground.sprite = BarBackGroundSprite;
         }
-        // else
-        // {
-        //     if (Alert >= barValue && Time.time > nextPlay)
-        //     {
-        //         nextPlay = Time.time + RepeatRate;
-        //         audiosource.PlayOneShot(sound);
-        //     }
-        // }
 
-        if (_agent != null) { BarValue = _agent.GetCumulativeReward(); }
+        if (_agent != null) { BarValue = _agent.health; }
 
-        //if (HungerDrain & BarValue > MinHealth)
-        //{
-        //    ReduceHealth(HungerDrainRate);
-        //}
-
-        if (OutOfHealth() & _agent != null) { _agent.AgentDeath(-1.0f); }
     }
-
-    /*
-    public void ReduceHealth(float drainAmount)
-    {
-        BarValue = (_barValue - drainAmount);
-    }
-    */
-
-    public bool OutOfHealth() { return BarValue <= MinHealth; }
-
 }
