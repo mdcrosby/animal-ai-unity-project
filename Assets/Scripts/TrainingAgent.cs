@@ -8,7 +8,6 @@ using PrefabInterface;
 using Unity.MLAgents.Sensors;
 
 /// Actions are currently discrete. 2 branches of 0,1,2, 0,1,2
-///
 public class TrainingAgent : Agent, IPrefab
 {
     public float speed = 30f;
@@ -39,6 +38,8 @@ public class TrainingAgent : Agent, IPrefab
         health = _maxHealth;
     }
 
+    // Agent additionally receives local observations of length 7
+    // [health, velocity x, velocity y, velocity z, position x, position y, position z]
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(health);
