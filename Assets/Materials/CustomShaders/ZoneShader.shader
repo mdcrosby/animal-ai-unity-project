@@ -42,6 +42,8 @@ Shader "Custom/ZoneShader"
 
 				#include "UnityCG.cginc"
 
+				static const float one_over_root2 = 0.70710678;
+
 				struct v2f {
 					float4 pos : SV_POSITION;
 					fixed4 vertCol : COLOR0;
@@ -57,13 +59,13 @@ Shader "Custom/ZoneShader"
 				{
 					
 					float2 p = float2(0.,0.);
-					if (abs(n.x) > 0.5) {
+					if (abs(n.x) > one_over_root2) {
 						p = w.yz;
 					}
-					else if (abs(n.y) > 0.5) {
+					else if (abs(n.y) > one_over_root2) {
 						p = w.xz;
 					}
-					else if (abs(n.z) > 0.5) {
+					else if (abs(n.z) > one_over_root2) {
 						p = w.xy;
 					}
 					return p;
@@ -78,7 +80,7 @@ Shader "Custom/ZoneShader"
 
 					// Gets the position of the vertex in worldspace.
 					float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz/* + mul(unity_ObjectToWorld, v.vertex).yy*/;
-					float2 planePos = calcPlane(worldPos, v.normal);
+					float2 planePos = calcPlane(worldPos, UnityObjectToWorldNormal(v.normal));
 					
 					// To use the worldspace coords instead of the mesh's UVs for main noisy/foggy texture, substitute v.texcoord for planePos
 					o.uv = TRANSFORM_TEX(planePos, _MainTex);
