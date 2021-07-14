@@ -35,7 +35,7 @@ public class DecayGoal : BallGoal
         _basemat.EnableKeyword("_EMISSION");
         _basemat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
 
-        _radialmat = this.gameObject.GetComponent<MeshRenderer>().materials[1];
+        _radialmat = this.gameObject.GetComponent<MeshRenderer>().materials[2];
         _radialmat.SetFloat("_Cutoff", isDecaying ? loAlpha : hiAlpha);
 
         canRandomizeColor = false;
