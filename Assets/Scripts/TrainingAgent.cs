@@ -27,15 +27,18 @@ public class TrainingAgent : Agent, IPrefab
     [HideInInspector]
     public float health = 100f;
     private float _maxHealth = 100f;
+    [HideInInspector]
+    public float timeLimit = 0f;
 
     public override void Initialize()
     {
         _arena = GetComponentInParent<TrainingArena>();
         _rigidBody = GetComponent<Rigidbody>();
-        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0; // No step reward for infinite episode by default
+        _rewardPerStep = timeLimit > 0 ? -1f / timeLimit : 0; // No step reward for infinite episode by default
         progBar = GameObject.Find("UI ProgressBar").GetComponent<ProgressBar>();
         progBar.AssignAgent(this);
         health = _maxHealth;
+
     }
 
     // Agent additionally receives local observations of length 7
@@ -137,7 +140,7 @@ public class TrainingAgent : Agent, IPrefab
         _previousScore = _currentScore;
         numberOfGoalsCollected = 0;
         _arena.ResetArena();
-        _rewardPerStep = MaxStep > 0 ? -1f / MaxStep : 0;
+        _rewardPerStep = timeLimit > 0 ? -1f / timeLimit : 0; // No step reward for infinite episode by default
         _isGrounded = false;
         health = _maxHealth;
     }

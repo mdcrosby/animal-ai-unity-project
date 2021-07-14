@@ -16,7 +16,7 @@ public class TrainingArena : MonoBehaviour
     [HideInInspector]
     public int arenaID = -1;
     [HideInInspector]
-    public Agent _agent;
+    public TrainingAgent _agent;
     private ArenaBuilder _builder;
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
     private AAI3EnvironmentManager _environmentManager;
@@ -31,9 +31,7 @@ public class TrainingArena : MonoBehaviour
                                     maxSpawnAttemptsForPrefabs,
                                     maxSpawnAttemptsForAgent);
         _environmentManager = GameObject.FindObjectOfType<AAI3EnvironmentManager>();
-        Debug.Log("Finding Agent");
-        _agent = FindObjectsOfType<Agent>(true)[0];
-        Debug.Log(_agent);
+        _agent = FindObjectsOfType<TrainingAgent>(true)[0];
         _agentDecisionInterval = _agent.GetComponentInChildren<DecisionRequester>().DecisionPeriod;
         _fades = blackScreens.GetFades();
     }
@@ -59,7 +57,8 @@ public class TrainingArena : MonoBehaviour
             _arenaConfiguration.SetGameObject(prefabs.GetList());
             _builder.Spawnables = _arenaConfiguration.spawnables;
             _arenaConfiguration.toUpdate = false;
-            _agent.MaxStep = _arenaConfiguration.T * _agentDecisionInterval;
+            _agent.MaxStep  = 0; //We never time the environment out unless agent health goes to 0
+            _agent.timeLimit = _arenaConfiguration.T * _agentDecisionInterval;
         }
 
         _builder.Build();
