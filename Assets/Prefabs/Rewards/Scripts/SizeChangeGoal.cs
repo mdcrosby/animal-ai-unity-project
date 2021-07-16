@@ -7,7 +7,7 @@ public class SizeChangeGoal : BallGoal
 {
     [Header("Size Change Params")]
     public float initialSize = 5;
-    public float finalSize = 2;
+    public float finalSize = 1;
     private bool isShrinking;
     private bool freeToGrow = true;
     //private Collider[] immovableColliders;
@@ -28,6 +28,10 @@ public class SizeChangeGoal : BallGoal
     private bool finishedSizeChange = false;
 
     // 'reward' and 'isMulti' carried over from inherited Goal class
+
+    // list of current collision objects
+    //private CollisionImpulseTracker colImpTracker;
+    private Collider[] sphereOverlap;
 
     public override void SetSize(Vector3 size)
     {
@@ -52,6 +56,11 @@ public class SizeChangeGoal : BallGoal
         SetSize(initialSize * Vector3.one);
 
         //if ((int)interpolationMethod > 0) { sizeProportion = (isShrinking ? 1 : 0); } // start at 1 if shrinking, 0 if growing
+
+        // get collision list script component; deactivate (halt unnecessary computation) if a shrinking goal
+        // (we only use this to check safety of goal growth)
+        //colImpTracker = this.GetComponent<CollisionImpulseTracker>();
+        //colImpTracker.enabled = !isShrinking;
     }
 
     override public void OnCollisionEnter(Collision collision)
@@ -97,8 +106,21 @@ public class SizeChangeGoal : BallGoal
             //Debug.DrawLine(Vector3.zero, new Vector3(10, 10, 10), Color.green, 0.1f, false);
             //Debug.DrawRay(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Color.green, 0.1f, true);
             //Debug.Log(freeToGrow);
-        }
 
+            sphereOverlap = Physics.OverlapSphere(this.transform.position, this.transform.localScale.x/2 - 0.05f);
+            List<Collider> overlapList = new List<Collider>();
+            foreach (Collider c in sphereOverlap) {
+                if (c.gameObject.tag == "arena" || c.gameObject.tag == "Immovable") {
+                    overlapList.Add(c);
+                }
+            }
+            print(overlapList.Count);
+            foreach (Collider c in overlapList) { print(c.gameObject.name); }
+            if (overlapList.Count > 0)
+            {
+                freeToGrow = false;
+            }
+        }
 
         /*=== delay and size change operations here ===*/
         if (delayCounter > 0) { delayCounter--; }
@@ -115,6 +137,19 @@ public class SizeChangeGoal : BallGoal
             }
         }
     }
+
+    /*
+    private void LateUpdate()
+    {
+        if (!isShrinking)
+        {
+            if (colImpTracker.impulseMagnitude > 0)
+            {
+                freeToGrow = false;
+                print(this.name + ": impulse magnitude is " + colImpTracker.impulseMagnitude);
+            }
+        }
+    }*/
 
     private void PolyInterpolationUpdate()
     {

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 23208423389121088}
   - component: {fileID: 54197712693996860}
   - component: {fileID: -228958769421370408}
+  - component: {fileID: -624356228688901553}
   m_Layer: 0
   m_Name: ShrinkGoal
   m_TagString: goodGoalMulti
@@ -135,9 +136,21 @@ MonoBehaviour:
   reward: 5
   isMulti: 1
   initialSize: 5
-  finalSize: 2
+  finalSize: 0.5
   sizeChangeRate: -0.01
   interpolationMethod: 0
   rewardSizeTracking: 1
   rewardOverride: 0
   fixedFrameDelay: 250
+--- !u!114 &-624356228688901553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815161577820678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4bc51e6bdd39cc4db49cccfe8857d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
