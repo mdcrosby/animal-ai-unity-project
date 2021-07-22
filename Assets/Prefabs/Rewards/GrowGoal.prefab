@@ -136,7 +136,7 @@ MonoBehaviour:
   reward: 2
   isMulti: 1
   initialSize: 1
-  finalSize: 40
+  finalSize: 8
   sizeChangeRate: -0.01
   interpolationMethod: 0
   rewardSizeTracking: 1
