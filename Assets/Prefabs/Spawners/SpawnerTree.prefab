@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6131923203372012947}
   - component: {fileID: 6131923203368588723}
   - component: {fileID: 6131923203369719667}
+  - component: {fileID: 2714515721024027578}
   m_Layer: 0
   m_Name: SpawnerTree
   m_TagString: Untagged
@@ -82,3 +83,36 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2714515721024027578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131923203371649459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3666ebc94bd1fb54986a9d5b0145f827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationRange: {x: 0, y: 0}
+  sizeMin: {x: 0, y: 0, z: 0}
+  sizeMax: {x: 0, y: 0, z: 0}
+  canRandomizeColor: 1
+  ratioSize: {x: 0, y: 0, z: 0}
+  sizeAdjustement: 0.999
+  spawnObjects:
+  - {fileID: 703623700356385717, guid: efdf89976edbdaa42aee9b9c7013c916, type: 3}
+  initialSpawnSize: 1
+  ripenedSpawnSize: 1
+  variableSize: 0
+  variableSpawnPosition: 1
+  sphericalSpawnRadius: 3
+  defaultSpawnPosition: {x: 0, y: 5, z: 0}
+  timeToRipen: 2
+  timeBetweenSpawns: 1
+  delaySeconds: 2
+  spawnCount: 5
+  colourOverride: {r: 1, g: 0, b: 0.44876766, a: 1}
+  objSpawnSeed: 0
+  spawnSizeSeed: 0
