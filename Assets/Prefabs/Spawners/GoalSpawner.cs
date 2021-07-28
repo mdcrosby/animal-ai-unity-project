@@ -93,7 +93,8 @@ public class GoalSpawner : Prefab
             // spawn first, wait second, repeat
 
             BallGoal newGoal = spawnNewGoal(0);
-            StartCoroutine(manageRipening(newGoal));
+            StartCoroutine(manageRipeningGrowth(newGoal));
+            StartCoroutine(waitForRipening(newGoal));
 
             if (!willSpawnInfinite()) { spawnCount--; }
 
@@ -131,19 +132,41 @@ public class GoalSpawner : Prefab
     }
 
 
-    private IEnumerator manageRipening(BallGoal newGoal) {
+    private IEnumerator waitForRipening(BallGoal newGoal) {
         yield return new WaitForSeconds(timeToRipen);
 
-        // now ensure its growth is complete at exactly ripenedSpawnSize
-        newGoal.SetSize(new Func<float,Vector3>(x => new Vector3(x,x,x))(ripenedSpawnSize));
-        // toggle kinematic/gravity settings.
-        newGoal.gameObject.GetComponent<Rigidbody>().useGravity = true;
-        newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        if (newGoal != null) {
+            // now ensure its growth is complete at exactly ripenedSpawnSize
+            newGoal.SetSize(new Func<float, Vector3>(x => new Vector3(x, x, x))(ripenedSpawnSize));
+            // toggle kinematic/gravity settings.
+            newGoal.gameObject.GetComponent<Rigidbody>().useGravity = true;
+            newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        }
+    }
+
+    private IEnumerator manageRipeningGrowth(BallGoal newGoal)
+    {
+        float dt = 0f; float newSize;
+        while (dt < timeToRipen && newGoal != null)
+        {
+            newSize = interpolate(0, timeToRipen, dt, initialSpawnSize, ripenedSpawnSize);
+            newGoal.SetSize(new Func<float, Vector3>(x => new Vector3(x,x,x))(newSize));
+            dt += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        yield return null;
     }
 
 
     Vector3 sphericalToCartesian(float r, float theta, float phi) {
         float sin_theta = Mathf.Sin(theta);
         return new Vector3(r * Mathf.Cos(phi) * sin_theta, r * Mathf.Cos(theta), r * Mathf.Sin(phi) * sin_theta);
+    }
+
+    float interpolate(float tLo, float tHi, float t, float sLo, float sHi) {
+        t = Mathf.Clamp(t, tLo, tHi); // ensure t is actually clamped within [tLo, tHi]
+        float p = (t-tLo)/(tHi-tLo); // get proportion to interpolate with
+        return sHi*p + sLo*(1-p);
     }
 }
