@@ -102,6 +102,7 @@ MonoBehaviour:
   canRandomizeColor: 1
   ratioSize: {x: 0, y: 0, z: 0}
   sizeAdjustement: 0.999
+  typicalOrigin: 1
   spawnObjects:
   - {fileID: 703623700356385717, guid: efdf89976edbdaa42aee9b9c7013c916, type: 3}
   initialSpawnSize: 0.2
@@ -130,4 +131,4 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -7100219141164419968, guid: bc4d85d855557f74bbbfb1c585bd7adc, type: 3}
+  m_Mesh: {fileID: -7100219141164419968, guid: 5d014f7bb02269145ab66199dfe8240a, type: 3}
