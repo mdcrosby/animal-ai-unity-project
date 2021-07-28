@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ArenaBuilders;
 
 public class GoalSpawner : Prefab
 {
@@ -87,10 +88,8 @@ public class GoalSpawner : Prefab
         while (canStillSpawn()) {
             // spawn first, wait second, repeat
 
-            spawnNewGoal(0);
-            // instantiate using linear interpolation growth
-            // with growth time set by timeToRipen
-            // then remove isKinematic/!useGravity constraint
+            BallGoal newGoal = spawnNewGoal(0);
+            StartCoroutine(manageRipening(newGoal));
 
             if (!willSpawnInfinite()) { spawnCount--; }
 
@@ -112,6 +111,7 @@ public class GoalSpawner : Prefab
         else { spawnPos = defaultSpawnPosition; }
 
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
+        this.transform.parent.parent.GetComponent<TrainingArena>().Builder.AddToGoodGoalsMultiSpawned(newGoal);
         newGoal.transform.parent = this.transform;
 
         newGoal.SetSize(Vector3.one * initialSpawnSize);
@@ -121,9 +121,21 @@ public class GoalSpawner : Prefab
         }
 
         newGoal.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
         newGoal.enabled = true;
         return newGoal;
+    }
+
+
+    private IEnumerator manageRipening(BallGoal newGoal) {
+        yield return new WaitForSeconds(timeToRipen);
+
+        // now ensure its growth is complete at exactly ripenedSpawnSize
+        newGoal.SetSize(new Func<float,Vector3>(x => new Vector3(x,x,x))(ripenedSpawnSize));
+        // toggle kinematic/gravity settings.
+        newGoal.gameObject.GetComponent<Rigidbody>().useGravity = true;
+        newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
 

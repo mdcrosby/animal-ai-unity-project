@@ -104,16 +104,16 @@ MonoBehaviour:
   sizeAdjustement: 0.999
   spawnObjects:
   - {fileID: 703623700356385717, guid: efdf89976edbdaa42aee9b9c7013c916, type: 3}
-  initialSpawnSize: 0.1
-  ripenedSpawnSize: 0.1
+  initialSpawnSize: 0.25
+  ripenedSpawnSize: 0.5
   variableSize: 0
   variableSpawnPosition: 1
-  sphericalSpawnRadius: 2
+  sphericalSpawnRadius: 2.25
   defaultSpawnPosition: {x: -0.1, y: 4.3, z: -0.1}
   timeToRipen: 2
-  timeBetweenSpawns: 1
+  timeBetweenSpawns: 2
   delaySeconds: 2
-  spawnCount: 5
+  spawnCount: 10
   colourOverride: {r: 1, g: 0, b: 0.44876766, a: 1}
   objSpawnSeed: 0
   spawnSizeSeed: 0

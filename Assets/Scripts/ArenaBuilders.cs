@@ -43,6 +43,8 @@ namespace ArenaBuilders
 
         /// List of good goals that have been instantiated, used to set numberOfGoals in these goals
         private List<Goal> _goodGoalsMultiSpawned;
+        public void AddToGoodGoalsMultiSpawned(Goal ggm) { _goodGoalsMultiSpawned.Add(ggm); }
+        public void AddToGoodGoalsMultiSpawned(GameObject ggm) { _goodGoalsMultiSpawned.Add(ggm.GetComponent<Goal>()); }
 
         /// Buffer to allow space around instantiated objects
         // public Vector3 safeSpawnBuffer = Vector3.zero;
