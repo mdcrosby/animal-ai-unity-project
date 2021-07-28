@@ -27,6 +27,8 @@ public class GoalSpawner : Prefab
 
     private float height;
 
+    private ArenaBuilder AB;
+
     // random-object-spawning toggle and associated objects
     private bool spawnsRandomObjects;
     public int objSpawnSeed = 0; public int spawnSizeSeed = 0;
@@ -45,7 +47,9 @@ public class GoalSpawner : Prefab
         // combats random size setting from ArenaBuilder
         sizeMin = sizeMax = Vector3Int.one;
         canRandomizeColor = false; ratioSize = Vector3Int.one;
+        
         height = GetComponent<Renderer>().bounds.size.y;
+        AB = this.transform.parent.parent.GetComponent<TrainingArena>().Builder;
 
         // sets to random if more than one spawn object to choose from
         // else just spawns the same object repeatedly
@@ -105,13 +109,12 @@ public class GoalSpawner : Prefab
         {
             float phi /*azimuthal angle*/           = (float) (RNGs[(int)E.ANGLE].NextDouble() * 2 * Math.PI);
             float theta /*polar/inclination angle*/ = (float)((RNGs[(int)E.ANGLE].NextDouble() * 0.6f + 0.2f) * Math.PI);
-            Debug.Log("phi: " + phi + "theta: " + theta);
             spawnPos = defaultSpawnPosition + sphericalToCartesian(sphericalSpawnRadius, theta, phi);
         }
         else { spawnPos = defaultSpawnPosition; }
 
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
-        this.transform.parent.parent.GetComponent<TrainingArena>().Builder.AddToGoodGoalsMultiSpawned(newGoal);
+        AB.AddToGoodGoalsMultiSpawned(newGoal);
         newGoal.transform.parent = this.transform;
 
         newGoal.SetSize(Vector3.one * initialSpawnSize);

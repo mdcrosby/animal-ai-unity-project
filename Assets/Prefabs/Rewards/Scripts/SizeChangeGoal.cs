@@ -78,30 +78,6 @@ public class SizeChangeGoal : BallGoal
         /*=== RAY COLLISIONS FOR IMMOVEABLES GO HERE ===*/
         if (!isShrinking)
         {
-            Vector3 rayDir; string debug = "";
-            /*
-            foreach (Tuple<GameObject, Vector3> immoveableTuple in immoveableObstacles)
-            {
-                debug += immoveableTuple.Item1.name + " @ " + immoveableTuple.Item2 + ". ";
-                /*
-                for (int c = 0; c < immoveable.contactCount; c++)
-                {
-                    // get direction of ray towards collision contact point
-                    rayDir = immoveable.GetContact(c).point - this.transform.position;
-
-
-                }/
-                
-            }
-            Debug.Log(debug);/
-
-            immovableColliders = Physics.OverlapSphere(transform.position, transform.localScale.x);
-            foreach (Collider c in immovableColliders)
-            {
-                debug += c.gameObject.name+", ";
-            }
-            Debug.Log(debug);*/
-
             freeToGrow = !Physics.Raycast(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Mathf.Abs(sizeChangeRate));
             //Debug.DrawLine(Vector3.zero, new Vector3(10, 10, 10), Color.green, 0.1f, false);
             //Debug.DrawRay(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Color.green, 0.1f, true);
