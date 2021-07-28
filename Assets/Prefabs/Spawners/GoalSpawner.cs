@@ -95,8 +95,18 @@ public class GoalSpawner : Prefab
             // spawn first, wait second, repeat
 
             BallGoal newGoal = spawnNewGoal(0);
-            StartCoroutine(manageRipeningGrowth(newGoal));
-            StartCoroutine(waitForRipening(newGoal));
+            if (variableSize)
+            {
+                var sizeNoise = Math.Abs(newGoal.reward - initialSpawnSize);
+                StartCoroutine(manageRipeningGrowth(newGoal, sizeNoise));
+                StartCoroutine(waitForRipening(newGoal, sizeNoise));
+            }
+            else
+            {
+                StartCoroutine(manageRipeningGrowth(newGoal));
+                StartCoroutine(waitForRipening(newGoal));
+            }
+            
 
             if (!willSpawnInfinite()) { spawnCount--; }
 
@@ -119,8 +129,8 @@ public class GoalSpawner : Prefab
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
         AB.AddToGoodGoalsMultiSpawned(newGoal);
         newGoal.transform.parent = this.transform;
-
-        newGoal.SetSize(Vector3.one * initialSpawnSize);
+        var sizeNoise = variableSize ? ((float)(RNGs[(int)E.SIZE].NextDouble() - 0.5f) * 0.5f) : 0;
+        newGoal.SetSize(Vector3.one * (initialSpawnSize + sizeNoise));
         if (colourOverride != null) {
             Material _mat = newGoal.GetComponent<MeshRenderer>().material;
             _mat.SetColor("_EmissionColor", colourOverride);
@@ -134,24 +144,24 @@ public class GoalSpawner : Prefab
     }
 
 
-    private IEnumerator waitForRipening(BallGoal newGoal) {
+    private IEnumerator waitForRipening(BallGoal newGoal, float sizeNoise=0) {
         yield return new WaitForSeconds(timeToRipen);
 
         if (newGoal != null) {
             // now ensure its growth is complete at exactly ripenedSpawnSize
-            newGoal.SetSize(new Func<float, Vector3>(x => new Vector3(x, x, x))(ripenedSpawnSize));
+            newGoal.SetSize(new Func<float, Vector3>(x => new Vector3(x, x, x))(ripenedSpawnSize+sizeNoise));
             // toggle kinematic/gravity settings.
             newGoal.gameObject.GetComponent<Rigidbody>().useGravity = true;
             newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }
     }
 
-    private IEnumerator manageRipeningGrowth(BallGoal newGoal)
+    private IEnumerator manageRipeningGrowth(BallGoal newGoal, float sizeNoise=0)
     {
         float dt = 0f; float newSize;
         while (dt < timeToRipen && newGoal != null)
         {
-            newSize = interpolate(0, timeToRipen, dt, initialSpawnSize, ripenedSpawnSize);
+            newSize = interpolate(0, timeToRipen, dt, initialSpawnSize+sizeNoise, ripenedSpawnSize+sizeNoise);
             newGoal.SetSize(new Func<float, Vector3>(x => new Vector3(x,x,x))(newSize));
             dt += Time.fixedDeltaTime;
             yield return new WaitForSeconds(Time.fixedDeltaTime);
