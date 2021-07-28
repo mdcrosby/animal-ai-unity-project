@@ -37,7 +37,7 @@ public class GoalSpawner : Prefab
      * (3) H_ANGLE: proportion around the tree where spawning occurs
      * (4) V_ANGLE: extent up the tree where spawning occurs */
     private System.Random[] RNGs = new System.Random[4];
-    private enum E {OBJECT=0, SIZE=1, H_ANGLE=2, V_ANGLE=3};
+    private enum E {OBJECT=0, SIZE=1, ANGLE=2};
 
     void Awake()
     {
@@ -52,7 +52,7 @@ public class GoalSpawner : Prefab
         spawnsRandomObjects = (spawnObjects.Length>1);
         if (spawnsRandomObjects) { RNGs[(int)E.OBJECT] = new System.Random(objSpawnSeed); }
         if (variableSize) { RNGs[(int)E.SIZE] = new System.Random(spawnSizeSeed); }
-        if (variableSpawnPosition) { RNGs[(int)E.H_ANGLE] = new System.Random(0); RNGs[(int)E.V_ANGLE] = new System.Random(0); }
+        if (variableSpawnPosition) { RNGs[(int)E.ANGLE] = new System.Random(0); }
 
         StartCoroutine(startSpawning());
 
@@ -104,15 +104,15 @@ public class GoalSpawner : Prefab
         Vector3 spawnPos;
         if (variableSpawnPosition)
         {
-            float phi /*azimuthal angle*/           = (float) (RNGs[(int)E.H_ANGLE].NextDouble() * 2 * Math.PI);
-            float theta /*polar/inclination angle*/ = (float)((RNGs[(int)E.V_ANGLE].NextDouble() * 0.6f + 0.2f) * Math.PI);
+            float phi /*azimuthal angle*/           = (float) (RNGs[(int)E.ANGLE].NextDouble() * 2 * Math.PI);
+            float theta /*polar/inclination angle*/ = (float)((RNGs[(int)E.ANGLE].NextDouble() * 0.6f + 0.2f) * Math.PI);
+            Debug.Log("phi: " + phi + "theta: " + theta);
             spawnPos = defaultSpawnPosition + sphericalToCartesian(sphericalSpawnRadius, theta, phi);
         }
         else { spawnPos = defaultSpawnPosition; }
 
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
         newGoal.transform.parent = this.transform;
-        newGoal.enabled = false;
 
         newGoal.SetSize(Vector3.one * initialSpawnSize);
         if (colourOverride != null) {
