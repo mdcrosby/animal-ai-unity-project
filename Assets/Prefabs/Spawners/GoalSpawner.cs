@@ -44,6 +44,8 @@ public class GoalSpawner : Prefab
 
     void Awake()
     {
+        // overwrite 'typicalOrigin' because origin of geometry is at base
+        typicalOrigin = false;
         // combats random size setting from ArenaBuilder
         sizeMin = sizeMax = Vector3Int.one;
         canRandomizeColor = false; ratioSize = Vector3Int.one;

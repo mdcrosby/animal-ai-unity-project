@@ -21,6 +21,7 @@ public class Prefab : MonoBehaviour, IPrefab
     public Vector3 ratioSize;
     public float sizeAdjustement = 0.999f;
 
+    public bool typicalOrigin = true;
     protected float _height;
 
     public virtual void SetColor(Vector3 color)
@@ -82,7 +83,7 @@ public class Prefab : MonoBehaviour, IPrefab
 
     protected virtual float AdjustY(float yIn)
     {
-        return yIn + _height / 2 + 0.01f;
+        return yIn + (typicalOrigin?(_height / 2):0) + 0.01f;
     }
 
 }
