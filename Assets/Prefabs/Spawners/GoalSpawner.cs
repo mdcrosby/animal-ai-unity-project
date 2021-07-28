@@ -24,6 +24,8 @@ public class GoalSpawner : Prefab
 
     private bool isSpawning = false;
 
+    private float height;
+
     // random-object-spawning toggle and associated objects
     private bool spawnsRandomObjects;
     public int objSpawnSeed = 0; public int spawnSizeSeed = 0;
@@ -40,8 +42,9 @@ public class GoalSpawner : Prefab
     void Awake()
     {
         // combats random size setting from ArenaBuilder
-        sizeMin = sizeMax = new Vector3(0.311f,0.319f,0.314f);
+        sizeMin = sizeMax = Vector3Int.one;
         canRandomizeColor = false; ratioSize = Vector3Int.one;
+        height = GetComponent<Renderer>().bounds.size.y;
 
         // sets to random if more than one spawn object to choose from
         // else just spawns the same object repeatedly
@@ -57,15 +60,24 @@ public class GoalSpawner : Prefab
 
     public override void SetSize(Vector3 size)
     {
-        // bypasses random size assignment (used e.g. by ArenaBuilder) from parent Prefab class, fixing to desired size
-        // otherwise just changes size as usual
-        sizeMin = sizeMax = new Vector3(0.311f, 0.319f, 0.314f);
-        base.SetSize(new Vector3(0.311f, 0.319f, 0.314f));
+        // bypasses random size assignment (used e.g. by ArenaBuilder) from parent Prefab class,
+        // fixing to desired size otherwise just changes size as usual
+        sizeMin = sizeMax = Vector3Int.one;//new Vector3(0.311f, 0.319f, 0.314f);
+        base.SetSize(Vector3Int.one);
+        _height = height;
+    }
+    protected override float AdjustY(float yIn)
+    {
+        return yIn;
+        // trivial call - just in case of the GoalSpawner, we have origin at the bottom not in middle of bounding box
+        // so no need to compensate for origin position via AdjustY
     }
 
-    void FixedUpdate()
+    private void OnDrawGizmos()
     {
-        
+        Gizmos.DrawWireSphere(transform.position + defaultSpawnPosition, sphericalSpawnRadius);
+        var bs = transform.GetComponent<Renderer>().bounds.size;
+        Gizmos.DrawWireCube(transform.position + new Vector3(0,bs.y/2,0), bs);
     }
 
     private IEnumerator startSpawning() {
@@ -76,7 +88,6 @@ public class GoalSpawner : Prefab
             // spawn first, wait second, repeat
 
             spawnNewGoal(0);
-            // --> SPAWN NEW SpawnGoal HERE <--
             // instantiate using linear interpolation growth
             // with growth time set by timeToRipen
             // then remove isKinematic/!useGravity constraint
@@ -94,12 +105,13 @@ public class GoalSpawner : Prefab
         if (variableSpawnPosition)
         {
             float phi /*azimuthal angle*/           = (float) (RNGs[(int)E.H_ANGLE].NextDouble() * 2 * Math.PI);
-            float theta /*polar/inclination angle*/ = (float) ((RNGs[(int)E.V_ANGLE].NextDouble() * 0.6f + 0.2f) * Math.PI);
+            float theta /*polar/inclination angle*/ = (float)((RNGs[(int)E.V_ANGLE].NextDouble() * 0.6f + 0.2f) * Math.PI);
             spawnPos = defaultSpawnPosition + sphericalToCartesian(sphericalSpawnRadius, theta, phi);
         }
         else { spawnPos = defaultSpawnPosition; }
 
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
+        newGoal.transform.parent = this.transform;
         newGoal.enabled = false;
 
         newGoal.SetSize(Vector3.one * initialSpawnSize);
