@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6131923203368588723}
   - component: {fileID: 6131923203369719667}
   - component: {fileID: 2714515721024027578}
+  - component: {fileID: -2901181462991391087}
   m_Layer: 0
   m_Name: SpawnerTree
   m_TagString: Untagged
@@ -116,3 +117,17 @@ MonoBehaviour:
   colourOverride: {r: 1, g: 0, b: 0.44876766, a: 1}
   objSpawnSeed: 0
   spawnSizeSeed: 0
+--- !u!64 &-2901181462991391087
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131923203371649459}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7100219141164419968, guid: bc4d85d855557f74bbbfb1c585bd7adc, type: 3}
