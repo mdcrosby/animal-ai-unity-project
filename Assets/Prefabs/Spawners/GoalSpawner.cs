@@ -61,6 +61,9 @@ public class GoalSpawner : Prefab
         if (variableSize) { RNGs[(int)E.SIZE] = new System.Random(spawnSizeSeed); }
         if (variableSpawnPosition) { RNGs[(int)E.ANGLE] = new System.Random(0); }
 
+        // by default, ignore initialSpawnSize is there is no 'ripening' phase
+        if (timeToRipen <= 0) { initialSpawnSize = ripenedSpawnSize; }
+
         StartCoroutine(startSpawning());
 
     }
@@ -85,6 +88,7 @@ public class GoalSpawner : Prefab
         Gizmos.DrawWireSphere(transform.position + defaultSpawnPosition, sphericalSpawnRadius);
         var bs = transform.GetComponent<Renderer>().bounds.size;
         Gizmos.DrawWireCube(transform.position + new Vector3(0,bs.y/2,0), bs);
+        Gizmos.DrawSphere(defaultSpawnPosition, 0.5f);
     }
 
     private IEnumerator startSpawning() {
@@ -97,7 +101,8 @@ public class GoalSpawner : Prefab
             BallGoal newGoal = spawnNewGoal(0);
             if (variableSize)
             {
-                var sizeNoise = Math.Abs(newGoal.reward - initialSpawnSize);
+                var sizeNoise = newGoal.reward - initialSpawnSize;
+                print("sizeNoise: "+sizeNoise);
                 StartCoroutine(manageRipeningGrowth(newGoal, sizeNoise));
                 StartCoroutine(waitForRipening(newGoal, sizeNoise));
             }
@@ -129,8 +134,12 @@ public class GoalSpawner : Prefab
         BallGoal newGoal = (BallGoal)Instantiate(spawnObjects[listID], transform.position + spawnPos, Quaternion.identity);
         AB.AddToGoodGoalsMultiSpawned(newGoal);
         newGoal.transform.parent = this.transform;
-        var sizeNoise = variableSize ? ((float)(RNGs[(int)E.SIZE].NextDouble() - 0.5f) * 0.5f) : 0;
+        float sizeNoise = variableSize ? ((float)(RNGs[(int)E.SIZE].NextDouble() - 0.5f) * 0.5f) : 0;
+        // edit the prefab we have been given to make sure we can actually set fruit size as we want to
+        newGoal.sizeMax = Vector3.one * (ripenedSpawnSize + (variableSize ? 0.25f : 0f));
+        newGoal.sizeMin = Vector3.one * (initialSpawnSize - (variableSize ? 0.25f : 0f));
         newGoal.SetSize(Vector3.one * (initialSpawnSize + sizeNoise));
+        print("newGoal size and reward: SIZE " + newGoal.transform.localScale.x + " REWARD " + newGoal.reward);
         if (colourOverride != null) {
             Material _mat = newGoal.GetComponent<MeshRenderer>().material;
             _mat.SetColor("_EmissionColor", colourOverride);

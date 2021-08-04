@@ -833,6 +833,7 @@ MonoBehaviour:
     - {fileID: 1815161577820678, guid: 125fabec8c22e0240a1a15856c0ba250, type: 3}
     - {fileID: 1815161577820678, guid: 00ac9feb8de9fc043b8d1ac23824d86b, type: 3}
     - {fileID: 6131923203371649459, guid: a82f888801d22644f94d9c3f2aa98b71, type: 3}
+    - {fileID: 6131923203371649459, guid: 2647b94027143164f8f1f4851d148d1f, type: 3}
   spawnedObjectsHolder: {fileID: 6276814220842007455, guid: ff9a0b038a04e8747a9f95217df0b26f, type: 3}
   maxSpawnAttemptsForAgent: 100
   maxSpawnAttemptsForPrefabs: 20
@@ -1677,11 +1678,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4143868646325880, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
   m_PrefabInstance: {fileID: 2928780302556050365}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2928445448933336229 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1956805098100504, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
-  m_PrefabInstance: {fileID: 2928780302556050365}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7281874702758017693 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5596694904648026400, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
@@ -1695,5 +1691,10 @@ GameObject:
 --- !u!1 &2049938451244076549 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3807729730360376760, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
+  m_PrefabInstance: {fileID: 2928780302556050365}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2928445448933336229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1956805098100504, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
   m_PrefabInstance: {fileID: 2928780302556050365}
   m_PrefabAsset: {fileID: 0}

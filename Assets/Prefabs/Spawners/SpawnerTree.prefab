@@ -97,17 +97,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationRange: {x: 0, y: 0}
-  sizeMin: {x: 0, y: 0, z: 0}
-  sizeMax: {x: 0, y: 0, z: 0}
-  canRandomizeColor: 1
-  ratioSize: {x: 0, y: 0, z: 0}
+  sizeMin: {x: 1, y: 1, z: 1}
+  sizeMax: {x: 1, y: 1, z: 1}
+  canRandomizeColor: 0
+  ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
-  typicalOrigin: 1
+  typicalOrigin: 0
   spawnObjects:
   - {fileID: 703623700356385717, guid: efdf89976edbdaa42aee9b9c7013c916, type: 3}
   initialSpawnSize: 0.2
   ripenedSpawnSize: 1
-  variableSize: 0
+  variableSize: 1
   variableSpawnPosition: 1
   sphericalSpawnRadius: 2.25
   defaultSpawnPosition: {x: -0.1, y: 4.3, z: -0.1}
@@ -117,7 +117,7 @@ MonoBehaviour:
   spawnCount: 10
   colourOverride: {r: 1, g: 0, b: 0.44876766, a: 1}
   objSpawnSeed: 0
-  spawnSizeSeed: 0
+  spawnSizeSeed: 1
 --- !u!64 &-2901181462991391087
 MeshCollider:
   m_ObjectHideFlags: 0
