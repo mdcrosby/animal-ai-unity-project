@@ -18,6 +18,9 @@ public class GoalSpawner : Prefab
     public float timeBetweenSpawns; // also in seconds
     public float delaySeconds;
     public int spawnCount; // total number spawner can spawn; -1 if infinite
+    public bool stockpiling = false; // for inheriting class later on...
+    public int doorOpenDelay = -1; // assuming not using
+    public int timeBetweenDoorOpens = -1; // assuming not usings
     [ColorUsage(true, true)]
     public Color colourOverride;
     private bool willSpawnInfinite() { return spawnCount == -1; }
@@ -28,6 +31,7 @@ public class GoalSpawner : Prefab
     private float height;
 
     private ArenaBuilder AB;
+    private GameObject Door;
 
     // random-object-spawning toggle and associated objects
     private bool spawnsRandomObjects;
@@ -64,8 +68,11 @@ public class GoalSpawner : Prefab
         // by default, ignore initialSpawnSize is there is no 'ripening' phase
         if (timeToRipen <= 0) { initialSpawnSize = ripenedSpawnSize; }
 
-        StartCoroutine(startSpawning());
+        if (stockpiling) { Door = transform.GetChild(1).gameObject;
+            if (!Door.name.ToLower().Contains("door")) throw new Exception("WARNING: a stockpiling GoalSpawner has not found its Door."); }
 
+        StartCoroutine(startSpawning());
+        if (stockpiling) { StartCoroutine(manageDoor()); }
     }
 
     public override void SetSize(Vector3 size)
@@ -175,6 +182,22 @@ public class GoalSpawner : Prefab
             dt += Time.fixedDeltaTime;
             yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
+
+        yield return null;
+    }
+
+
+    private IEnumerator manageDoor() {
+        yield return new WaitForSeconds(doorOpenDelay);
+        float dt = 0f; float newSize;
+        while (dt < 1)
+        {
+            newSize = interpolate(0, 1, dt, 1, 0);
+            Door.transform.localScale = new Vector3(Door.transform.localScale.x, newSize, Door.transform.localScale.z);
+            dt += Time.fixedDeltaTime;
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
 
         yield return null;
     }
