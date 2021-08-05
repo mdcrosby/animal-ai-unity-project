@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 6629666505054455364}
   m_Layer: 0
   m_Name: SpawnerDispenser
-  m_TagString: Untagged
+  m_TagString: GoalSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -303,11 +303,11 @@ MonoBehaviour:
   variableSize: 0
   variableSpawnPosition: 0
   sphericalSpawnRadius: 0
-  defaultSpawnPosition: {x: 0, y: 3.75, z: 0}
+  defaultSpawnPosition: {x: 0, y: 3.65, z: 0}
   timeToRipen: 0
   timeBetweenSpawns: 0.5
   delaySeconds: 10
-  spawnCount: 4
+  spawnCount: 10
   colourOverride: {r: 0, g: 0.7882353, b: 1, a: 1}
   objSpawnSeed: 0
   spawnSizeSeed: 1

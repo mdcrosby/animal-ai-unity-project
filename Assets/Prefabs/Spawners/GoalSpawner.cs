@@ -24,7 +24,7 @@ public class GoalSpawner : Prefab
     private bool willSpawnInfinite() { return spawnCount == -1; }
     private bool canStillSpawn() { return spawnCount!=0; }
 
-    private bool isSpawning = false;
+    //private bool isSpawning = false;
 
     private float height;
 
@@ -88,13 +88,13 @@ public class GoalSpawner : Prefab
         Gizmos.DrawWireSphere(transform.position + defaultSpawnPosition, sphericalSpawnRadius);
         var bs = transform.GetComponent<Renderer>().bounds.size;
         Gizmos.DrawWireCube(transform.position + new Vector3(0,bs.y/2,0), bs);
-        Gizmos.DrawSphere(defaultSpawnPosition, 0.5f);
+        Gizmos.DrawSphere(transform.position + defaultSpawnPosition, 0.5f);
     }
 
     private IEnumerator startSpawning() {
         yield return new WaitForSeconds(delaySeconds);
 
-        isSpawning = true;
+        //isSpawning = true;
         while (canStillSpawn()) {
             // spawn first, wait second, repeat
 
@@ -102,7 +102,6 @@ public class GoalSpawner : Prefab
             if (variableSize)
             {
                 var sizeNoise = newGoal.reward - initialSpawnSize;
-                print("sizeNoise: "+sizeNoise);
                 StartCoroutine(manageRipeningGrowth(newGoal, sizeNoise));
                 StartCoroutine(waitForRipening(newGoal, sizeNoise));
             }
@@ -119,7 +118,7 @@ public class GoalSpawner : Prefab
         }
     }
 
-    BallGoal spawnNewGoal(int listID) {
+    public virtual BallGoal spawnNewGoal(int listID) {
 
         // calculate spawning location if necessary
         Vector3 spawnPos;
@@ -139,7 +138,7 @@ public class GoalSpawner : Prefab
         newGoal.sizeMax = Vector3.one * (ripenedSpawnSize + (variableSize ? 0.25f : 0f));
         newGoal.sizeMin = Vector3.one * (initialSpawnSize - (variableSize ? 0.25f : 0f));
         newGoal.SetSize(Vector3.one * (initialSpawnSize + sizeNoise));
-        print("newGoal size and reward: SIZE " + newGoal.transform.localScale.x + " REWARD " + newGoal.reward);
+        //print("newGoal size and reward: SIZE " + newGoal.transform.localScale.x + " REWARD " + newGoal.reward);
         if (colourOverride != null) {
             Material _mat = newGoal.GetComponent<MeshRenderer>().material;
             _mat.SetColor("_EmissionColor", colourOverride);

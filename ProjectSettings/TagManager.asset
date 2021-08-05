@@ -25,6 +25,7 @@ TagManager:
   - ProgressBar
   - EffectCanvas
   - PlayerControls
+  - GoalSpawner
   layers:
   - Default
   - TransparentFX
