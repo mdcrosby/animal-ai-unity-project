@@ -16,6 +16,8 @@ public class TrainingArena : MonoBehaviour
     [HideInInspector]
     public int arenaID = -1;
     [HideInInspector]
+    public int maxarenaID = -1;
+    [HideInInspector]
     public TrainingAgent _agent;
     private ArenaBuilder _builder;
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
@@ -45,6 +47,14 @@ public class TrainingArena : MonoBehaviour
             Destroy(holder);
         }
 
+        //Each time reset is called we cycle through the defined arenaIDs
+        maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check during once (after environmentManager is initialized).
+        Debug.Log(arenaID);
+        Debug.Log(maxarenaID);
+        if(maxarenaID > 0){
+            arenaID = (arenaID + 1) % maxarenaID;
+        }
+
         ArenaConfiguration newConfiguration;
         if (!_environmentManager.GetConfiguration(arenaID, out newConfiguration))
         {
@@ -52,14 +62,13 @@ public class TrainingArena : MonoBehaviour
             _environmentManager.AddConfiguration(arenaID, newConfiguration);
         }
         _arenaConfiguration = newConfiguration;
-        if (_arenaConfiguration.toUpdate)
-        {
-            _arenaConfiguration.SetGameObject(prefabs.GetList());
-            _builder.Spawnables = _arenaConfiguration.spawnables;
-            _arenaConfiguration.toUpdate = false;
-            _agent.MaxStep  = 0; //We never time the environment out unless agent health goes to 0
-            _agent.timeLimit = _arenaConfiguration.T * _agentDecisionInterval;
-        }
+
+        Debug.Log("Updating");
+        _arenaConfiguration.SetGameObject(prefabs.GetList());
+        _builder.Spawnables = _arenaConfiguration.spawnables;
+        _arenaConfiguration.toUpdate = false;
+        _agent.MaxStep  = 0; //We never time the environment out unless agent health goes to 0
+        _agent.timeLimit = _arenaConfiguration.T * _agentDecisionInterval;
 
         _builder.Build();
         _arenaConfiguration.lightsSwitch.Reset();

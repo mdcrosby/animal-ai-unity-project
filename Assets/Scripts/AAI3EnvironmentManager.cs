@@ -128,6 +128,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
             );
     }
 
+    public int getMaxArenaID(){
+        return _arenasConfigurations.configurations.Count;
+    }
+
     private void ChangeRayCasts(RayPerceptionSensorComponent3D raySensor, int no_raycasts, int max_degrees)
     {
         raySensor.RaysPerDirection = no_raycasts;

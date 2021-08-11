@@ -159,6 +159,7 @@ namespace ArenasParameters
             {
                 // In case we have only a single configuration for all arenas we copy this configuration
                 // to all arenas
+                Debug.Log("We only have one arena key");
                 for (int i = 0; i < numberOfArenas; i++)
                 {
                     Add(i, arenasConfigurationsProto.Arenas[-1]);
@@ -166,6 +167,8 @@ namespace ArenasParameters
             }
             else
             {
+
+                Debug.Log("We have multiple arena keys");
                 foreach (KeyValuePair<int, ArenaConfigurationProto> arenaConfiguration in arenasConfigurationsProto.Arenas)
                 {
                     if (configurations.ContainsKey(arenaConfiguration.Key))
