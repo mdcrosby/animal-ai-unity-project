@@ -46,9 +46,15 @@ public class DecayGoal : BallGoal
         delayCounter = fixedFrameDelay;
 
         this.gameObject.tag = "goodGoalMulti";
-        Debug.Log("intitialReward: "+initialReward);
+        //Debug.Log("intitialReward: "+initialReward);
         reward = initialReward;
         sizeMax = sizeMin = (flipDecayDirection ? finalReward : initialReward) * Vector3.one;
+
+        // if AntiDecayGoal but decaying, or DecayGoal but anti-decaying
+        if ((flipDecayDirection && finalReward<initialReward) ||
+            !flipDecayDirection && finalReward>initialReward) { finalReward = initialReward; }
+        // ...constrain finalReward so it doesn't break the prefab
+        // (we don't want to allow a AntiDecayGoal to decay or vice versa because the materials don't match, hence different prefabs
 
         decayWidth = Mathf.Abs(initialReward - finalReward);
 
@@ -107,7 +113,7 @@ public class DecayGoal : BallGoal
     // (assume we have just updated value before executing UpdateColour(), i.e. just as in UpdateGoal())
     private void UpdateColour(float p)
     {
-        //Debug.Log("p is: " + p + ", and middleDecayProportion is: " + middleDecayProportion);
+        //Debug.Log("p is: " + p);
         if (p != Mathf.Clamp(p, 0, 1)) { Debug.Log("UpdateColour passed a bad proprtion! Clamping . . ."); p = Mathf.Clamp(p, 0, 1); }
         // if within 'bad -> neutral' range, interpolates between red (bad) and yellow (neutral)
 
@@ -116,6 +122,6 @@ public class DecayGoal : BallGoal
 
         _radialmat.SetFloat("_Cutoff", Mathf.Clamp(p*loAlpha + (1-p)*hiAlpha, loAlpha, hiAlpha));
     }
-    float getProportion(float r) { return (r - Mathf.Min(initialReward, finalReward)) / decayWidth; }
+    float getProportion(float r) { return (decayWidth!=0) ? ((r - Mathf.Min(initialReward, finalReward)) / decayWidth) : (flipDecayDirection?1:0); }
 }
 
