@@ -31,8 +31,9 @@ public class DecayGoal : BallGoal
 
     void Awake()
     {
-        initialReward = Mathf.Clamp(initialReward, 0, Mathf.Max(0, initialReward));
-        finalReward = Mathf.Clamp(finalReward, 0, Mathf.Max(0, finalReward));
+        sizeMax = 5*Vector3Int.one;
+        initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
+        finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
 
         _basemat = this.gameObject.GetComponent<MeshRenderer>().material;
         _basemat.EnableKeyword("_EMISSION");

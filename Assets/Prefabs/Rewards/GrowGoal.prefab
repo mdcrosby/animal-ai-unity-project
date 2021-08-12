@@ -135,8 +135,8 @@ MonoBehaviour:
   numberOfGoals: 1
   reward: 2
   isMulti: 1
-  initialSize: 1
-  finalSize: 8
+  initialSize: 0.5
+  finalSize: 5
   sizeChangeRate: -0.01
   interpolationMethod: 0
   rewardSizeTracking: 1

@@ -44,8 +44,10 @@ public class SizeChangeGoal : BallGoal
 
     void Awake()
     {
-        initialSize = Mathf.Clamp(initialSize, 0, Mathf.Max(0,initialSize));
-        finalSize = Mathf.Clamp(finalSize, 0, Mathf.Max(0,finalSize));
+        sizeMax = 8 * Vector3Int.one;
+        initialSize = Mathf.Clamp(initialSize, 0, sizeMax.x);
+        finalSize = Mathf.Clamp(finalSize, 0, sizeMax.x);
+
         isShrinking = (finalSize <= initialSize);
         delayCounter = fixedFrameDelay;
 
