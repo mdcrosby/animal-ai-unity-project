@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 718439775431632637}
   - component: {fileID: 8679969811055685185}
   - component: {fileID: 4177324108388760848}
+  - component: {fileID: 4250942168749391607}
   m_Layer: 0
   m_Name: Agent
   m_TagString: agent
@@ -392,6 +393,43 @@ MonoBehaviour:
   m_ObservationType: 0
   m_ObservationStacks: 1
   m_Compression: 1
+--- !u!114 &4250942168749391607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956805098100504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65fa6ff6f75ea1242afec42d5df52b92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimalID: 2
+  AnimalNames:
+  - panda
+  - pig
+  - hedgehog
+  AnimalMeshes:
+  - {fileID: 9033755607662494930, guid: 6980c95f7651fdd46b2efc95f9260b76, type: 3}
+  - {fileID: 7649607833726302928, guid: c4203427a7ca2f94f88f022290511550, type: 3}
+  - {fileID: -6399858156082876518, guid: 2d72da8d0d1eb7e4d8bb0a383085c788, type: 3}
+  AnimalMaterials:
+  - array:
+    - {fileID: 2100000, guid: 3f1481280d4a1704dbc5f7c3df0588e5, type: 2}
+    - {fileID: 2100000, guid: 8f80b495e7bb53a4dbc37f2df52c2866, type: 2}
+    - {fileID: 2100000, guid: e01c36d74c7f52e4e8fb0a3888fc2ed2, type: 2}
+    - {fileID: 2100000, guid: a81b0d9f3c7507b4e88e5cd47bb045dc, type: 2}
+  - array:
+    - {fileID: 2100000, guid: 8bdefeb7fa7a1b542bf29a21269fb1b0, type: 2}
+    - {fileID: 2100000, guid: db6c4a89443e9a44fbe3dc87f0affd10, type: 2}
+    - {fileID: 2100000, guid: a81b0d9f3c7507b4e88e5cd47bb045dc, type: 2}
+    - {fileID: 2100000, guid: af32502609c2245429ef03c1c60e9888, type: 2}
+  - array:
+    - {fileID: 2100000, guid: 087e7fa31a44f14429e69001c7ea0019, type: 2}
+    - {fileID: 2100000, guid: a81b0d9f3c7507b4e88e5cd47bb045dc, type: 2}
+    - {fileID: 2100000, guid: a0ace560ea64ecd40bf24bdbfdfdc7ff, type: 2}
+    - {fileID: 2100000, guid: a8ea5f62771267348a941f9d25843e05, type: 2}
 --- !u!1 &672733935705455044
 GameObject:
   m_ObjectHideFlags: 0
