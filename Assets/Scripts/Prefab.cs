@@ -1,5 +1,5 @@
-// using System.Collections;
-// using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
@@ -98,6 +98,7 @@ public class Prefab : MonoBehaviour, IPrefab
             Debug.Log("Wall _BaseMap GET: " + GetComponent<Renderer>().material.GetTexture("_BaseMap"));
             Debug.Log("Wall material NAME: " + GetComponent<Renderer>().material.name);
 
+            /*
             string meshVertices = "MeshVertex array, length " + MESH.vertices.Length + ": ";
             foreach (Vector3 vCoord in MESH.vertices)
             {
@@ -105,30 +106,42 @@ public class Prefab : MonoBehaviour, IPrefab
             }
             Debug.Log(meshVertices);
 
-            string meshUV = "MeshUV array, length "+ MESH.uv.Length+ ": ";
+            string meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
             foreach (Vector2 uvCoord in MESH.uv) {
                 meshUV += uvCoord.ToString() + ", ";
             }
             Debug.Log(meshUV);
 
-            Vector2Int[] scaleDimIndices = new Vector2Int[6] { new Vector2Int(0,1), new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 2), new Vector2Int(2, 1), new Vector2Int(2, 1) };
+            string meshNormals = "MeshNormal array, length " + MESH.normals.Length + ": ";
+            foreach (Vector3 normCoord in MESH.normals)
+            {
+                meshNormals += normCoord.ToString() + ", ";
+            }
+            Debug.Log(meshNormals);
+            */
+
             Vector2[] uvs = new Vector2[MESH.uv.Length];
-            for (int i = 0; i < 6; i++) { for (int j = 0; j < 4; j++) {
-                    Debug.Log("i: " + i + ", scaleDimIndices: " + scaleDimIndices[i]);
-                    uvs[4 * i + j].x = (MESH.uv[4 * i + j].x>0) ? transform.localScale[scaleDimIndices[i].x] : 0;
-                    uvs[4 * i + j].y = (MESH.uv[4 * i + j].y>0) ? transform.localScale[scaleDimIndices[i].y] : 0;
-                    Debug.Log(uvs[4 * i + j]);
-                }
+            Dictionary<Vector3, Vector2Int> uvStretchLookup = new Dictionary<Vector3, Vector2Int> {
+                { new Vector3(0f, 0f, 1f), new Vector2Int(0, 1) },
+                { new Vector3(0f, 1f, 0f), new Vector2Int(0, 2) },
+                { new Vector3(0f, 0f, -1f), new Vector2Int(0,1) },
+                { new Vector3(0f, -1f, 0f), new Vector2Int(0,2) },
+                { new Vector3(-1f, 0f, 0f), new Vector2Int(2,1) },
+                { new Vector3(1f, 0f, 0f), new Vector2Int(2, 1) }
+            };
+            for (int i = 0; i < uvs.Length; ++i) {
+                uvs[i].x = (MESH.uv[i].x > 0) ? transform.localScale[uvStretchLookup[MESH.normals[i]].x] : 0;
+                uvs[i].y = (MESH.uv[i].y > 0) ? transform.localScale[uvStretchLookup[MESH.normals[i]].y] : 0;
             }
             MESH.uv = uvs;
 
             Debug.Log(transform.localScale[0] +", "+ transform.localScale[1] + ", " + transform.localScale[2]);
-            meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
+            /*meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
             foreach (Vector2 uvCoord in MESH.uv)
             {
                 meshUV += uvCoord.ToString() + ", ";
             }
-            Debug.Log(meshUV);
+            Debug.Log(meshUV);*/
         }
     }
 
