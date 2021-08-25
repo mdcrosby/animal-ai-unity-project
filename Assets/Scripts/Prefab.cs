@@ -20,6 +20,8 @@ public class Prefab : MonoBehaviour, IPrefab
     public bool canRandomizeColor = true;
     public Vector3 ratioSize;
     public float sizeAdjustement = 0.999f;
+    // to scale textures on dynamically-sized objects
+    public bool textureUVOverride = false;
 
     protected float _height;
 
@@ -55,6 +57,8 @@ public class Prefab : MonoBehaviour, IPrefab
         transform.localScale = new Vector3(sizeX * ratioSize.x,
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
+
+        if (textureUVOverride) { RescaleUVs(); }
     }
 
     public virtual Vector3 GetRotation(float rotationY)
@@ -83,6 +87,49 @@ public class Prefab : MonoBehaviour, IPrefab
     protected virtual float AdjustY(float yIn)
     {
         return yIn + _height / 2 + 0.01f;
+    }
+
+    protected virtual void RescaleUVs() {
+        if (GetComponent<Renderer>() != null && GetComponent<Renderer>().material.GetTexture("_BaseMap") != null)
+        {
+            GetComponent<MeshFilter>().sharedMesh = Instantiate<Mesh>(GetComponent<MeshFilter>().mesh);
+            Mesh MESH = GetComponent<MeshFilter>().sharedMesh;
+
+            Debug.Log("Wall _BaseMap GET: " + GetComponent<Renderer>().material.GetTexture("_BaseMap"));
+            Debug.Log("Wall material NAME: " + GetComponent<Renderer>().material.name);
+
+            string meshVertices = "MeshVertex array, length " + MESH.vertices.Length + ": ";
+            foreach (Vector3 vCoord in MESH.vertices)
+            {
+                meshVertices += vCoord.ToString() + ", ";
+            }
+            Debug.Log(meshVertices);
+
+            string meshUV = "MeshUV array, length "+ MESH.uv.Length+ ": ";
+            foreach (Vector2 uvCoord in MESH.uv) {
+                meshUV += uvCoord.ToString() + ", ";
+            }
+            Debug.Log(meshUV);
+
+            Vector2Int[] scaleDimIndices = new Vector2Int[6] { new Vector2Int(0,1), new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 2), new Vector2Int(2, 1), new Vector2Int(2, 1) };
+            Vector2[] uvs = new Vector2[MESH.uv.Length];
+            for (int i = 0; i < 6; i++) { for (int j = 0; j < 4; j++) {
+                    Debug.Log("i: " + i + ", scaleDimIndices: " + scaleDimIndices[i]);
+                    uvs[4 * i + j].x = (MESH.uv[4 * i + j].x>0) ? transform.localScale[scaleDimIndices[i].x] : 0;
+                    uvs[4 * i + j].y = (MESH.uv[4 * i + j].y>0) ? transform.localScale[scaleDimIndices[i].y] : 0;
+                    Debug.Log(uvs[4 * i + j]);
+                }
+            }
+            MESH.uv = uvs;
+
+            Debug.Log(transform.localScale[0] +", "+ transform.localScale[1] + ", " + transform.localScale[2]);
+            meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
+            foreach (Vector2 uvCoord in MESH.uv)
+            {
+                meshUV += uvCoord.ToString() + ", ";
+            }
+            Debug.Log(meshUV);
+        }
     }
 
 }

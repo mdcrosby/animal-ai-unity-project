@@ -114,7 +114,7 @@ public class SizeChangeGoal : BallGoal
                     overlapList.Add(c);
                 }
             }
-            print(overlapList.Count);
+            //print(overlapList.Count);
             foreach (Collider c in overlapList) { print(c.gameObject.name); }
             if (overlapList.Count > 0)
             {
