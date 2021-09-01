@@ -1,6 +1,7 @@
 // using System.Collections;
 // using System.Collections.Generic;
 using UnityEngine;
+using AAIEvents;
 
 
 public class Goal : Prefab
@@ -10,9 +11,17 @@ public class Goal : Prefab
     public float reward = 1;
     public bool isMulti = false;
 
+    public EventTimeKeeper ETK;
+
     void Awake()
     {
         canRandomizeColor = false;
+    }
+
+    public void Start()
+    {
+        ETK = GameObject.FindGameObjectWithTag("EventTimeKeeper").GetComponent<EventTimeKeeper>();
+        Debug.Log("ETK" + ETK + " found by " + this.name);
     }
 
     public virtual void OnTriggerEnter(Collider collision)
@@ -27,6 +36,8 @@ public class Goal : Prefab
     {
         if (collision.gameObject.CompareTag("agent"))
         {
+            registerNewAAIEvent();
+
             TrainingAgent agentScript = collision.gameObject.GetComponent<TrainingAgent>();
             // Debug.Break();
             if (!isMulti)
@@ -48,6 +59,16 @@ public class Goal : Prefab
                 Object.Destroy(gameObject);
             }
         }
+    }
+
+    public virtual void registerNewAAIEvent() {
+
+        Debug.Log(ETK.nextID + ETK.fixedFramesElapsed);
+        AAIEvent e = new AAIEvent(ETK.nextID, ETK.fixedFramesElapsed,
+            EventTimeKeeper.EventType.GoalGeneric, this.transform.position, this.name, "goal collision enter");
+        Debug.Log("new AAIEvent being registered: " + e);
+
+        ETK.LogEvent(e);
     }
 
 }

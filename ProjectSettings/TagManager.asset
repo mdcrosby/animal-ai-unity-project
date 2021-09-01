@@ -25,6 +25,7 @@ TagManager:
   - ProgressBar
   - EffectCanvas
   - PlayerControls
+  - EventTimeKeeper
   layers:
   - Default
   - TransparentFX

@@ -16,6 +16,7 @@ public class BallGoalBounce : BallGoal
 
         rBody.AddForce(forceToApply * transform.forward * Time.fixedDeltaTime,
                             ForceMode.VelocityChange);
+        base.Start();
     }
 
     // void FixedUpdate()
