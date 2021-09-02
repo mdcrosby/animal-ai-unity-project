@@ -142,8 +142,18 @@ public class Prefab : MonoBehaviour, IPrefab
             for (int i = 0; i < uvs.Length; ++i)
             {
                 b = uvStretchLookup.TryGetValue(MESH.normals[i], out n);
-                uvs[i].x = (MESH.uv[i].x > 0) ? T.localScale[(b ? n : d).x] : 0;
-                uvs[i].y = (MESH.uv[i].y > 0) ? T.localScale[(b ? n : d).y] : 0;
+                if (b)
+                {
+                    uvs[i].x = (MESH.uv[i].x > 0) ? T.localScale[n.x] : 0;
+                    uvs[i].y = (MESH.uv[i].y > 0) ? T.localScale[n.y] : 0;
+                }
+                else
+                {
+                    uvs[i].x = (MESH.uv[i].x > 0) ? T.localScale[0] : 0;
+                    uvs[i].y = (MESH.uv[i].y > 0) ? Mathf.Sqrt(Mathf.Pow(T.localScale[1],2) + Mathf.Pow(T.localScale[2], 2)) : 0;
+                    //uvs[i].x = (MESH.uv[i].x > 0) ? MESH.uv[i].x : 0; print("MESH.uv[i].x: "+ MESH.uv[i].x);
+                    //uvs[i].y = (MESH.uv[i].y > 0) ? MESH.uv[i].y : 0; print("MESH.uv[i].y: " + MESH.uv[i].y);
+                }
             }
             MESH.uv = uvs;
 
