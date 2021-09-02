@@ -51,6 +51,7 @@ MonoBehaviour:
   canRandomizeColor: 1
   ratioSize: {x: 0.5, y: 0.5, z: 0.5}
   sizeAdjustement: 0.999
+  textureUVOverride: 1
 --- !u!54 &8839437840819701191
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -125,7 +126,7 @@ PrefabInstance:
     - target: {fileID: 1557087961565423864, guid: b36a14dc41ee1e6409bf9a3507c4f0b8, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 453cd06096fdb464f9e7abc5f703f5e5, type: 2}
+      objectReference: {fileID: 2100000, guid: 29597f4ca31f7e649891c017199e9512, type: 2}
     - target: {fileID: 6151151473114806142, guid: b36a14dc41ee1e6409bf9a3507c4f0b8, type: 3}
       propertyPath: m_IsTrigger
       value: 0
