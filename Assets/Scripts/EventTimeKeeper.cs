@@ -29,4 +29,12 @@ public class EventTimeKeeper : MonoBehaviour
     {
         fixedFramesElapsed++;
     }
+
+    public void Reset(bool exportPreviousLog=false)
+    {
+        if (exportPreviousLog) { ExportEvents(); }
+
+        events = new List<AAIEvent>();
+        nextID = 0; fixedFramesElapsed = 0;
+    }
 }

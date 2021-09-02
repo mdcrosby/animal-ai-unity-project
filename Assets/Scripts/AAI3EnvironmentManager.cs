@@ -27,6 +27,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public int defaultRayMaxDegrees = 60;
     public int defaultDecisionPeriod = 3;
     public GameObject playerControls; //Just for camera and reset controls ...@TODO Don't think this should be a GameObject in the scene and linked there (carried over from v2.0)
+    public GameObject eventTimeKeeper; // to reset time-keeper when starting a new run
 
     [HideInInspector]
     public bool playerMode;
@@ -254,6 +255,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
         {
             SideChannelManager.UnregisterSideChannel(_arenasParametersSideChannel);
         }
+    }
+
+    public void ResetTimeKeeper() {
+        eventTimeKeeper.GetComponent<EventTimeKeeper>().Reset();
     }
 
 }

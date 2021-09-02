@@ -55,6 +55,8 @@ public class TrainingArena : MonoBehaviour
             arenaID = (arenaID + 1) % maxarenaID;
         }
 
+        _environmentManager.ResetTimeKeeper();
+
         ArenaConfiguration newConfiguration;
         if (!_environmentManager.GetConfiguration(arenaID, out newConfiguration))
         {

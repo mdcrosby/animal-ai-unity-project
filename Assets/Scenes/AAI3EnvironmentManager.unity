@@ -438,6 +438,7 @@ MonoBehaviour:
   defaultRayMaxDegrees: 60
   defaultDecisionPeriod: 3
   playerControls: {fileID: 1065671190}
+  eventTimeKeeper: {fileID: 1232369224}
   playerMode: 0
 --- !u!1 &660795385
 GameObject:

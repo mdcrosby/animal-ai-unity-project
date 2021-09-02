@@ -31,9 +31,12 @@ namespace AAIEvents
         public override string ToString()
         {
             string output = "AAIEvent(";
-            foreach (object x in new object[] { ID, timeStep, eventType, eventLocation, eventObject, description }) {
-                output += nameof(x) + ": " + x.ToString() + ", ";
+            foreach (KeyValuePair<string,object> x in new Dictionary<string, object>() {
+                { "ID", ID }, { "timeStep", timeStep }, {"eventType", eventType }, {"eventLocation", eventLocation }, {"eventObject", eventObject }, {"description", description }
+            }) {
+                output += x.Key + ": " + x.Value.ToString() + ", ";
             }
+            output = output.Remove(output.Length-2);
             output += ")";
             return output;
         }

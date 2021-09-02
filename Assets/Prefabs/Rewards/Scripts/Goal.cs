@@ -21,7 +21,7 @@ public class Goal : Prefab
     public void Start()
     {
         ETK = GameObject.FindGameObjectWithTag("EventTimeKeeper").GetComponent<EventTimeKeeper>();
-        Debug.Log("ETK" + ETK + " found by " + this.name);
+        //Debug.Log("ETK" + ETK + " found by " + this.name);
     }
 
     public virtual void OnTriggerEnter(Collider collision)
