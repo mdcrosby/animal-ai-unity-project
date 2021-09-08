@@ -73,23 +73,21 @@ public class AAI3EnvironmentManager : MonoBehaviour
             grayscale = false;
             useRayCasts = true;
             raysPerSide = 2;
-            
             //If in editor mode then we won't have any arenas input via the sidechannel
             //Instead load whichever config is specified in configFile field in editor
             if(configFile != ""){
-                Debug.Log("Loading resource " + configFile);
                 var configYAML = Resources.Load<TextAsset>(configFile);
-                Debug.Log(configYAML);
-                var deserializer = new DeserializerBuilder()
-                    .WithTagMapping("!ArenaConfig", typeof(YAMLDefs.ArenaConfig))
-                    .WithTagMapping("!Arena", typeof(YAMLDefs.Arena))
-                    .WithTagMapping("!Item", typeof(YAMLDefs.Item))
-                    .WithTagMapping("!Vector3", typeof(Vector3))
-                    .WithTagMapping("!RGB", typeof(YAMLDefs.RGB))
-                    .IgnoreUnmatchedProperties()
-                    .Build();
-                var parsed = deserializer.Deserialize<YAMLDefs.ArenaConfig>(configYAML.ToString());
-                _arenasConfigurations.UpdateWithYAML(parsed);
+                if(configYAML!=null){
+                    var deserializer = new DeserializerBuilder()
+                        .WithTagMapping("!ArenaConfig", typeof(YAMLDefs.ArenaConfig))
+                        .WithTagMapping("!Arena", typeof(YAMLDefs.Arena))
+                        .WithTagMapping("!Item", typeof(YAMLDefs.Item))
+                        .WithTagMapping("!Vector3", typeof(Vector3))
+                        .WithTagMapping("!RGB", typeof(YAMLDefs.RGB))
+                        .Build();
+                    var parsed = deserializer.Deserialize<YAMLDefs.ArenaConfig>(configYAML.ToString());
+                    _arenasConfigurations.UpdateWithYAML(parsed);
+                }
             }
         }
 
