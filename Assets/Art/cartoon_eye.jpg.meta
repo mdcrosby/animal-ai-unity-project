@@ -1,12 +1,16 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
 guid: 2ad0bd89eb1cd134dbcf5c70586f807c
+=======
+guid: 651f35d2148997a49b5334518be4d5d9
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -65,10 +69,14 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -77,10 +85,14 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -89,10 +101,14 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: iPhone
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -101,10 +117,14 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,10 +133,14 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Windows Store Apps
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -125,10 +149,14 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+<<<<<<< HEAD:Assets/Art/cartoon_eye.jpg.meta
     maxTextureSize: 64
+=======
+    maxTextureSize: 128
+>>>>>>> aesthetics_shading_overhaul:Assets/Art/MiscPrefabObjectTextures/box_tex1_128x128.png.meta
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 3
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0

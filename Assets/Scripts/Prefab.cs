@@ -1,5 +1,5 @@
-// using System.Collections;
-// using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
@@ -20,6 +20,8 @@ public class Prefab : MonoBehaviour, IPrefab
     public bool canRandomizeColor = true;
     public Vector3 ratioSize;
     public float sizeAdjustement = 0.999f;
+    // to scale textures on dynamically-sized objects
+    public bool textureUVOverride = false;
 
     protected float _height;
 
@@ -55,6 +57,8 @@ public class Prefab : MonoBehaviour, IPrefab
         transform.localScale = new Vector3(sizeX * ratioSize.x,
                                             sizeY * ratioSize.y,
                                             sizeZ * ratioSize.z);
+
+        if (textureUVOverride) { RescaleUVs(); }
     }
 
     public virtual Vector3 GetRotation(float rotationY)
@@ -83,6 +87,86 @@ public class Prefab : MonoBehaviour, IPrefab
     protected virtual float AdjustY(float yIn)
     {
         return yIn + _height / 2 + 0.01f;
+    }
+
+    protected virtual void RescaleUVs(bool child=false, GameObject childOverride=null) {
+        if (this.name.ToLower().Contains("ramp")) { Debug.Log(this.name + " CALLING RescaleUVs() " + child + ", " + childOverride); }
+        Renderer R = (child) ? childOverride.GetComponent<Renderer>() : this.GetComponent<Renderer>();
+        MeshFilter MF = (child) ? childOverride.GetComponent<MeshFilter>() : this.GetComponent<MeshFilter>();
+        if (R != null && R.material.GetTexture("_BaseMap") != null)
+        {
+            if (!child) { Debug.Log(this.name + ": " + R + ", " + MF); }
+            MF.sharedMesh = Instantiate<Mesh>(MF.mesh);
+            Mesh MESH = MF.sharedMesh;
+
+            Debug.Log(this.name + " _BaseMap GET: " + R.material.GetTexture("_BaseMap"));
+            Debug.Log(this.name + " material NAME: " + R.material.name);
+
+            if (this.name.ToLower().Contains("ramp"))
+            {
+                string meshVertices = "MeshVertex array, length " + MESH.vertices.Length + ": ";
+                foreach (Vector3 vCoord in MESH.vertices)
+                {
+                    meshVertices += vCoord.ToString() + ", ";
+                }
+                Debug.Log(meshVertices);
+
+                string meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
+                foreach (Vector2 uvCoord in MESH.uv)
+                {
+                    meshUV += uvCoord.ToString() + ", ";
+                }
+                Debug.Log(meshUV);
+
+                string meshNormals = "MeshNormal array, length " + MESH.normals.Length + ": ";
+                foreach (Vector3 normCoord in MESH.normals)
+                {
+                    meshNormals += normCoord.ToString() + ", ";
+                }
+                Debug.Log(meshNormals);
+            }
+
+            Transform T = /*(child) ? transform.parent :*/ transform;
+            if (this.name.ToLower().Contains("ramp")) { Debug.Log("RAMP: "+T.gameObject.name); }
+
+            Vector2[] uvs = new Vector2[MESH.uv.Length];
+            Dictionary<Vector3, Vector2Int> uvStretchLookup = new Dictionary<Vector3, Vector2Int> {
+                { new Vector3(0f, 0f, 1f), new Vector2Int(0, 1) },
+                { new Vector3(0f, 1f, 0f), new Vector2Int(0, 2) },
+                { new Vector3(0f, 0f, -1f), new Vector2Int(0,1) },
+                { new Vector3(0f, -1f, 0f), new Vector2Int(0,2) },
+                { new Vector3(-1f, 0f, 0f), new Vector2Int(2,1) },
+                { new Vector3(1f, 0f, 0f), new Vector2Int(2, 1) }
+            };
+            Vector2Int n; bool b; Vector2Int d = new Vector2Int(0, 1);
+            for (int i = 0; i < uvs.Length; ++i)
+            {
+                b = uvStretchLookup.TryGetValue(MESH.normals[i], out n);
+                if (b)
+                {
+                    uvs[i].x = (MESH.uv[i].x > 0) ? T.localScale[n.x] : 0;
+                    uvs[i].y = (MESH.uv[i].y > 0) ? T.localScale[n.y] : 0;
+                }
+                else
+                {
+                    uvs[i].x = (MESH.uv[i].x > 0) ? T.localScale[0] : 0;
+                    uvs[i].y = (MESH.uv[i].y > 0) ? Mathf.Sqrt(Mathf.Pow(T.localScale[1],2) + Mathf.Pow(T.localScale[2], 2)) : 0;
+                    //uvs[i].x = (MESH.uv[i].x > 0) ? MESH.uv[i].x : 0; print("MESH.uv[i].x: "+ MESH.uv[i].x);
+                    //uvs[i].y = (MESH.uv[i].y > 0) ? MESH.uv[i].y : 0; print("MESH.uv[i].y: " + MESH.uv[i].y);
+                }
+            }
+            MESH.uv = uvs;
+
+            Debug.Log(T.localScale[0] + ", " + T.localScale[1] + ", " + T.localScale[2]);
+            /*meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
+            foreach (Vector2 uvCoord in MESH.uv)
+            {
+                meshUV += uvCoord.ToString() + ", ";
+            }
+            Debug.Log(meshUV);*/
+
+        }
+        else if (!child) { for (int i = 0; i < transform.childCount; ++i) { RescaleUVs(true, (transform.GetChild(i).gameObject)); } }
     }
 
 }

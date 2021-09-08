@@ -96,7 +96,7 @@ public class SizeChangeGoal : BallGoal
                 }
             }
             //print(overlapList.Count);
-            //foreach (Collider c in overlapList) { print(c.gameObject.name); }
+            foreach (Collider c in overlapList) { print(c.gameObject.name); }
             if (overlapList.Count > 0)
             {
                 freeToGrow = false;
