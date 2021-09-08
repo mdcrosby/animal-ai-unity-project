@@ -34,6 +34,8 @@ public class SpawnerStockpiler : GoalSpawner
             if (timeUntilDoorOpens < 0) { timeUntilDoorOpens = 0; Debug.Log("WARNING: negative TimeUntilDoorOpens given. Clamping to 0..."); }
         }
         else { timeUntilDoorOpens = -1; timeUntilDoorCloses = -1; }
+
+        canRandomizeColor = true;
     }
 
     private void FixedUpdate()
