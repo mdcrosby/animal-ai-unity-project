@@ -91,44 +91,19 @@ public class Prefab : MonoBehaviour, IPrefab
     }
 
     protected virtual void RescaleUVs(bool child=false, GameObject childOverride=null) {
-        if (this.name.ToLower().Contains("ramp")) { Debug.Log(this.name + " CALLING RescaleUVs() " + child + ", " + childOverride); }
+        //if (this.name.ToLower().Contains("ramp")) { Debug.Log(this.name + " CALLING RescaleUVs() " + child + ", " + childOverride); }
         Renderer R = (child) ? childOverride.GetComponent<Renderer>() : this.GetComponent<Renderer>();
         MeshFilter MF = (child) ? childOverride.GetComponent<MeshFilter>() : this.GetComponent<MeshFilter>();
         if (R != null && R.material.GetTexture("_BaseMap") != null)
         {
-            if (!child) { Debug.Log(this.name + ": " + R + ", " + MF); }
+            //if (!child) { Debug.Log(this.name + ": " + R + ", " + MF); }
             MF.sharedMesh = Instantiate<Mesh>(MF.mesh);
             Mesh MESH = MF.sharedMesh;
 
-            Debug.Log(this.name + " _BaseMap GET: " + R.material.GetTexture("_BaseMap"));
-            Debug.Log(this.name + " material NAME: " + R.material.name);
-
-            if (this.name.ToLower().Contains("ramp"))
-            {
-                string meshVertices = "MeshVertex array, length " + MESH.vertices.Length + ": ";
-                foreach (Vector3 vCoord in MESH.vertices)
-                {
-                    meshVertices += vCoord.ToString() + ", ";
-                }
-                Debug.Log(meshVertices);
-
-                string meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
-                foreach (Vector2 uvCoord in MESH.uv)
-                {
-                    meshUV += uvCoord.ToString() + ", ";
-                }
-                Debug.Log(meshUV);
-
-                string meshNormals = "MeshNormal array, length " + MESH.normals.Length + ": ";
-                foreach (Vector3 normCoord in MESH.normals)
-                {
-                    meshNormals += normCoord.ToString() + ", ";
-                }
-                Debug.Log(meshNormals);
-            }
+            //Debug.Log(this.name + " _BaseMap GET: " + R.material.GetTexture("_BaseMap"));
+            //Debug.Log(this.name + " material NAME: " + R.material.name);
 
             Transform T = /*(child) ? transform.parent :*/ transform;
-            if (this.name.ToLower().Contains("ramp")) { Debug.Log("RAMP: "+T.gameObject.name); }
 
             Vector2[] uvs = new Vector2[MESH.uv.Length];
             Dictionary<Vector3, Vector2Int> uvStretchLookup = new Dictionary<Vector3, Vector2Int> {
@@ -158,7 +133,7 @@ public class Prefab : MonoBehaviour, IPrefab
             }
             MESH.uv = uvs;
 
-            Debug.Log(T.localScale[0] + ", " + T.localScale[1] + ", " + T.localScale[2]);
+            //Debug.Log(T.localScale[0] + ", " + T.localScale[1] + ", " + T.localScale[2]);
             /*meshUV = "MeshUV array, length " + MESH.uv.Length + ": ";
             foreach (Vector2 uvCoord in MESH.uv)
             {
