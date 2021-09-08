@@ -255,7 +255,7 @@ namespace ArenaBuilders
 
         private bool IsSpotFree(Collider[] colliders, bool isAgent, bool isZone = false)
         {
-            if (isZone) Debug.Log("IsZone set to TRUE");
+            //if (isZone) Debug.Log("IsZone set to TRUE");
             if (isZone) return colliders.Length == 0 ||
                     (colliders.All(collider => collider.isTrigger || !collider.gameObject.CompareTag("arena")) && !isAgent);
             else return colliders.Length == 0 ||
