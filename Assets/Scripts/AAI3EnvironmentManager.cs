@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
@@ -6,7 +8,9 @@ using Unity.MLAgents.Sensors;
 using Unity.MLAgents.SideChannels;
 using Unity.MLAgents.Policies;
 using ArenasParameters;
+using AAIOCommunicators;
 using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check necessary/good practice.
+using YamlDotNet.Serialization;
 
 /// Training scene must start automatically on launch by training process
 /// Academy must reset the scene to a valid starting point for each episode
@@ -20,6 +24,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 {
     public GameObject arena; // A prefab for the training arena setup
     public GameObject uiCanvas;
+    public string configFile = "";
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
@@ -48,7 +53,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
         
         //Get all commandline arguments and update starting parameters
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
-
         int paramValue;
         playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
         int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
@@ -69,6 +73,24 @@ public class AAI3EnvironmentManager : MonoBehaviour
             grayscale = false;
             useRayCasts = true;
             raysPerSide = 2;
+            
+            //If in editor mode then we won't have any arenas input via the sidechannel
+            //Instead load whichever config is specified in configFile field in editor
+            if(configFile != ""){
+                Debug.Log("Loading resource " + configFile);
+                var configYAML = Resources.Load<TextAsset>(configFile);
+                Debug.Log(configYAML);
+                var deserializer = new DeserializerBuilder()
+                    .WithTagMapping("!ArenaConfig", typeof(YAMLDefs.ArenaConfig))
+                    .WithTagMapping("!Arena", typeof(YAMLDefs.Arena))
+                    .WithTagMapping("!Item", typeof(YAMLDefs.Item))
+                    .WithTagMapping("!Vector3", typeof(Vector3))
+                    .WithTagMapping("!RGB", typeof(YAMLDefs.RGB))
+                    .IgnoreUnmatchedProperties()
+                    .Build();
+                var parsed = deserializer.Deserialize<YAMLDefs.ArenaConfig>(configYAML.ToString());
+                _arenasConfigurations.UpdateWithYAML(parsed);
+            }
         }
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
@@ -197,7 +219,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
             {
                 case "--playerMode":
                     int playerMode = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 1;
-                    environmentParameters.Add("playerMode", playerMode);
                     break;
                 case "--receiveConfiguration":
                     environmentParameters.Add("receiveConfiguration", 0);
@@ -253,6 +274,21 @@ public class AAI3EnvironmentManager : MonoBehaviour
         if (Academy.IsInitialized)
         {
             SideChannelManager.UnregisterSideChannel(_arenasParametersSideChannel);
+        }
+    }
+
+    public static byte[] ReadFully (Stream stream)
+    {
+        byte[] buffer = new byte[32768];
+        using (MemoryStream ms = new MemoryStream())
+        {
+            while (true)
+            {
+                int read = stream.Read (buffer, 0, buffer.Length);
+                if (read <= 0)
+                    return ms.ToArray();
+                ms.Write (buffer, 0, read);
+            }
         }
     }
 

@@ -7,7 +7,7 @@ using AAIOCommunicators;
 namespace ArenasParameters
 {
     /// <summary>
-    /// The list of prefabs that can be passed as items to spawn in the various arenas instantiatec 
+    /// The list of prefabs that can be passed as items to spawn in the various arenas 
     /// </summary>
     [System.Serializable]
     public class ListOfPrefabs
@@ -64,6 +64,18 @@ namespace ArenasParameters
                 colors.Add(new Vector3(v.X, v.Y, v.Z));
             }
         }
+        
+        internal Spawnable(YAMLDefs.Item yamlItem)
+        {
+            name = yamlItem.name;
+            positions = yamlItem.positions;
+            rotations = yamlItem.rotations;
+            sizes = yamlItem.sizes;
+            colors = new List<Vector3>();
+            foreach (YAMLDefs.RGB c in yamlItem.colors){
+                colors.Add(new Vector3(c.r, c.g, c.b));
+            }
+        }
 
     }
 
@@ -78,7 +90,7 @@ namespace ArenasParameters
         public List<Spawnable> spawnables = new List<Spawnable>();
         public LightsSwitch lightsSwitch = new LightsSwitch();
         public bool toUpdate = false;
-        public string protoString = "";
+        public string protoString = "";// @TODO Check functionality with new yaml loaders
 
         public ArenaConfiguration()
         {
@@ -110,6 +122,20 @@ namespace ArenasParameters
             lightsSwitch = new LightsSwitch(T, blackouts);
             toUpdate = true;
             protoString = proto.ToString();
+        }
+
+        internal ArenaConfiguration(YAMLDefs.Arena yamlArena)
+        {
+            T = yamlArena.t;
+            spawnables = new List<Spawnable>();
+            foreach (YAMLDefs.Item item in yamlArena.items)
+            {
+                spawnables.Add(new Spawnable(item));
+            }
+            List<int> blackouts = yamlArena.blackouts;
+            lightsSwitch = new LightsSwitch(T, blackouts);
+            toUpdate = true;
+            protoString = yamlArena.ToString();//This is holdover from dodgy proto check @TODO UDPATE
         }
 
         public void SetGameObject(List<GameObject> listObj)
@@ -149,12 +175,42 @@ namespace ArenasParameters
                 }
             }
         }
+    
+        internal void Add(int k, YAMLDefs.Arena yamlConfig)
+        {
+            if (!configurations.ContainsKey(k))
+            {
+                configurations.Add(k, new ArenaConfiguration(yamlConfig));
+            }
+            else
+            {
+                if (yamlConfig.ToString() != configurations[k].protoString)
+                {
+                    configurations[k] = new ArenaConfiguration(yamlConfig);
+                }
+            }
+        }
+
+        public void UpdateWithYAML(YAMLDefs.ArenaConfig yamlArenaConfig){
+            if (yamlArenaConfig.arenas.ContainsKey(-1)){
+                Debug.Log("We only have one arena key");
+                for(int i = 0; i < numberOfArenas; i++){
+                    Add(i, yamlArenaConfig.arenas[-1]);
+                }
+            }
+            else{
+                Debug.Log("We have multiple arena keys");
+                foreach (KeyValuePair<int, YAMLDefs.Arena> arenaConfiguration in yamlArenaConfig.arenas){
+                    Add(arenaConfiguration.Key, arenaConfiguration.Value);
+                }
+            }
+        }
 
         public void UpdateWithConfigurationsReceived(object sender, ArenasParametersEventArgs arenasParametersEvent)
         {
             byte[] arenas = arenasParametersEvent.Proto;
             ArenasConfigurationsProto arenasConfigurationsProto = ArenasConfigurationsProto.Parser.ParseFrom(arenas);
-
+            Debug.Log(arenasConfigurationsProto);
             if (arenasConfigurationsProto.Arenas.ContainsKey(-1))
             {
                 // In case we have only a single configuration for all arenas we copy this configuration
