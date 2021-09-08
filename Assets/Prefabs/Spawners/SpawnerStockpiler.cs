@@ -7,7 +7,10 @@ public class SpawnerStockpiler : GoalSpawner
 {
     public bool stockpiling = true; // for inheriting class later on...
     public int doorOpenDelay = -1; // assuming not using
-    public int timeBetweenDoorOpens = -1; // assuming not using
+    public bool infiniteDoorOpens = false; // assuming not using
+    public float timeUntilDoorOpens = 1.5f; // assuming not using
+    public float timeUntilDoorCloses = 1.5f; // assuming not using
+    private float minDoorOpenTime = 1.4f;
 
     private Queue<BallGoal> waitingList; // for spawned goals waiting to materialise
     private GameObject Door;
@@ -25,6 +28,12 @@ public class SpawnerStockpiler : GoalSpawner
 
         waitingList = new Queue<BallGoal>();
         if (stockpiling) { StartCoroutine(manageDoor()); }
+
+        if (infiniteDoorOpens) {
+            if (timeUntilDoorCloses < minDoorOpenTime) { timeUntilDoorCloses = minDoorOpenTime; Debug.Log("WARNING: TimeUntilDoorCloses too small for food release. Clamping to 0..."); }
+            if (timeUntilDoorOpens < 0) { timeUntilDoorOpens = 0; Debug.Log("WARNING: negative TimeUntilDoorOpens given. Clamping to 0..."); }
+        }
+        else { timeUntilDoorOpens = -1; timeUntilDoorCloses = -1; }
     }
 
     private void FixedUpdate()
@@ -67,16 +76,22 @@ public class SpawnerStockpiler : GoalSpawner
         rb.constraints = materialising?RigidbodyConstraints.None:RigidbodyConstraints.FreezePosition;
     }
 
-    private IEnumerator manageDoor()
+    private IEnumerator manageDoor(bool includeInitDelay = true, bool doorOpening=true)
     {
-        yield return new WaitForSeconds(doorOpenDelay);
+        if (includeInitDelay) { yield return new WaitForSeconds(Math.Max(doorOpenDelay, 0)); }
+
         float dt = 0f; float newSize;
         while (dt < 1)
         {
-            newSize = base.interpolate(0, 1, dt, 1, 0);
+            newSize = base.interpolate(0, 1, dt, doorOpening?1:0, doorOpening?0:1);
             Door.transform.localScale = new Vector3(Door.transform.localScale.x, newSize, Door.transform.localScale.z);
             dt += Time.fixedDeltaTime;
             yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+
+        if (infiniteDoorOpens) {
+            yield return new WaitForSeconds(doorOpening ? timeUntilDoorCloses : timeUntilDoorOpens);
+            StartCoroutine(manageDoor(false, !doorOpening));
         }
 
 
