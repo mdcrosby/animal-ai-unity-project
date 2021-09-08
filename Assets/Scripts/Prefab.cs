@@ -23,6 +23,7 @@ public class Prefab : MonoBehaviour, IPrefab
     // to scale textures on dynamically-sized objects
     public bool textureUVOverride = false;
 
+    public bool typicalOrigin = true;
     protected float _height;
 
     public virtual void SetColor(Vector3 color)
@@ -86,7 +87,7 @@ public class Prefab : MonoBehaviour, IPrefab
 
     protected virtual float AdjustY(float yIn)
     {
-        return yIn + _height / 2 + 0.01f;
+        return yIn + (typicalOrigin?(_height / 2):0) + 0.01f;
     }
 
     protected virtual void RescaleUVs(bool child=false, GameObject childOverride=null) {

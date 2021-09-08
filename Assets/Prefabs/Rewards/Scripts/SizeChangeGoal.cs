@@ -82,7 +82,6 @@ public class SizeChangeGoal : BallGoal
         /*=== RAY COLLISIONS FOR IMMOVEABLES GO HERE ===*/
         if (!isShrinking)
         {
-
             freeToGrow = !Physics.Raycast(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Mathf.Abs(sizeChangeRate));
             //Debug.DrawLine(Vector3.zero, new Vector3(10, 10, 10), Color.green, 0.1f, false);
             //Debug.DrawRay(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Color.green, 0.1f, true);

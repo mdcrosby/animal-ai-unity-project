@@ -20,6 +20,7 @@ public class TrainingArena : MonoBehaviour
     [HideInInspector]
     public TrainingAgent _agent;
     private ArenaBuilder _builder;
+    public ArenaBuilder Builder { get { return _builder; } }
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
     private AAI3EnvironmentManager _environmentManager;
     private List<Fade> _fades = new List<Fade>();
