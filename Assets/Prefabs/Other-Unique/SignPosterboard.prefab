@@ -104,3 +104,10 @@ MonoBehaviour:
   sizeAdjustement: 0.999
   textureUVOverride: 0
   typicalOrigin: 0
+  selectedSymbolName: left-arrow
+  symbolNames:
+  - right-arrow
+  - left-arrow
+  textures:
+  - {fileID: 2800000, guid: 366a404328d6e9b48abdb05b4c9e1546, type: 3}
+  - {fileID: 2800000, guid: 19828ca507064434481e4eb56d28441b, type: 3}
