@@ -15,3 +15,10 @@ arenas:
       - !Vector3 {x: 20, y: 0, z: 22}
       sizes:
       - !Vector3 {x: 1, y: 1, z: 1}  
+    - !Item
+      name: WallNoisy
+      positions:
+      - !Vector3 {x: 30, y: 0, z: 22}
+      rotations: [90]
+      sizes:
+      - !Vector3 {x: 4, y: 4, z: 4}  
