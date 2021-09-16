@@ -104,7 +104,7 @@ MonoBehaviour:
   sizeAdjustement: 0.999
   textureUVOverride: 0
   typicalOrigin: 0
-  selectedSymbolName: u-turn-arrow
+  selectedSymbolName: right-arrow
   symbolNames:
   - default
   - right-arrow
@@ -112,6 +112,9 @@ MonoBehaviour:
   - up-arrow
   - down-arrow
   - u-turn-arrow
+  - letter-a
+  - letter-b
+  - letter-c
   textures:
   - {fileID: 2800000, guid: f47b3813406f70c4f9b951c5802eb29f, type: 3}
   - {fileID: 2800000, guid: 366a404328d6e9b48abdb05b4c9e1546, type: 3}
@@ -119,12 +122,18 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 6b6daa9c456102d41af8ced0596b3080, type: 3}
   - {fileID: 2800000, guid: f397bc8541a95074893f24038d711d05, type: 3}
   - {fileID: 2800000, guid: 34aeef3bc8a968347ad66f8e48d69fd0, type: 3}
+  - {fileID: 2800000, guid: f8e82359ab99ade4a90307f334ceda8d, type: 3}
+  - {fileID: 2800000, guid: d219d9ab4b40ba54991601c802bc08bb, type: 3}
+  - {fileID: 2800000, guid: a4bdfa80c8ae92546b8fcea87ea1f0e0, type: 3}
   colours:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.8509804, g: 0.17777778, b: 0.043137256, a: 1}
+  - {r: 0.9, g: 0.31500003, b: 0.31500003, a: 1}
+  - {r: 0.25500003, g: 0.85, b: 0.42500007, a: 1}
+  - {r: 0.25500003, g: 0.6990942, b: 0.85, a: 1}
   useDefaultColourArray: 1
   assignedColourOverride: {r: 0.239153, g: 0, b: 0.8396226, a: 1}
