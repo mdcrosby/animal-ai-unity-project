@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6907925748948253622}
   - component: {fileID: 8662980198616354684}
   - component: {fileID: -6601130326534759375}
+  - component: {fileID: -1495984043384320533}
   m_Layer: 0
   m_Name: SignPosterboard
   m_TagString: Untagged
@@ -137,3 +138,16 @@ MonoBehaviour:
   - {r: 0.25500003, g: 0.6990942, b: 0.85, a: 1}
   useDefaultColourArray: 1
   assignedColourOverride: {r: 0.239153, g: 0, b: 0.8396226, a: 1}
+--- !u!65 &-1495984043384320533
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150004164178407081}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.100000024, y: 2, z: 3}
+  m_Center: {x: 0, y: 1, z: 0}
