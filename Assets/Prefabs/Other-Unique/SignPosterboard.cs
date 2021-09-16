@@ -22,5 +22,10 @@ public class SignPosterboard : Prefab
 
     }
 
-    private Texture getTextureBySymbolName(string S) { return textures[Array.IndexOf(symbolNames, S)]; }
+    private Texture getTextureBySymbolName(string S) {
+        int index = Array.IndexOf(symbolNames, S);
+        // index==0 is default empty transparent texture, so use this if invalid symbol name entered
+        if (index == -1) { Debug.Log("WARNING: a SignPosterboard has not been given a valid symbol name! Defaulting to empty texture..."); }
+        return ((index!=-1) ? textures[index] : textures[0]);
+    }
 }
