@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
@@ -8,7 +7,6 @@ using Unity.MLAgents.Sensors;
 using Unity.MLAgents.SideChannels;
 using Unity.MLAgents.Policies;
 using ArenasParameters;
-using AAIOCommunicators;
 using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check necessary/good practice.
 using YamlDotNet.Serialization;
 
@@ -54,7 +52,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         //Get all commandline arguments and update starting parameters
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
         int paramValue;
-        playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
+        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
         int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
         bool useCamera = (environmentParameters.TryGetValue("useCamera", out paramValue) ? paramValue: 0) > 0;
         int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
@@ -63,9 +61,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
         int raysPerSide = environmentParameters.TryGetValue("raysPerSide", out paramValue) ? paramValue : defaultRaysPerSide;
         int rayMaxDegrees = environmentParameters.TryGetValue("rayMaxDegrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
         int decisionPeriod = environmentParameters.TryGetValue("decisionPeriod", out paramValue) ? paramValue : defaultDecisionPeriod;
+        Debug.Log("Set playermode to " + playerMode);
 
-        if (Application.isEditor)//Default settings for tests in Editor @TODO replace this with custom config settings in editor window for easier testing.
+        if (Application.isEditor)//Default settings for tests in Editor
         {
+            Debug.Log("Using UnityEditor default configuration");
             numberOfArenas = 1;
             playerMode = true;
             useCamera= true;
@@ -137,14 +137,14 @@ public class AAI3EnvironmentManager : MonoBehaviour
         }
 
         Debug.Log("Environment loaded with options:" + 
-            "\nPlayerMode: " + playerMode + 
-            "\nNo. Arenas: " + numberOfArenas + 
-            "\nuseCamera: " + useCamera + 
-            "\nResolution: " + resolution + 
-            "\ngrayscale: " + grayscale +
-            "\nuseRayCasts: " + useRayCasts +
-            "\nraysPerSide: " + raysPerSide +
-            "\nrayMaxDegrees: " + rayMaxDegrees            
+            "\n  PlayerMode: " + playerMode + 
+            "\n  No. Arenas: " + numberOfArenas + 
+            "\n  useCamera: " + useCamera + 
+            "\n  Resolution: " + resolution + 
+            "\n  grayscale: " + grayscale +
+            "\n  useRayCasts: " + useRayCasts +
+            "\n  raysPerSide: " + raysPerSide +
+            "\n  rayMaxDegrees: " + rayMaxDegrees            
             );
     }
 
@@ -210,13 +210,14 @@ public class AAI3EnvironmentManager : MonoBehaviour
         Dictionary<string, int> environmentParameters = new Dictionary<string, int>();
 
         string[] args = System.Environment.GetCommandLineArgs();
-        // Debug.Log("Command Line Args: " + args);
+        Debug.Log("Command Line Args: " + String.Join(" ", args));
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
             {
                 case "--playerMode":
                     int playerMode = (i < args.Length - 1) ? Int32.Parse(args[i + 1]) : 1;
+                    environmentParameters.Add("playerMode", playerMode);
                     break;
                 case "--receiveConfiguration":
                     environmentParameters.Add("receiveConfiguration", 0);
@@ -252,7 +253,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("Environment Parameters: " + string.Join(Environment.NewLine, environmentParameters));
+        Debug.Log("Args parsed by Unity: " + string.Join(" ", environmentParameters));
         return environmentParameters;
     }
 
