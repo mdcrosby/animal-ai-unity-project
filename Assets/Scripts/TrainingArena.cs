@@ -49,7 +49,7 @@ public class TrainingArena : MonoBehaviour
         }
 
         //Each time reset is called we cycle through the defined arenaIDs
-        maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check during once (after environmentManager is initialized).
+        maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check once (after environmentManager is initialized).
         Debug.Log(arenaID);
         Debug.Log(maxarenaID);
         if(maxarenaID > 0){
