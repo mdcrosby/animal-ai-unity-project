@@ -14,6 +14,24 @@ public class SignPosterboard : Prefab
     public bool useDefaultColourArray;
     public Color assignedColourOverride;
 
+    public void SetSymbol(string s) {
+        selectedSymbolName = s;
+        texIndex = Array.IndexOf(symbolNames, selectedSymbolName);
+        if (useDefaultColourArray)
+        {
+            KeyValuePair<Texture, Color> texture_colour_pair = getTextureAndColourByIndex(texIndex);
+            _symbolMat.SetTexture("_BaseMap", texture_colour_pair.Key);
+            _symbolMat.color = texture_colour_pair.Value;
+        }
+        else
+        {
+            Texture texture = getTextureByIndex(texIndex);
+            _symbolMat.SetTexture("_BaseMap", texture);
+            Debug.Log("assignedColourOverride: " + assignedColourOverride);
+            _symbolMat.color = assignedColourOverride;
+        }
+    }
+
     void Awake()
     {
         // attempts to retrieve symbol material (the third of three in current implementation)
@@ -21,19 +39,7 @@ public class SignPosterboard : Prefab
         _symbolMat = this.gameObject.GetComponent<MeshRenderer>().materials[2];
         if (!_symbolMat.name.Contains("symbol")) { Debug.Log("WARNING: a SignPosterboard may not have found the correct symbol material!!"); }
         // sets texture to show correct chosen symbol according to symbol name provided
-        texIndex = Array.IndexOf(symbolNames, selectedSymbolName);
-
-        if (useDefaultColourArray) {
-            KeyValuePair<Texture, Color> texture_colour_pair = getTextureAndColourByIndex(texIndex);
-            _symbolMat.SetTexture("_BaseMap", texture_colour_pair.Key);
-            _symbolMat.color = texture_colour_pair.Value;
-        }
-        else {
-            Texture texture = getTextureByIndex(texIndex);
-            _symbolMat.SetTexture("_BaseMap", texture);
-            Debug.Log("assignedColourOverride: " + assignedColourOverride);
-            _symbolMat.color = assignedColourOverride;
-        }
+        SetSymbol(selectedSymbolName);
 
     }
 
