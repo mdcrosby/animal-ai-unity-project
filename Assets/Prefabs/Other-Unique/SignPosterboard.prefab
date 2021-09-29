@@ -116,6 +116,12 @@ MonoBehaviour:
   - letter-a
   - letter-b
   - letter-c
+  - square
+  - triangle
+  - circle
+  - star
+  - tick
+  - cross
   textures:
   - {fileID: 2800000, guid: f47b3813406f70c4f9b951c5802eb29f, type: 3}
   - {fileID: 2800000, guid: 366a404328d6e9b48abdb05b4c9e1546, type: 3}
@@ -126,16 +132,28 @@ MonoBehaviour:
   - {fileID: 2800000, guid: f8e82359ab99ade4a90307f334ceda8d, type: 3}
   - {fileID: 2800000, guid: d219d9ab4b40ba54991601c802bc08bb, type: 3}
   - {fileID: 2800000, guid: a4bdfa80c8ae92546b8fcea87ea1f0e0, type: 3}
+  - {fileID: 2800000, guid: 6d8d1c8f015d08341a995f3af7826e8e, type: 3}
+  - {fileID: 2800000, guid: e574e14b44c8297449bc6a3877c3a875, type: 3}
+  - {fileID: 2800000, guid: 62327cb5831fcd14f9d2eeee7c910a3c, type: 3}
+  - {fileID: 2800000, guid: 6dc1f6d974554b9408589cde33c4a7eb, type: 3}
+  - {fileID: 2800000, guid: 55946d4ff22139b48ab7254ce425ba9e, type: 3}
+  - {fileID: 2800000, guid: 87a02abb0a046e94686df14879bf0f0d, type: 3}
   colours:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0.8509804, g: 0.17777778, b: 0.043137256, a: 1}
+  - {r: 0.9433962, g: 0.9171746, b: 0.10145953, a: 1}
   - {r: 0.9, g: 0.31500003, b: 0.31500003, a: 1}
   - {r: 0.25500003, g: 0.85, b: 0.42500007, a: 1}
   - {r: 0.25500003, g: 0.6990942, b: 0.85, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.10635927, g: 0.8679245, b: 0.044214953, a: 1}
+  - {r: 0.9339623, g: 0.08282302, b: 0.08282302, a: 1}
   useDefaultColourArray: 1
   assignedColourOverride: {r: 0.239153, g: 0, b: 0.8396226, a: 1}
 --- !u!65 &-1495984043384320533
