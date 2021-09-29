@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationRange: {x: 0, y: 0}
-  sizeMin: {x: 1, y: 1, z: 1}
-  sizeMax: {x: 1, y: 1, z: 1}
+  sizeMin: {x: 0.5, y: 0.5, z: 0.5}
+  sizeMax: {x: 2.5, y: 2.5, z: 2.5}
   canRandomizeColor: 0
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999

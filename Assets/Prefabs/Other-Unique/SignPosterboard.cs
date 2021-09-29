@@ -13,13 +13,14 @@ public class SignPosterboard : Prefab
     private int texIndex;
     public bool useDefaultColourArray;
     public Color assignedColourOverride;
+    //public bool useStandardSize = true;
 
     public void SetSymbol(string s, bool needsUpdating = false) {
         selectedSymbolName = s;
         texIndex = Array.IndexOf(symbolNames, selectedSymbolName);
         if (needsUpdating) {
             UpdatePosterboard();
-            print("UpdatePosterboard() called with useDefaultColourArray " + useDefaultColourArray.ToString() + " from SetSymbol()");
+            //print("UpdatePosterboard() called with useDefaultColourArray " + useDefaultColourArray.ToString() + " from SetSymbol()");
         }
     }
 
@@ -29,9 +30,12 @@ public class SignPosterboard : Prefab
             useDefaultColourArray = false;
             if (needsUpdating) {
                 UpdatePosterboard();
-                print("UpdatePosterboard() called with useDefaultColourArray "+useDefaultColourArray.ToString()+" from SetColourOverride()"); }
+                //print("UpdatePosterboard() called with useDefaultColourArray "+useDefaultColourArray.ToString()+" from SetColourOverride()");
+            }
         }
     }
+
+    //public void ActivateResizing() { useStandardSize = false; }
 
     public void UpdatePosterboard() {
         if (useDefaultColourArray)
@@ -71,5 +75,11 @@ public class SignPosterboard : Prefab
         index = (index >= 0 && index < symbolNames.Length) ? index : 0;
         Debug.Log("colours[index]: " + colours[index]);
         return new KeyValuePair<Texture, Color>(textures[index], colours[index]);
+    }
+
+
+    public override void SetSize(Vector3 size)
+    {
+        base.SetSize((size==Vector3.one*-1) ? Vector3.one : size);
     }
 }
