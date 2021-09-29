@@ -214,9 +214,9 @@ namespace ArenaBuilders
 
                 if (symbolName != null) {
                     SignPosterboard SP = gameObjectInstance.GetComponent<SignPosterboard>();
-                    if (SP != null) { 
-                        SP.assignedColourOverride = new Color(color.x, color.y, color.z);
-                        SP.SetSymbol(symbolName);
+                    if (SP != null) {
+                        if (color!=new Vector3(-1,-1,-1)) { SP.SetColourOverride(new Color(color.x, color.y, color.z), true); }
+                        SP.SetSymbol(symbolName, true); // UpdatePosterboard() for color/symbol texture is called here
                     }
                 }
             }

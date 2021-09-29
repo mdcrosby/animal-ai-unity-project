@@ -14,9 +14,26 @@ public class SignPosterboard : Prefab
     public bool useDefaultColourArray;
     public Color assignedColourOverride;
 
-    public void SetSymbol(string s) {
+    public void SetSymbol(string s, bool needsUpdating = false) {
         selectedSymbolName = s;
         texIndex = Array.IndexOf(symbolNames, selectedSymbolName);
+        if (needsUpdating) {
+            UpdatePosterboard();
+            print("UpdatePosterboard() called with useDefaultColourArray " + useDefaultColourArray.ToString() + " from SetSymbol()");
+        }
+    }
+
+    public void SetColourOverride(Color c, bool activateOverride = false, bool needsUpdating = false) {
+        assignedColourOverride = c;
+        if (activateOverride) {
+            useDefaultColourArray = false;
+            if (needsUpdating) {
+                UpdatePosterboard();
+                print("UpdatePosterboard() called with useDefaultColourArray "+useDefaultColourArray.ToString()+" from SetColourOverride()"); }
+        }
+    }
+
+    public void UpdatePosterboard() {
         if (useDefaultColourArray)
         {
             KeyValuePair<Texture, Color> texture_colour_pair = getTextureAndColourByIndex(texIndex);

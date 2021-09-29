@@ -7,14 +7,34 @@ arenas:
     - !Item
       name: Agent
       positions:
-      - !Vector3 {x: 20, y: 0, z: 20}
-      rotations: [0]
+      - !Vector3 {x: 10, y: 0, z: 20}
+      rotations: [90]
     - !Item
-      name: SignPosterboard
+      name: GoodGoal
       positions:
-      - !Vector3 {x: 20, y: 0, z: 22}
+      - !Vector3 {x: 5, y: 0, z: 30}
       sizes:
       - !Vector3 {x: 1, y: 1, z: 1}
       symbolNames:
-      - "left-arrow"      
+      - "left-arrow"
+    - !Item
+      name: SignPosterboard
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 8}
+      - !Vector3 {x: 20, y: 0, z: 14}
+      - !Vector3 {x: 20, y: 0, z: 20}
+      - !Vector3 {x: 20, y: 0, z: 26}
+      - !Vector3 {x: 20, y: 0, z: 32}
+      sizes:
+      - !Vector3 {x: 1, y: 1, z: 1}
+      - !Vector3 {x: 1, y: 1, z: 1}
+      - !Vector3 {x: 1, y: 1, z: 1}
+      - !Vector3 {x: 1, y: 1, z: 1}
+      - !Vector3 {x: 1, y: 1, z: 1}
+      symbolNames:
+      - "left-arrow"    
+      - "letter-a"    
+      - "circle"    
+      - "u-turn-arrow"    
+      - "tick"    
 

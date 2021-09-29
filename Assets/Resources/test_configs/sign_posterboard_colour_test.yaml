@@ -1,0 +1,30 @@
+!ArenaConfig
+arenas:
+  0: !Arena
+    pass_mark: 0
+    t: 250
+    items:
+    - !Item
+      name: Agent
+      positions:
+      - !Vector3 {x: 10, y: 0, z: 20}
+      rotations: [90]
+    - !Item
+      name: SignPosterboard
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 8}
+      - !Vector3 {x: 20, y: 0, z: 14}
+      symbolNames:
+      - "left-arrow"    
+      - "letter-a"
+    - !Item
+      name: SignPosterboard
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 26}
+      - !Vector3 {x: 20, y: 0, z: 32}
+      colors:
+      - !RGB {r: 0, g: 0, b: 255}
+      - !RGB {r: 100, g: 100, b: 0}
+      symbolNames:
+      - "left-arrow"    
+      - "letter-a"
