@@ -25,7 +25,9 @@ arenas:
       - !Vector3 {x: 20, y: 0, z: 20}
       - !Vector3 {x: 20, y: 0, z: 26}
       - !Vector3 {x: 20, y: 0, z: 32}
+      - !Vector3 {x: 30, y: 0, z: 20}
       sizes:
+      - !Vector3 {x: 1, y: 1, z: 1}
       - !Vector3 {x: 1, y: 1, z: 1}
       - !Vector3 {x: 1, y: 1, z: 1}
       - !Vector3 {x: 1, y: 1, z: 1}
@@ -36,5 +38,6 @@ arenas:
       - "letter-a"    
       - "circle"    
       - "u-turn-arrow"    
-      - "tick"    
+      - "tick"
+      - "10110/00001/11011"
 
