@@ -32,9 +32,9 @@ arenas:
       - !Vector3 {x: 1, y: 1, z: 1}
       - !Vector3 {x: 1, y: 1, z: 1}
       symbolNames:
-      - "left-arrow"    
-      - "letter-a"    
-      - "circle"    
-      - "u-turn-arrow"    
-      - "tick"
+      - "01/10"    
+      - "111/110/001"    
+      - "001010/011000/100001/101010/111001"    
+      - "0101/**10/0010/0***"
+      - "13x11"
 

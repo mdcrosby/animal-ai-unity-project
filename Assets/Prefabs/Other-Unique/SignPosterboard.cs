@@ -15,6 +15,8 @@ public class SignPosterboard : Prefab
     public Color assignedColourOverride;
     //public bool useStandardSize = true;
 
+    private System.Random RNG = new System.Random();
+
     public void SetSymbol(string s, bool needsUpdating = false) {
         selectedSymbolName = s;
         texIndex = Array.IndexOf(symbolNames, selectedSymbolName);
@@ -45,16 +47,18 @@ public class SignPosterboard : Prefab
     public void UpdatePosterboard() {
         // evaluate possible special case
         bool specialCodeCase = false;
-        // i.e. weak check for if binary symbol code is intended
+        // i.e. weak check for if special symbol code is intended
+        // or might just be a mistake...
         if (texIndex == -1)
         {
             char c = selectedSymbolName[0];
-            if (c == '0' || c == '1')
+            // if starting with 0-9|*, then assume a special symbol code is intended
+            if ((c >= '0' && c <= '9') || c == '*')
             {
-                // try to parse the possible special-texture-code
+                // try to parse the prospective special code
                 // if successful, we will have procedurally generated a texture so can use it
                 Texture2D tex;
-                // outputting tex correctly in test case according to pixel read
+                // specialCodeCase returns true iff parsing was successful - else, is invalid symbolName!
                 specialCodeCase = parseSpecialTextureCode(selectedSymbolName, out tex);
                 if (specialCodeCase) {
                     _symbolMat.SetTexture("_BaseMap", tex);
@@ -117,41 +121,49 @@ public class SignPosterboard : Prefab
     }
 
     bool parseSpecialTextureCode(string texCode, out Texture2D tex) {
-
-        int pixelWidth, pixelHeight;
+        print("RUNNING 1");
         //print("texCode: " + texCode);
 
-        int k = 0; char c = texCode[k];
-        // iterate through first row to ascertain width
-        while ((c == '0' || c == '1') && c != '/') { k++; c = texCode[k]; }
-        
-        // terminate if row ended incorrectly
-        if (c != '/') { tex = null; return false; }
-        // ...or if code isn't 'rectangular'
-        pixelWidth = k;
-        pixelHeight = (texCode.Length + 1) / (pixelWidth + 1);
+        int pixelWidth, pixelHeight;
+        Color[] texCols; // colour pixel value output will go here
 
-        if ((texCode.Length + 1) % (pixelWidth + 1) != 0) { tex = null; return false; }
-        //print("pixelWidth: "+pixelWidth+", pixelHeight"+pixelHeight);
+        // first, look for an 'x', which indicates a random "M x N" is intended
+        int xIndex = texCode.IndexOf('x');
+        if (!(xIndex == -1 || xIndex == texCode.Length))
+        {
+            // split into first dimension and second dimension
+            string[] splitCode = texCode.Split('x');
+            // if not 2D, >1 'x' was used, so INVALID
+            if (splitCode.Length != 2) { tex = null; return false; }
+            // otherwise, generate a symbol with dimensions M x N
+            bool dimensionParseSuccess = int.TryParse(splitCode[0], out pixelWidth);
+            dimensionParseSuccess = int.TryParse(splitCode[1], out pixelHeight) && dimensionParseSuccess;
+            // if not successfully parsed, then INVALID
+            if (!dimensionParseSuccess) { tex = null; return false; }
+            // else, we can generate!
+            print("about to run generateSpecialSymbolByDims with: " + texCode);
+            texCols = generateSpecialSymbolByDims(pixelWidth, pixelHeight);
+        }
+        else
+        {
+            int k = 0; char c = texCode[k];
+            // iterate through first row to ascertain width
+            while ((c == '0' || c == '1' || c == '*') && c != '/') { k++; c = texCode[k]; }
+            print("RUNNING 2");
+            // terminate if row ended incorrectly
+            if (c != '/') { tex = null; return false; }
+            // ...or if code isn't 'rectangular'
+            pixelWidth = k;
+            pixelHeight = (texCode.Length + 1) / (pixelWidth + 1);
+            print("RUNNING 3");
+            if ((texCode.Length + 1) % (pixelWidth + 1) != 0) { tex = null; return false; }
+            //print("pixelWidth: "+pixelWidth+", pixelHeight"+pixelHeight);
 
-        // convert to matrix coordinate form, checking each character is in {0,1}
-        char[,] texBinary = new char[pixelHeight, pixelWidth];
-        for (int i = 0; i < pixelHeight; ++i) {
-            for (int j = 0; j < pixelWidth; ++j) {
-                c = texCode[(pixelWidth+1) * i + j];
-                if (c != '0' && c != '1') { tex = null; return false; }
-                texBinary[i, j] = c;
-            }
+            print("about to run specialCodeToTextureColours with: " + texCode);
+            texCols = specialCodeToTextureColours(texCode, pixelHeight, pixelWidth);
         }
-        // string s = "texBinary: "; foreach (char x in texBinary) { s += x.ToString() + ", "; } print(s);
-        // process binary matrix into flattened colour array for SetPixels()
-        Color[] texCols = new Color[pixelWidth * pixelHeight];
-        k = 0; Color col;
-        for (int i = 0; i < pixelHeight; ++i) { for (int j = 0; j < pixelWidth; ++j) {
-                col = (texBinary[pixelHeight-1-i, j] == '0') ? Color.black : Color.white;
-                texCols[k] = col; k++;
-            }
-        }
+
+        if (texCols == null) { tex = null; return false; }
 
         Texture2D specialSymbolTex = new Texture2D(pixelWidth, pixelHeight);
         specialSymbolTex.SetPixels(0, 0, pixelWidth, pixelHeight, texCols);
@@ -161,5 +173,58 @@ public class SignPosterboard : Prefab
         // pass texture object back to 'out tex'
         tex = specialSymbolTex;
         return true;
+
+    }
+
+    Color[] specialCodeToTextureColours(string texCode, int pH, int pW) {
+        // convert to matrix coordinate form, checking each character is in {0,1}
+        char[,] texBinary = new char[pH, pW];
+        char c;
+        for (int i = 0; i < pH; ++i)
+        {
+            for (int j = 0; j < pW; ++j)
+            {
+                c = texCode[(pW + 1) * i + j];
+                if (c != '0' && c != '1' && c != '*') { return null; }
+                texBinary[i, j] = c;
+            }
+        }
+        // string s = "texBinary: "; foreach (char x in texBinary) { s += x.ToString() + ", "; } print(s);
+        // process binary matrix into flattened colour array for SetPixels()
+        Color[] texCols = new Color[pW * pH];
+        int k = 0;
+        Color col = Color.cyan;//placeholder - something wrong if Color.cyan is used!
+        for (int i = 0; i < pH; ++i)
+        {
+            for (int j = 0; j < pW; ++j)
+            {
+                switch (texBinary[pH - 1 - i, j]) {
+                    case '0':
+                        col = Color.black; break;
+                    case '1':
+                        col = Color.white; break;
+                    case '*':
+                        col = (RNG.Next(0,2) == 0) ? Color.black : Color.white;
+                        break;
+                    default: break;
+                }
+                texCols[k] = col; k++;
+            }
+        }
+
+        return texCols;
+    }
+
+    Color[] generateSpecialSymbolByDims(int pW, int pH) {
+        int k = 0;
+        Color[] texCols = new Color[pW * pH];
+
+        for (int i=0; i < pH; ++i) { for (int j = 0; j < pW; ++j) { 
+                texCols[k] = (RNG.Next(0, 2) == 0) ? Color.black : Color.white;
+                k++;
+            }
+        }
+
+        return texCols;
     }
 }
