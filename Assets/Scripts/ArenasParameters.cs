@@ -141,6 +141,13 @@ namespace ArenasParameters
             }
         }
 
+        public void AddAdditionalArenas(YAMLDefs.ArenaConfig yamlArenaConfig){
+            foreach(YAMLDefs.Arena arena in yamlArenaConfig.arenas.Values){
+                int i = configurations.Count;
+                Add(i, arena);
+            }
+        }
+
         public void UpdateWithYAML(YAMLDefs.ArenaConfig yamlArenaConfig){
             if (yamlArenaConfig.arenas.ContainsKey(-1)){
                 Debug.Log("We only have one arena key");

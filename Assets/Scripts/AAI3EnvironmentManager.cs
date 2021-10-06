@@ -76,10 +76,18 @@ public class AAI3EnvironmentManager : MonoBehaviour
             //If in editor mode load whichever config is specified in configFile field in editor
             if(configFile != ""){
                 var configYAML = Resources.Load<TextAsset>(configFile);
-                if(configYAML!=null){
+                if(configYAML!=null){//If config file
                     var YAMLReader = new YAMLDefs.YAMLReader();
                     var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(configYAML.ToString());
                     _arenasConfigurations.UpdateWithYAML(parsed);
+                }
+                else{//If directory, then load all config files in the directory.
+                    var configYAMLS = Resources.LoadAll<TextAsset>(configFile);
+                    var YAMLReader = new YAMLDefs.YAMLReader();
+                    foreach(TextAsset config in configYAMLS){
+                        var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(config.ToString());
+                        _arenasConfigurations.AddAdditionalArenas(parsed); 
+                    }
                 }
             }
         }
