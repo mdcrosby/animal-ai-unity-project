@@ -34,6 +34,8 @@ namespace ArenasParameters
         public List<Vector3> sizes = null;
         public List<Vector3> colors = null;
 
+        public List<string> symbolNames = null;
+
         public Spawnable(GameObject obj)
         {
             name = obj.name;
@@ -75,6 +77,8 @@ namespace ArenasParameters
             foreach (YAMLDefs.RGB c in yamlItem.colors){
                 colors.Add(new Vector3(c.r, c.g, c.b));
             }
+
+            symbolNames = yamlItem.symbolNames;
         }
 
     }
