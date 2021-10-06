@@ -33,8 +33,13 @@ namespace ArenasParameters
         public List<float> rotations = null;
         public List<Vector3> sizes = null;
         public List<Vector3> colors = null;
-
+        // ======== EXTRA/OPTIONAL PARAMETERS ========
+        // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
         public List<string> symbolNames = null;
+        public List<float> delays = null;
+        public List<float> initialValues = null;
+        public List<float> finalValues = null;
+        public List<float> changeRates = null;
 
         public Spawnable(GameObject obj)
         {
@@ -77,8 +82,13 @@ namespace ArenasParameters
             foreach (YAMLDefs.RGB c in yamlItem.colors){
                 colors.Add(new Vector3(c.r, c.g, c.b));
             }
-
+            // ======== EXTRA/OPTIONAL PARAMETERS ========
+            // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
             symbolNames = yamlItem.symbolNames;
+            delays = yamlItem.delays;
+            initialValues = yamlItem.initialValues;
+            finalValues = yamlItem.finalValues;
+            changeRates = yamlItem.changeRates;
         }
 
     }

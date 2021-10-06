@@ -7,7 +7,16 @@ public class DecayGoal : BallGoal
 {
     [Header("Reward Params")]
     public float initialReward;
+    public override void SetInitialValue(float v)
+    {
+        initialReward = v;
+        if (StillInInitDecayState()) reward = initialReward;
+    }
     public float finalReward;
+    public override void SetFinalValue(float v)
+    {
+        finalReward = v;
+    }
 
     [Header("Colour Params")]
     [ColorUsage(true, true)]
@@ -17,7 +26,15 @@ public class DecayGoal : BallGoal
 
     [Header("Decay Params")]
     public float decayRate = -0.001f;
+    public override void SetChangeRate(float v) { decayRate = v; CheckIfNeedToFlip(); }
+    
     public bool flipDecayDirection = false;
+    // if (negative) decay but rate is positive, or (positive) 'anti-decaying' but rate is negative, then flip the rate value provided
+    private void CheckIfNeedToFlip() {
+        if (flipDecayDirection ? decayRate < 0 : decayRate > 0) {
+            decayRate *= -1; Debug.Log("Had to flip decay rate");
+        };
+    }
 
     private Material _basemat;
     private Material _radialmat;
@@ -27,13 +44,16 @@ public class DecayGoal : BallGoal
     private float hiAlpha = 0.35f;
 
     public int fixedFrameDelay = 150; // controls extent of delay before (anti-)decay commences
+    public override void SetDelay(float v)
+    {
+        fixedFrameDelay = Mathf.RoundToInt(v);
+        delayCounter = fixedFrameDelay; // not sure if need to reset here or not
+    }
     private int delayCounter;
 
     void Awake()
     {
-        sizeMax = 5*Vector3Int.one;
-        initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
-        finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
+        Debug.Log("AWAKE BEING CALLED BY DECAYGOAL");
 
         _basemat = this.gameObject.GetComponent<MeshRenderer>().material;
         _basemat.EnableKeyword("_EMISSION");
@@ -44,21 +64,28 @@ public class DecayGoal : BallGoal
 
         canRandomizeColor = false;
         SetEpisodeEnds(false);
+        sizeMax = 5 * Vector3Int.one; sizeMin = Vector3Int.zero;
+        isDecaying = false;
+    }
 
-        // if (negative) decay but rate is positive, or (positive) 'anti-decaying' but rate is negative, then flip the rate value provided
-        if (flipDecayDirection ? decayRate < 0 : decayRate > 0) { decayRate *= -1; Debug.Log("Had to flip decay rate"); }
+    void Start()
+    {
+        Debug.Log("START BEING CALLED BY DECAYGOAL");
+        initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
+        finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
+
+        CheckIfNeedToFlip();
         delayCounter = fixedFrameDelay;
 
         this.gameObject.tag = "goodGoalMulti";
         //Debug.Log("intitialReward: "+initialReward);
         reward = initialReward;
-        sizeMax = sizeMin = (flipDecayDirection ? finalReward : initialReward) * Vector3.one;
 
         // if AntiDecayGoal but decaying, or DecayGoal but anti-decaying
         if ((flipDecayDirection && finalReward<initialReward) ||
             !flipDecayDirection && finalReward>initialReward) { finalReward = initialReward; }
         // ...constrain finalReward so it doesn't break the prefab
-        // (we don't want to allow a AntiDecayGoal to decay or vice versa because the materials don't match, hence different prefabs
+        // (we don't want to allow a AntiDecayGoal to decay or vice versa because the materials don't match, hence different prefabs)
 
         decayWidth = Mathf.Abs(initialReward - finalReward);
 
@@ -67,7 +94,7 @@ public class DecayGoal : BallGoal
 
     public override void SetSize(Vector3 size)
     {
-        base.SetSize(size);
+        base.SetSize((flipDecayDirection ? finalReward : initialReward) * Vector3.one);
     }
 
     // StartDecay()/StopDecay() functions by default do not change reward value,
@@ -78,6 +105,8 @@ public class DecayGoal : BallGoal
     // assumes linear decay (for now - @TO-DO could maybe add other decay functions?)
     void FixedUpdate()
     {
+        Debug.Log("DelayCounter is: " + delayCounter);
+
         if (StillInInitDecayState() && !isDecaying)
         {
             if (delayCounter > 0) { delayCounter--; }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -134,16 +135,31 @@ namespace ArenaBuilders
             List<float> rotations = spawnable.rotations;
             List<Vector3> sizes = spawnable.sizes;
             List<Vector3> colors = spawnable.colors;
-            // optional/extra params
+            // ======== EXTRA/OPTIONAL PARAMETERS ========
+            // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
             List<string> symbolNames = spawnable.symbolNames;
+            List<float> delays = spawnable.delays;
+            List<float> initialValues = spawnable.initialValues;
+            List<float> finalValues = spawnable.finalValues;
+            List<float> changeRates = spawnable.changeRates;
 
             int numberOfPositions = positions.Count;
             int numberOfRotations = rotations.Count;
             int numberOfSizes = sizes.Count;
             int numberOfColors = colors.Count;
-            int numberOfSymbolNames = (symbolNames!=null) ? symbolNames.Count : 0;
-            int n = Math.Max(numberOfColors, Math.Max(numberOfPositions,
-                        Math.Max(numberOfRotations, Math.Max(numberOfSizes, numberOfSymbolNames))));
+            int numberOfSymbolNames = optionalCount(symbolNames);
+            int numberOfDelays = optionalCount(delays);
+            int numberOfInitialValues = optionalCount(initialValues);
+            int numberOfFinalValues = optionalCount(finalValues);
+            int numberOfChangeRates = optionalCount(changeRates);
+
+            int n = new int[] {
+                numberOfPositions, numberOfRotations,
+                numberOfSizes, numberOfColors,
+                numberOfSymbolNames, numberOfDelays,
+                numberOfInitialValues, numberOfFinalValues,
+                numberOfChangeRates
+            }.Max();
 
             int k = 0;
             do
@@ -156,7 +172,21 @@ namespace ArenaBuilders
                 float rotation = k < numberOfRotations ? rotations[k] : -1;
                 Vector3 size = k < numberOfSizes ? sizes[k] : -Vector3.one;
                 Vector3 color = k < numberOfColors ? colors[k] : -Vector3.one;
+                // for optional parameters, use default values
+                // @TO-DO default values should be stored somewhere more obvious and global !
                 string symbolName = k < numberOfSymbolNames ? symbolNames[k] : null;
+                float delay = k < numberOfDelays ? delays[k] : 0;
+                float initialValue = k < numberOfInitialValues ? initialValues[k] : 2.5f;
+                float finalValue = k < numberOfFinalValues ? finalValues[k] : 0.5f;
+                float changeRate = k < numberOfChangeRates ? changeRates[k] : -0.005f;
+                // group together in dictionary so can pass as one argument to Spawner
+                // (means we won't have to keep updating the arguments of Spawner function
+                // each time we add to optional parameters)
+                Dictionary<string, object> optionals = new Dictionary<string, object>() {
+                    {nameof(symbolName), symbolName}, {nameof(delay), delay},
+                    {nameof(initialValue), initialValue}, {nameof(finalValue), finalValue},
+                    {nameof(changeRate), changeRate}
+                };
 
                 PositionRotation spawnPosRot = SamplePositionRotation(gameObjectInstance,
                                                                     _maxSpawnAttemptsForPrefabs,
@@ -164,10 +194,14 @@ namespace ArenaBuilders
                                                                     rotation,
                                                                     size);
 
-                SpawnGameObject(spawnable, gameObjectInstance, spawnPosRot, color, symbolName);
+                SpawnGameObject(spawnable, gameObjectInstance, spawnPosRot, color, optionals);
                 k++;
             } while (k < n);
         }
+
+        // count of parameter entries in a list
+        // used for optional YAML parameters where list could be null
+        private int optionalCount<T>(List<T> paramList) { return (paramList!=null) ? paramList.Count: 0; }
 
         private void SpawnAgent(Spawnable agentSpawnableFromUser)
         {
@@ -197,7 +231,7 @@ namespace ArenaBuilders
                                      GameObject gameObjectInstance,
                                      PositionRotation spawnLocRot,
                                      Vector3 color,
-                                     string symbolName=null)
+                                     Dictionary<string, object> optionals = null)
         {
             // Debug.Log("Spawning: " + spawnable.name);
             if (spawnLocRot != null)
@@ -211,12 +245,27 @@ namespace ArenaBuilders
                 {
                     _goodGoalsMultiSpawned.Add(gameObjectInstance.GetComponent<Goal>());
                 }
-
-                if (symbolName != null) {
-                    SignPosterboard SP = gameObjectInstance.GetComponent<SignPosterboard>();
-                    if (SP != null) {
-                        if (color!=new Vector3(-1,-1,-1)) { SP.SetColourOverride(color, true); }
-                        SP.SetSymbol(symbolName, true); // UpdatePosterboard() for color/symbol texture is called here
+                // check for optional symbol name for SignPosterboards
+                if (optionals["symbolName"] != null) {
+                    AssignSymbolName(gameObjectInstance, (string)optionals["symbolName"], color);
+                }
+                // now check all floats relating to timing of changes
+                // each float param has a list of "acceptable types" to which it applies
+                Dictionary<string, List<Type>> paramValidTypeLookup = new Dictionary<string, List<Type>> {
+                    { "delay",          new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
+                    { "initialValue",   new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "finalValue",     new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "changeRate",     new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } }
+                };
+                foreach (string paramKey in paramValidTypeLookup.Keys) {
+                    // try each valid type that we might be able to assign to
+                    if (optionals[paramKey] != null) {
+                        foreach (Type T in paramValidTypeLookup[paramKey]) {
+                            Component component = new Component();
+                            // see if gameObjectInstance has got the relevant component
+                            if (gameObjectInstance.TryGetComponent(T, out component))
+                                AssignTimingFloat(paramKey, (float)optionals[paramKey], component);
+                        }
                     }
                 }
             }
@@ -225,6 +274,26 @@ namespace ArenaBuilders
                 gameObjectInstance.SetActive(false);
                 GameObject.Destroy(gameObjectInstance);
             }
+        }
+
+        // calls SetSymbol on SignPosterboard if such a component can be found - overrides colour setting also
+        private void AssignSymbolName(GameObject gameObjectInstance, string sName, Vector3 color) {
+            SignPosterboard SP = gameObjectInstance.GetComponent<SignPosterboard>();
+            if (SP != null)
+            {
+                if (color != new Vector3(-1, -1, -1)) { SP.SetColourOverride(color, true); }
+                // assertion-cast that symbolName is string (stored as object)
+                SP.SetSymbol(sName, true); // UpdatePosterboard() for color/symbol texture is called here
+            }
+        }
+
+        // calls correct Setter method according to arg paramName and corresponding method-name
+        private void AssignTimingFloat<T>(string paramName, float value, T component) {
+            paramName = paramName[0].ToString().ToUpper() + paramName.Substring(1); // "delay" -> "Delay" and so on...
+            MethodInfo SetMethod = component.GetType().GetMethod("Set" + (paramName));
+            Debug.Log("Trying to invoke method with name: " + "Set" + (paramName));
+            Debug.Log("...for object of type " + component.GetType().ToString());
+            if (SetMethod != null) { SetMethod.Invoke(component, new object[] { value }); }
         }
 
         private PositionRotation SamplePositionRotation(GameObject gameObjectInstance,

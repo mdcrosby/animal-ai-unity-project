@@ -145,4 +145,9 @@ public class Prefab : MonoBehaviour, IPrefab
         else if (!child) { for (int i = 0; i < transform.childCount; ++i) { RescaleUVs(true, (transform.GetChild(i).gameObject)); } }
     }
 
+    public virtual void SetDelay(float v) { Debug.Log("SetDelay() activated in Prefab with value " + v.ToString()); }
+    public virtual void SetInitialValue(float v) { Debug.Log("SetInitialValue() activated in Prefab with value " + v.ToString()); }
+    public virtual void SetFinalValue(float v) { Debug.Log("SetFinalValue() activated in Prefab with value " + v.ToString()); }
+    public virtual void SetChangeRate(float v) { Debug.Log("SetChangeRate() activated in Prefab with value " + v.ToString()); }
+
 }
