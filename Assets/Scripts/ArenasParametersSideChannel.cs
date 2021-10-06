@@ -14,9 +14,8 @@ public class ArenasParametersSideChannel : SideChannel
     {
         // when a new message is received we trigger an event to signal the environment
         // configurations to check if they need to update
-
         ArenasParametersEventArgs args = new ArenasParametersEventArgs();
-        args.Proto = msg.GetRawBytes();
+        args.arenas_yaml = msg.GetRawBytes();
         OnArenasParametersReceived(args);
     }
 

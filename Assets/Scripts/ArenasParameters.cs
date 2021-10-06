@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Lights;
-using AAIOCommunicators;
 using System.Text;
 
 namespace ArenasParameters
@@ -45,27 +44,6 @@ namespace ArenasParameters
             rotations = new List<float>();
             sizes = new List<Vector3>();
             colors = new List<Vector3>();
-        }
-
-        internal Spawnable(ItemToSpawnProto proto)
-        {
-            name = proto.Name;
-            positions = new List<Vector3>();
-            foreach (VectorProto v in proto.Positions)
-            {
-                positions.Add(new Vector3(v.X, v.Y, v.Z));
-            }
-            rotations = new List<float>(proto.Rotations);
-            sizes = new List<Vector3>();
-            foreach (VectorProto v in proto.Sizes)
-            {
-                sizes.Add(new Vector3(v.X, v.Y, v.Z));
-            }
-            colors = new List<Vector3>();
-            foreach (VectorProto v in proto.Colors)
-            {
-                colors.Add(new Vector3(v.X, v.Y, v.Z));
-            }
         }
         
         internal Spawnable(YAMLDefs.Item yamlItem)
@@ -111,24 +89,6 @@ namespace ArenasParameters
             toUpdate = true;
         }
 
-        internal ArenaConfiguration(ArenaConfigurationProto proto)
-        {
-            T = proto.T;
-            spawnables = new List<Spawnable>();
-            foreach (ItemToSpawnProto item in proto.Items)
-            {
-                spawnables.Add(new Spawnable(item));
-            }
-            List<int> blackouts = new List<int>();
-            foreach (int blackout in proto.Blackouts)
-            {
-                blackouts.Add(blackout);
-            }
-            lightsSwitch = new LightsSwitch(T, blackouts);
-            toUpdate = true;
-            protoString = proto.ToString();
-        }
-
         internal ArenaConfiguration(YAMLDefs.Arena yamlArena)
         {
             T = yamlArena.t;
@@ -165,21 +125,6 @@ namespace ArenasParameters
         {
             configurations = new Dictionary<int, ArenaConfiguration>();
         }
-
-        internal void Add(int k, ArenaConfigurationProto arenaConfigurationProto)
-        {
-            if (!configurations.ContainsKey(k))
-            {
-                configurations.Add(k, new ArenaConfiguration(arenaConfigurationProto));
-            }
-            else
-            {
-                if (arenaConfigurationProto.ToString() != configurations[k].protoString)
-                {
-                    configurations[k] = new ArenaConfiguration(arenaConfigurationProto);
-                }
-            }
-        }
     
         internal void Add(int k, YAMLDefs.Arena yamlConfig)
         {
@@ -213,45 +158,11 @@ namespace ArenasParameters
 
         public void UpdateWithConfigurationsReceived(object sender, ArenasParametersEventArgs arenasParametersEvent)
         {
-            byte[] arenas = arenasParametersEvent.Proto;
-            // ArenasConfigurationsProto arenasConfigurationsProto = ArenasConfigurationsProto.Parser.ParseFrom(arenas);
-            // Debug.Log(arenasConfigurationsProto);
+            byte[] arenas = arenasParametersEvent.arenas_yaml;
             var YAMLReader = new YAMLDefs.YAMLReader();
-            // string bitString = BitConverter.ToString(arenas);
             string utfString = Encoding.UTF8.GetString(arenas, 0, arenas.Length);   
-            Debug.Log("Converted Message to bitString");
-            Debug.Log(utfString);
             var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(utfString);
             UpdateWithYAML(parsed);
-            
-            // if (arenasConfigurationsProto.Arenas.ContainsKey(-1))
-            // {
-            //     // In case we have only a single configuration for all arenas we copy this configuration
-            //     // to all arenas
-            //     Debug.Log("We only have one arena key");
-            //     for (int i = 0; i < numberOfArenas; i++)
-            //     {
-            //         Add(i, arenasConfigurationsProto.Arenas[-1]);
-            //     }
-            // }
-            // else
-            // {
-
-            //     Debug.Log("We have multiple arena keys");
-            //     foreach (KeyValuePair<int, ArenaConfigurationProto> arenaConfiguration in arenasConfigurationsProto.Arenas)
-            //     {
-            //         if (configurations.ContainsKey(arenaConfiguration.Key))
-            //         {
-            //             // we only update the arenas for which a new configuration was received
-            //             Add(arenaConfiguration.Key, arenaConfiguration.Value);
-            //         }
-            //         else
-            //         {
-            //             // need to check what to do if we don t have the key already
-            //             Add(arenaConfiguration.Key, arenaConfiguration.Value);
-            //         }
-            //     }
-            // }
         }
 
         public void SetAllToUpdated()
