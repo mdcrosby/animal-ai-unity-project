@@ -24,8 +24,7 @@ namespace AAIEvents
             this.eventObject = eventObject;
             this.description = description;
 
-            Debug.Log(string.Format("Event {0}, type {1} logged at time {2} at {3}, with object {4}, described as '{5}'",
-                        this.ID, this.eventType, this.timeStep, this.eventLocation, this.eventObject, this.description));
+            DeclareLogInstantiation();
         }
 
         public override string ToString()
@@ -39,6 +38,11 @@ namespace AAIEvents
             output = output.Remove(output.Length-2);
             output += ")";
             return output;
+        }
+
+        public void DeclareLogInstantiation() {
+            Debug.Log(string.Format("Event {0}, type {1} logged at time {2} at {3}, with object {4}, described as '{5}'",
+                        this.ID, this.eventType, this.timeStep, this.eventLocation, this.eventObject, this.description));
         }
     }
 }
