@@ -33,6 +33,10 @@ public class Item{
     public List<float> rotations { get; set;} = new List<float>();
     public List<Vector3> sizes { get; set;} = new List<Vector3>();
     public List<RGB> colors { get; set;} = new List<RGB>();
+
+    // ======== EXTRA/OPTIONAL PARAMETERS ========
+    // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+    public List<string> symbolNames { get; set; } = new List<string>();
 }
 
 //Not needed - can just use the Unity Vector3 implementation directly

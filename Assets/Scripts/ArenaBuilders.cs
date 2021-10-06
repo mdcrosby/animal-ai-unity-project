@@ -134,13 +134,16 @@ namespace ArenaBuilders
             List<float> rotations = spawnable.rotations;
             List<Vector3> sizes = spawnable.sizes;
             List<Vector3> colors = spawnable.colors;
+            // optional/extra params
+            List<string> symbolNames = spawnable.symbolNames;
 
             int numberOfPositions = positions.Count;
             int numberOfRotations = rotations.Count;
             int numberOfSizes = sizes.Count;
             int numberOfColors = colors.Count;
+            int numberOfSymbolNames = (symbolNames!=null) ? symbolNames.Count : 0;
             int n = Math.Max(numberOfColors, Math.Max(numberOfPositions,
-                        Math.Max(numberOfRotations, numberOfSizes)));
+                        Math.Max(numberOfRotations, Math.Max(numberOfSizes, numberOfSymbolNames))));
 
             int k = 0;
             do
@@ -153,6 +156,7 @@ namespace ArenaBuilders
                 float rotation = k < numberOfRotations ? rotations[k] : -1;
                 Vector3 size = k < numberOfSizes ? sizes[k] : -Vector3.one;
                 Vector3 color = k < numberOfColors ? colors[k] : -Vector3.one;
+                string symbolName = k < numberOfSymbolNames ? symbolNames[k] : null;
 
                 PositionRotation spawnPosRot = SamplePositionRotation(gameObjectInstance,
                                                                     _maxSpawnAttemptsForPrefabs,
@@ -160,7 +164,7 @@ namespace ArenaBuilders
                                                                     rotation,
                                                                     size);
 
-                SpawnGameObject(spawnable, gameObjectInstance, spawnPosRot, color);
+                SpawnGameObject(spawnable, gameObjectInstance, spawnPosRot, color, symbolName);
                 k++;
             } while (k < n);
         }
@@ -192,7 +196,8 @@ namespace ArenaBuilders
         private void SpawnGameObject(Spawnable spawnable,
                                      GameObject gameObjectInstance,
                                      PositionRotation spawnLocRot,
-                                     Vector3 color)
+                                     Vector3 color,
+                                     string symbolName=null)
         {
             // Debug.Log("Spawning: " + spawnable.name);
             if (spawnLocRot != null)
@@ -205,6 +210,14 @@ namespace ArenaBuilders
                 if (gameObjectInstance.CompareTag("goodGoalMulti") || gameObjectInstance.CompareTag("goodGoal"))
                 {
                     _goodGoalsMultiSpawned.Add(gameObjectInstance.GetComponent<Goal>());
+                }
+
+                if (symbolName != null) {
+                    SignPosterboard SP = gameObjectInstance.GetComponent<SignPosterboard>();
+                    if (SP != null) {
+                        if (color!=new Vector3(-1,-1,-1)) { SP.SetColourOverride(color, true); }
+                        SP.SetSymbol(symbolName, true); // UpdatePosterboard() for color/symbol texture is called here
+                    }
                 }
             }
             else
