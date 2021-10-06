@@ -1,8 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YamlDotNet.Serialization;
 
 namespace YAMLDefs{
+public class YAMLReader{
+    /// <summary>
+    /// A deserialiser for reading YAML files in AmimalAI Format
+    /// </summary>
+    public YamlDotNet.Serialization.IDeserializer deserializer = new DeserializerBuilder()
+                        .WithTagMapping("!ArenaConfig", typeof(YAMLDefs.ArenaConfig))
+                        .WithTagMapping("!Arena", typeof(YAMLDefs.Arena))
+                        .WithTagMapping("!Item", typeof(YAMLDefs.Item))
+                        .WithTagMapping("!Vector3", typeof(Vector3))
+                        .WithTagMapping("!RGB", typeof(YAMLDefs.RGB))
+                        .Build();
+}
+
 public class ArenaConfig{
     public IDictionary<int, Arena> arenas { get; set;}
 }
