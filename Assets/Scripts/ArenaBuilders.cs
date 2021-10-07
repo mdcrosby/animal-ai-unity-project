@@ -176,8 +176,9 @@ namespace ArenaBuilders
                 // @TO-DO default values should be stored somewhere more obvious and global !
                 string symbolName = k < numberOfSymbolNames ? symbolNames[k] : null;
                 float delay = k < numberOfDelays ? delays[k] : 0;
-                float initialValue = k < numberOfInitialValues ? initialValues[k] : 2.5f;
-                float finalValue = k < numberOfFinalValues ? finalValues[k] : 0.5f;
+                bool ripen_or_grow = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow"));
+                float initialValue = k < numberOfInitialValues ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
+                float finalValue = k < numberOfFinalValues ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
                 float changeRate = k < numberOfChangeRates ? changeRates[k] : -0.005f;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
