@@ -20,8 +20,6 @@ arenas:
       rotations: [0]
       sizes:
       - !Vector3 {x: 25, y: 3, z: 1}
-      colors:
-      - !Vector3 {x: 153, y: 153, z: 153}
     - !Item
       name: GoodGoal
       positions:
