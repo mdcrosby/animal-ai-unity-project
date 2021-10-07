@@ -74,6 +74,8 @@ public class DecayGoal : BallGoal
         initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
         finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
 
+        SetSize((flipDecayDirection ? finalReward : initialReward) * Vector3.one);
+
         CheckIfNeedToFlip();
         delayCounter = fixedFrameDelay;
 

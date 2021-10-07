@@ -19,7 +19,15 @@ arenas:
       name: DecayGoal
       positions:
       - !Vector3 {x: 20, y: 0, z: 20}
-      initialValues: [5]
-      finalValues: [4]
+      initialValues: [4]
+      finalValues: [3]
       delays: [250]
       changeRates: [-0.003]
+    - !Item
+      name: AntiDecayGoal
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 26}
+      initialValues: [1]
+      finalValues: [1.5]
+      delays: [300]
+      changeRates: [-0.007]
