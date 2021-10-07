@@ -27,6 +27,8 @@ public class TrainingArena : MonoBehaviour
     private bool _lightStatus = true;
     private int _agentDecisionInterval; // How many frames between decisions, reads from agent's decision requester
 
+    private bool _firstReset = true;
+
     internal void Awake()
     {
         _builder = new ArenaBuilder(gameObject,
@@ -50,9 +52,7 @@ public class TrainingArena : MonoBehaviour
 
         //Each time reset is called we cycle through the defined arenaIDs
         maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check once (after environmentManager is initialized).
-        Debug.Log(arenaID);
-        Debug.Log(maxarenaID);
-        if(maxarenaID > 0){
+        if(maxarenaID > 0 && !_firstReset){
             arenaID = (arenaID + 1) % maxarenaID;
         }
 
@@ -73,6 +73,7 @@ public class TrainingArena : MonoBehaviour
 
         _builder.Build();
         _arenaConfiguration.lightsSwitch.Reset();
+        _firstReset = false;
     }
 
     public void UpdateLigthStatus()
