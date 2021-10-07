@@ -53,8 +53,6 @@ public class DecayGoal : BallGoal
 
     void Awake()
     {
-        Debug.Log("AWAKE BEING CALLED BY DECAYGOAL");
-
         _basemat = this.gameObject.GetComponent<MeshRenderer>().material;
         _basemat.EnableKeyword("_EMISSION");
         _basemat.SetColor("_EmissionColor", flipDecayDirection ? finalColour : initialColour);
@@ -70,7 +68,6 @@ public class DecayGoal : BallGoal
 
     void Start()
     {
-        Debug.Log("START BEING CALLED BY DECAYGOAL");
         initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
         finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
 
@@ -107,8 +104,6 @@ public class DecayGoal : BallGoal
     // assumes linear decay (for now - @TO-DO could maybe add other decay functions?)
     void FixedUpdate()
     {
-        Debug.Log("DelayCounter is: " + delayCounter);
-
         if (StillInInitDecayState() && !isDecaying)
         {
             if (delayCounter > 0) { delayCounter--; }

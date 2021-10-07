@@ -12,9 +12,21 @@ arenas:
     - !Item
       name: SignPosterboard
       positions:
-      - !Vector3 {x: 20, y: 0, z: 14}
+      - !Vector3 {x: 20, y: 0, z: 8}
       symbolNames:
-      - "left-arrow"    
+      - "left-arrow" 
+    - !Item
+      name: ShrinkGoal
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 14}
+      sizes:
+      - !Vector3 {x: 0.1, y: 0.1, z: 0.1}
+      symbolNames:
+      - "left-arrow"
+      initialValues: [2.5]
+      finalValues: [1.5]
+      delays: [400]
+      changeRates: [-0.2]
     - !Item
       name: DecayGoal
       positions:
@@ -27,7 +39,17 @@ arenas:
       name: AntiDecayGoal
       positions:
       - !Vector3 {x: 20, y: 0, z: 26}
+      sizes:
+      - !Vector3 {x: 0.1, y: 0.1, z: 0.1}
       initialValues: [1]
       finalValues: [1.5]
       delays: [300]
       changeRates: [-0.007]
+    - !Item
+      name: GrowGoal
+      positions:
+      - !Vector3 {x: 20, y: 0, z: 32}
+      initialValues: [1]
+      finalValues: [3.5]
+      delays: [100]
+      changeRates: [0.01]
