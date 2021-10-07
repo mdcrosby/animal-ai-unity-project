@@ -142,6 +142,11 @@ namespace ArenaBuilders
             List<float> initialValues = spawnable.initialValues;
             List<float> finalValues = spawnable.finalValues;
             List<float> changeRates = spawnable.changeRates;
+            List<int> spawnCounts = spawnable.spawnCounts;
+            List<float> timesBetweenSpawns = spawnable.timesBetweenSpawns;
+            List<float> ripenTimes = spawnable.ripenTimes;
+            List<float> doorDelays = spawnable.doorDelays;
+            List<float> timesBetweenDoorOpens = spawnable.timesBetweenDoorOpens;
 
             int numberOfPositions = positions.Count;
             int numberOfRotations = rotations.Count;
@@ -152,14 +157,23 @@ namespace ArenaBuilders
             int numberOfInitialValues = optionalCount(initialValues);
             int numberOfFinalValues = optionalCount(finalValues);
             int numberOfChangeRates = optionalCount(changeRates);
+            int numberOfSpawnCounts = optionalCount(spawnCounts);
+            int numberOfTimesBetweenSpawns = optionalCount(timesBetweenSpawns);
+            int numberOfRipenTimes = optionalCount(ripenTimes);
+            int numberOfDoorDelays = optionalCount(doorDelays);
+            int numberOfTimesBetweenDoorOpens = optionalCount(timesBetweenDoorOpens);
 
-            int n = new int[] {
+
+            int[] ns = new int[] {
                 numberOfPositions, numberOfRotations,
                 numberOfSizes, numberOfColors,
                 numberOfSymbolNames, numberOfDelays,
                 numberOfInitialValues, numberOfFinalValues,
-                numberOfChangeRates
-            }.Max();
+                numberOfChangeRates, numberOfSpawnCounts,
+                numberOfTimesBetweenSpawns, numberOfRipenTimes,
+                numberOfDoorDelays, numberOfTimesBetweenDoorOpens,
+            };
+            int n = ns.Max();
 
             int k = 0;
             do
@@ -168,24 +182,32 @@ namespace ArenaBuilders
                                                                 spawnedObjectsHolder.transform,
                                                                 false);
                 gameObjectInstance.SetLayer(1);
-                Vector3 position = k < numberOfPositions ? positions[k] : -Vector3.one;
-                float rotation = k < numberOfRotations ? rotations[k] : -1;
-                Vector3 size = k < numberOfSizes ? sizes[k] : -Vector3.one;
-                Vector3 color = k < numberOfColors ? colors[k] : -Vector3.one;
+                Vector3 position = k < ns[0] ? positions[k] : -Vector3.one;
+                float rotation = k < ns[1] ? rotations[k] : -1;
+                Vector3 size = k < ns[2]? sizes[k] : -Vector3.one;
+                Vector3 color = k < ns[3] ? colors[k] : -Vector3.one;
                 // for optional parameters, use default values
                 // @TO-DO default values should be stored somewhere more obvious and global !
-                string symbolName = k < numberOfSymbolNames ? symbolNames[k] : null;
-                float delay = k < numberOfDelays ? delays[k] : 0;
-                float initialValue = k < numberOfInitialValues ? initialValues[k] : 2.5f;
-                float finalValue = k < numberOfFinalValues ? finalValues[k] : 0.5f;
-                float changeRate = k < numberOfChangeRates ? changeRates[k] : -0.005f;
+                string symbolName = k < ns[4] ? symbolNames[k] : null;
+                float delay = k < ns[5] ? delays[k] : 0;
+                bool ripen_or_grow = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow"));
+                float initialValue = k < ns[6] ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
+                float finalValue = k < ns[7] ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
+                float changeRate = k < ns[8] ? changeRates[k] : -0.005f;
+                int spawnCount = k < ns[9] ? spawnCounts[k] : -1;
+                float timeBetweenSpawns = k < ns[10] ? timesBetweenSpawns[k] : 1.5f;
+                float ripenTime = k < ns[11] ? ripenTimes[k] : 4;
+                float doorDelay = k < ns[12] ? doorDelays[k] : 10;
+                float timeBetweenDoorOpens = k < ns[13] ? timesBetweenDoorOpens[k] : 4;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
                 // each time we add to optional parameters)
                 Dictionary<string, object> optionals = new Dictionary<string, object>() {
                     {nameof(symbolName), symbolName}, {nameof(delay), delay},
                     {nameof(initialValue), initialValue}, {nameof(finalValue), finalValue},
-                    {nameof(changeRate), changeRate}
+                    {nameof(changeRate), changeRate}, {nameof(spawnCount), spawnCount},
+                    {nameof(timeBetweenSpawns), timeBetweenSpawns}, {nameof(ripenTime), ripenTime},
+                    {nameof(doorDelay), doorDelay}, {nameof(timeBetweenDoorOpens), timeBetweenDoorOpens},
                 };
 
                 PositionRotation spawnPosRot = SamplePositionRotation(gameObjectInstance,

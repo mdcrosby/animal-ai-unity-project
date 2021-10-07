@@ -53,3 +53,11 @@ arenas:
       finalValues: [3.5]
       delays: [100]
       changeRates: [0.01]
+    - !Item
+      name: SpawnerTree
+      positions:
+      - !Vector3 {x: 30, y: 0, z: 30}
+    - !Item
+      name: SpawnerDispenser
+      positions:
+      - !Vector3 {x: 30, y: 0, z: 10}

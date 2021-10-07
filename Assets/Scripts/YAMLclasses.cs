@@ -36,11 +36,16 @@ public class Item{
 
     // ======== EXTRA/OPTIONAL PARAMETERS ========
     // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
-    public List<string> symbolNames { get; set; } = new List<string>();
-    public List<float> delays { get; set; } = new List<float>();
-    public List<float> initialValues { get; set; } = new List<float>();
-    public List<float> finalValues { get; set; } = new List<float>();
-    public List<float> changeRates { get; set; } = new List<float>();
+    public List<string> symbolNames { get; set; } = new List<string>(); // SignPosterboard only
+    public List<float> delays { get; set; } = new List<float>(); // all uniques except Posterboard
+    public List<float> initialValues { get; set; } = new List<float>(); // all w/value change
+    public List<float> finalValues { get; set; } = new List<float>(); // " "
+    public List<float> changeRates { get; set; } = new List<float>(); // Decay/SizeChange
+    public List<int> spawnCounts { get; set; } = new List<int>(); // Spawners only
+    public List<float> timesBetweenSpawns { get; set; } = new List<float>(); // Spawners only
+    public List<float> ripenTimes { get; set; } = new List<float>(); // SpawnerTree only
+    public List<float> doorDelays { get; set; } = new List<float>(); // SpawnerDispenser only
+    public List<float> timesBetweenDoorOpens { get; set; } = new List<float>(); // " "
 }
 
 //Not needed - can just use the Unity Vector3 implementation directly

@@ -40,6 +40,11 @@ namespace ArenasParameters
         public List<float> initialValues = null;
         public List<float> finalValues = null;
         public List<float> changeRates = null;
+        public List<int> spawnCounts = null;
+        public List<float> timesBetweenSpawns = null;
+        public List<float> ripenTimes = null;
+        public List<float> doorDelays = null;
+        public List<float> timesBetweenDoorOpens = null;
 
         public Spawnable(GameObject obj)
         {
@@ -68,7 +73,12 @@ namespace ArenasParameters
             initialValues = yamlItem.initialValues;
             finalValues = yamlItem.finalValues;
             changeRates = yamlItem.changeRates;
-        }
+            spawnCounts = yamlItem.spawnCounts;
+            timesBetweenSpawns = yamlItem.timesBetweenSpawns;
+            ripenTimes = yamlItem.ripenTimes;
+            doorDelays = yamlItem.doorDelays;
+            timesBetweenDoorOpens = yamlItem.timesBetweenDoorOpens;
+    }
 
     }
 
