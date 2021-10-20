@@ -190,7 +190,7 @@ namespace ArenaBuilders
                 // @TO-DO default values should be stored somewhere more obvious and global !
                 string symbolName           = k < ns[4] ? symbolNames[k] : null;
                 float delay                 = k < ns[5] ? delays[k] : 0;
-                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow"));
+                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow") || spawnable.name.Contains("Tree"));
                 float initialValue          = k < ns[6] ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
                 float finalValue            = k < ns[7] ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
                 float changeRate            = k < ns[8] ? changeRates[k] : -0.005f;
@@ -198,7 +198,7 @@ namespace ArenaBuilders
                 float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : 1.5f;
                 float ripenTime             = k < ns[11]? ripenTimes[k] : 4;
                 float doorDelay             = k < ns[12]? doorDelays[k] : 10;
-                float timeBetweenDoorOpens  = k < ns[13]? timesBetweenDoorOpens[k] : 4;
+                float timeBetweenDoorOpens  = k < ns[13]? timesBetweenDoorOpens[k] : -1;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
                 // each time we add to optional parameters)
@@ -281,14 +281,14 @@ namespace ArenaBuilders
                 Dictionary<string, List<Type>> paramValidTypeLookup = new Dictionary<string, List<Type>> {
 
                     { "delay",                  new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
-                    { "initialValue",           new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
-                    { "finalValue",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
-                    { "changeRate",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "initialValue",           new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
+                    { "finalValue",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
+                    { "changeRate",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal)} },
                     { "spawnCount",             new List<Type> { typeof(GoalSpawner)} },
                     { "timeBetweenSpawns",      new List<Type> { typeof(GoalSpawner)} },
                     { "ripenTime",              new List<Type> { typeof(GoalSpawner)} }, // TreeSpawners only!
-                    { "doorDelay",              new List<Type> { typeof(GoalSpawner)} },
-                    { "timeBetweenDoorOpens",   new List<Type> { typeof(SpawnerStockpiler)} }
+                    { "doorDelay",              new List<Type> { typeof(SpawnerStockpiler)} }, // Dispensers/Containers only!
+                    { "timeBetweenDoorOpens",   new List<Type> { typeof(SpawnerStockpiler)} },  // Dispensers/Containers only!
                 };
                 float v;
                 foreach (string paramKey in paramValidTypeLookup.Keys) {
@@ -299,8 +299,8 @@ namespace ArenaBuilders
                             // see if gameObjectInstance has got the relevant component
                             if (gameObjectInstance.TryGetComponent(U, out component))
                             {
-                                Debug.Log(paramKey + ", " + optionals[paramKey] + ", " + component.ToString());
-                                Debug.Log(optionals[paramKey].GetType());
+                                //Debug.Log(paramKey + ", " + optionals[paramKey] + ", " + component.ToString());
+                                //Debug.Log(optionals[paramKey].GetType());
                                 v = Convert.ToSingle(optionals[paramKey]); 
                                 AssignTimingNumber(paramKey, v, component);
                             }
@@ -330,8 +330,8 @@ namespace ArenaBuilders
         private void AssignTimingNumber<T>(string paramName, float value, T component) {
             paramName = paramName[0].ToString().ToUpper() + paramName.Substring(1); // "delay" -> "Delay" and so on...
             MethodInfo SetMethod = component.GetType().GetMethod("Set" + (paramName));
-            Debug.Log("Trying to invoke method with name: " + "Set" + (paramName));
-            Debug.Log("...for object of type " + component.GetType().ToString());
+            //Debug.Log("Trying to invoke method with name: " + "Set" + (paramName));
+            //Debug.Log("...for object of type " + component.GetType().ToString());
             if (SetMethod != null) { SetMethod.Invoke(component, new object[] { value }); }
         }
 

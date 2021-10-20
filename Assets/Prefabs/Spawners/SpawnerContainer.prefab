@@ -295,6 +295,7 @@ MonoBehaviour:
   canRandomizeColor: 0
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
+  textureUVOverride: 0
   typicalOrigin: 0
   spawnObjects:
   - {fileID: 703623700356385717, guid: efdf89976edbdaa42aee9b9c7013c916, type: 3}
@@ -315,4 +316,5 @@ MonoBehaviour:
   doorOpenDelay: 12
   infiniteDoorOpens: 1
   timeUntilDoorOpens: 5
-  timeUntilDoorCloses: 1.5
+  timeUntilDoorCloses: 0.5
+  minDoorOpenTime: 0

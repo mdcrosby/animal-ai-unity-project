@@ -5,14 +5,18 @@ using UnityEngine;
 
 public class SpawnerStockpiler : GoalSpawner
 {
-    public bool stockpiling = true; // for inheriting class later on...
+    public override void SetInitialValue(float v) { base.SetInitialValue(Mathf.Min(v, 1f)); }
+    public override void SetFinalValue(float v) { base.SetFinalValue(Mathf.Min(v, 1f)); }
+    public bool stockpiling = true;
     public int doorOpenDelay = -1; // assuming not using
     public override void SetDoorDelay(float v) {doorOpenDelay = (int)v; }
     public bool infiniteDoorOpens = false; // assuming not using
     public float timeUntilDoorOpens = 1.5f;
     public float timeUntilDoorCloses = 1.5f;
     public override void SetTimeBetweenDoorOpens(float v) {
-        // first check is actually above minimum door open time
+        // first, check if set to -1 (or < 0); this means "open indefinitely"
+        if (v < 0) { infiniteDoorOpens = false; return; }
+        // secondly, check is actually above minimum door open time
         if (v < minDoorOpenTime) { Debug.Log(
                 "Invalid TimeBetweenDoorOpens (value "+v+" too small)."+
                 "Clamping at minimum door-open time: "+minDoorOpenTime);
@@ -24,7 +28,7 @@ public class SpawnerStockpiler : GoalSpawner
         // (i.e. subtract 'open -> closed' door change time)
         timeUntilDoorOpens = v - timeUntilDoorCloses;
     }
-    private float minDoorOpenTime = 1.4f;
+    public float minDoorOpenTime = 1.4f;
 
     private Queue<BallGoal> waitingList; // for spawned goals waiting to materialise
     private GameObject Door;

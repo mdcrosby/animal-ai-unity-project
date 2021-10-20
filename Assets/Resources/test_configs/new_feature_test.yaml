@@ -57,11 +57,20 @@ arenas:
       name: SpawnerTree
       positions:
       - !Vector3 {x: 30, y: 0, z: 30}
+      ripenTimes: [3]
+      timesBetweenSpawns: [0.5]
+      spawnCounts: [50]
+      finalValues: [2]
     - !Item
       name: SpawnerDispenser
       positions:
       - !Vector3 {x: 30, y: 0, z: 10}
+      spawnCounts: [-1]
+      timesBetweenDoorOpens: [-1]
     - !Item
       name: SpawnerContainer
       positions:
       - !Vector3 {x: 30, y: 0, z: 20}
+      spawnCounts: [1]
+      doorDelays: [20]
+      timesBetweenDoorOpens: [1]

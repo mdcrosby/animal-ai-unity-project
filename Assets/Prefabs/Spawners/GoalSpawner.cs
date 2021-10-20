@@ -9,7 +9,9 @@ public class GoalSpawner : Prefab
     [Header("Spawning Params")]
     public BallGoal[] spawnObjects;
     public float initialSpawnSize;
+    public override void SetInitialValue(float v) { initialSpawnSize = v; }
     public float ripenedSpawnSize;
+    public override void SetFinalValue(float v) { ripenedSpawnSize = v; }
     public bool variableSize;
     public bool variableSpawnPosition;
     public float sphericalSpawnRadius;
