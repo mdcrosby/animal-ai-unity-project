@@ -42,7 +42,7 @@ public class Prefab : MonoBehaviour, IPrefab
             }
             foreach (Renderer r in GetComponentsInChildren<Renderer>())
             {
-                r.material.color = newColor;
+                if (r.material.GetFloat("_Surface")!=1/*=Transparent*/) r.material.color = newColor;
             }
         }
     }
