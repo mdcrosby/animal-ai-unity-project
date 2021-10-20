@@ -61,3 +61,7 @@ arenas:
       name: SpawnerDispenser
       positions:
       - !Vector3 {x: 30, y: 0, z: 10}
+    - !Item
+      name: SpawnerContainer
+      positions:
+      - !Vector3 {x: 30, y: 0, z: 20}

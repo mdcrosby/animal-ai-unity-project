@@ -7,9 +7,23 @@ public class SpawnerStockpiler : GoalSpawner
 {
     public bool stockpiling = true; // for inheriting class later on...
     public int doorOpenDelay = -1; // assuming not using
+    public override void SetDoorDelay(float v) {doorOpenDelay = (int)v; }
     public bool infiniteDoorOpens = false; // assuming not using
-    public float timeUntilDoorOpens = 1.5f; // assuming not using
-    public float timeUntilDoorCloses = 1.5f; // assuming not using
+    public float timeUntilDoorOpens = 1.5f;
+    public float timeUntilDoorCloses = 1.5f;
+    public override void SetTimeBetweenDoorOpens(float v) {
+        // first check is actually above minimum door open time
+        if (v < minDoorOpenTime) { Debug.Log(
+                "Invalid TimeBetweenDoorOpens (value "+v+" too small)."+
+                "Clamping at minimum door-open time: "+minDoorOpenTime);
+            v = minDoorOpenTime;
+        }
+        // if smaller than the door-close time, then change door-close time
+        if (v < timeUntilDoorCloses) { timeUntilDoorCloses = v; }
+        // 'closed -> open' door change time is remainder
+        // (i.e. subtract 'open -> closed' door change time)
+        timeUntilDoorOpens = v - timeUntilDoorCloses;
+    }
     private float minDoorOpenTime = 1.4f;
 
     private Queue<BallGoal> waitingList; // for spawned goals waiting to materialise

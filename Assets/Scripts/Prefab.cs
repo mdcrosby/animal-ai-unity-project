@@ -5,6 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 // using UnityEngineExtensions;
 using PrefabInterface;
+using System.Reflection;
 
 
 /// <summary>
@@ -145,9 +146,17 @@ public class Prefab : MonoBehaviour, IPrefab
         else if (!child) { for (int i = 0; i < transform.childCount; ++i) { RescaleUVs(true, (transform.GetChild(i).gameObject)); } }
     }
 
-    public virtual void SetDelay(float v) { Debug.Log("SetDelay() activated in Prefab with value " + v.ToString()); }
-    public virtual void SetInitialValue(float v) { Debug.Log("SetInitialValue() activated in Prefab with value " + v.ToString()); }
-    public virtual void SetFinalValue(float v) { Debug.Log("SetFinalValue() activated in Prefab with value " + v.ToString()); }
-    public virtual void SetChangeRate(float v) { Debug.Log("SetChangeRate() activated in Prefab with value " + v.ToString()); }
+    private void SetOptionalFloatAbstract(float v, MethodBase method) {
+        Debug.Log(method.ToString() + " activated in Prefab with value " + v.ToString());
+    }
+    public virtual void SetDelay(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetInitialValue(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetFinalValue(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetChangeRate(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetSpawnCount(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetTimeBetweenSpawns(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetRipenTime(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetDoorDelay(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    public virtual void SetTimeBetweenDoorOpens(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
 
 }

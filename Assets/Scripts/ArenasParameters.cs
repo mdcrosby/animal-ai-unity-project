@@ -58,26 +58,26 @@ namespace ArenasParameters
         
         internal Spawnable(YAMLDefs.Item yamlItem)
         {
-            name = yamlItem.name;
-            positions = yamlItem.positions;
-            rotations = yamlItem.rotations;
-            sizes = yamlItem.sizes;
+            name                    = yamlItem.name;
+            positions               = yamlItem.positions;
+            rotations               = yamlItem.rotations;
+            sizes                   = yamlItem.sizes;
             colors = new List<Vector3>();
             foreach (YAMLDefs.RGB c in yamlItem.colors){
                 colors.Add(new Vector3(c.r, c.g, c.b));
             }
             // ======== EXTRA/OPTIONAL PARAMETERS ========
             // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
-            symbolNames = yamlItem.symbolNames;
-            delays = yamlItem.delays;
-            initialValues = yamlItem.initialValues;
-            finalValues = yamlItem.finalValues;
-            changeRates = yamlItem.changeRates;
-            spawnCounts = yamlItem.spawnCounts;
-            timesBetweenSpawns = yamlItem.timesBetweenSpawns;
-            ripenTimes = yamlItem.ripenTimes;
-            doorDelays = yamlItem.doorDelays;
-            timesBetweenDoorOpens = yamlItem.timesBetweenDoorOpens;
+            symbolNames             = yamlItem.symbolNames;
+            delays                  = yamlItem.delays;
+            initialValues           = yamlItem.initialValues;
+            finalValues             = yamlItem.finalValues;
+            changeRates             = yamlItem.changeRates;
+            spawnCounts             = yamlItem.spawnCounts;
+            timesBetweenSpawns      = yamlItem.timesBetweenSpawns;
+            ripenTimes              = yamlItem.ripenTimes;
+            doorDelays              = yamlItem.doorDelays;
+            timesBetweenDoorOpens   = yamlItem.timesBetweenDoorOpens;
     }
 
     }

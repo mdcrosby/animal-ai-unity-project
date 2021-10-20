@@ -15,9 +15,13 @@ public class GoalSpawner : Prefab
     public float sphericalSpawnRadius;
     public Vector3 defaultSpawnPosition;
     public float timeToRipen; // in seconds
+    public override void SetRipenTime(float v) {timeToRipen = v; }
     public float timeBetweenSpawns; // also in seconds
+    public override void SetTimeBetweenSpawns(float v) { timeBetweenSpawns = v; }
     public float delaySeconds;
+    public override void SetDelay(float v) { delaySeconds = (int)v; }
     public int spawnCount; // total number spawner can spawn; -1 if infinite
+    public override void SetSpawnCount(float v) { spawnCount = (int)v; }
 
     [ColorUsage(true, true)]
     public Color colourOverride;

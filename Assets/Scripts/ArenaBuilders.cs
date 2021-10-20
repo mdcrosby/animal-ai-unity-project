@@ -182,32 +182,37 @@ namespace ArenaBuilders
                                                                 spawnedObjectsHolder.transform,
                                                                 false);
                 gameObjectInstance.SetLayer(1);
-                Vector3 position = k < ns[0] ? positions[k] : -Vector3.one;
-                float rotation = k < ns[1] ? rotations[k] : -1;
-                Vector3 size = k < ns[2]? sizes[k] : -Vector3.one;
-                Vector3 color = k < ns[3] ? colors[k] : -Vector3.one;
+                Vector3 position            = k < ns[0] ? positions[k] : -Vector3.one;
+                float rotation              = k < ns[1] ? rotations[k] : -1;
+                Vector3 size                = k < ns[2] ? sizes[k] : -Vector3.one;
+                Vector3 color               = k < ns[3] ? colors[k] : -Vector3.one;
                 // for optional parameters, use default values
                 // @TO-DO default values should be stored somewhere more obvious and global !
-                string symbolName = k < ns[4] ? symbolNames[k] : null;
-                float delay = k < ns[5] ? delays[k] : 0;
-                bool ripen_or_grow = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow"));
-                float initialValue = k < ns[6] ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
-                float finalValue = k < ns[7] ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
-                float changeRate = k < ns[8] ? changeRates[k] : -0.005f;
-                int spawnCount = k < ns[9] ? spawnCounts[k] : -1;
-                float timeBetweenSpawns = k < ns[10] ? timesBetweenSpawns[k] : 1.5f;
-                float ripenTime = k < ns[11] ? ripenTimes[k] : 4;
-                float doorDelay = k < ns[12] ? doorDelays[k] : 10;
-                float timeBetweenDoorOpens = k < ns[13] ? timesBetweenDoorOpens[k] : 4;
+                string symbolName           = k < ns[4] ? symbolNames[k] : null;
+                float delay                 = k < ns[5] ? delays[k] : 0;
+                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow"));
+                float initialValue          = k < ns[6] ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
+                float finalValue            = k < ns[7] ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
+                float changeRate            = k < ns[8] ? changeRates[k] : -0.005f;
+                int spawnCount              = k < ns[9] ? spawnCounts[k] : -1;
+                float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : 1.5f;
+                float ripenTime             = k < ns[11]? ripenTimes[k] : 4;
+                float doorDelay             = k < ns[12]? doorDelays[k] : 10;
+                float timeBetweenDoorOpens  = k < ns[13]? timesBetweenDoorOpens[k] : 4;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
                 // each time we add to optional parameters)
                 Dictionary<string, object> optionals = new Dictionary<string, object>() {
-                    {nameof(symbolName), symbolName}, {nameof(delay), delay},
-                    {nameof(initialValue), initialValue}, {nameof(finalValue), finalValue},
-                    {nameof(changeRate), changeRate}, {nameof(spawnCount), spawnCount},
-                    {nameof(timeBetweenSpawns), timeBetweenSpawns}, {nameof(ripenTime), ripenTime},
-                    {nameof(doorDelay), doorDelay}, {nameof(timeBetweenDoorOpens), timeBetweenDoorOpens},
+                    {nameof(symbolName),            symbolName},
+                    {nameof(delay),                 delay},
+                    {nameof(initialValue),          initialValue},
+                    {nameof(finalValue),            finalValue},
+                    {nameof(changeRate),            changeRate},
+                    {nameof(spawnCount),            spawnCount},
+                    {nameof(timeBetweenSpawns),     timeBetweenSpawns},
+                    {nameof(ripenTime),             ripenTime},
+                    {nameof(doorDelay),             doorDelay},
+                    {nameof(timeBetweenDoorOpens),  timeBetweenDoorOpens},
                 };
 
                 PositionRotation spawnPosRot = SamplePositionRotation(gameObjectInstance,
@@ -274,19 +279,31 @@ namespace ArenaBuilders
                 // now check all floats relating to timing of changes
                 // each float param has a list of "acceptable types" to which it applies
                 Dictionary<string, List<Type>> paramValidTypeLookup = new Dictionary<string, List<Type>> {
-                    { "delay",          new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
-                    { "initialValue",   new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
-                    { "finalValue",     new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
-                    { "changeRate",     new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } }
+
+                    { "delay",                  new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal), typeof(GoalSpawner)} },
+                    { "initialValue",           new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "finalValue",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "changeRate",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal) } },
+                    { "spawnCount",             new List<Type> { typeof(GoalSpawner)} },
+                    { "timeBetweenSpawns",      new List<Type> { typeof(GoalSpawner)} },
+                    { "ripenTime",              new List<Type> { typeof(GoalSpawner)} }, // TreeSpawners only!
+                    { "doorDelay",              new List<Type> { typeof(GoalSpawner)} },
+                    { "timeBetweenDoorOpens",   new List<Type> { typeof(SpawnerStockpiler)} }
                 };
+                float v;
                 foreach (string paramKey in paramValidTypeLookup.Keys) {
                     // try each valid type that we might be able to assign to
                     if (optionals[paramKey] != null) {
-                        foreach (Type T in paramValidTypeLookup[paramKey]) {
+                        foreach (Type U in paramValidTypeLookup[paramKey]) {
                             Component component = new Component();
                             // see if gameObjectInstance has got the relevant component
-                            if (gameObjectInstance.TryGetComponent(T, out component))
-                                AssignTimingFloat(paramKey, (float)optionals[paramKey], component);
+                            if (gameObjectInstance.TryGetComponent(U, out component))
+                            {
+                                Debug.Log(paramKey + ", " + optionals[paramKey] + ", " + component.ToString());
+                                Debug.Log(optionals[paramKey].GetType());
+                                v = Convert.ToSingle(optionals[paramKey]); 
+                                AssignTimingNumber(paramKey, v, component);
+                            }
                         }
                     }
                 }
@@ -310,7 +327,7 @@ namespace ArenaBuilders
         }
 
         // calls correct Setter method according to arg paramName and corresponding method-name
-        private void AssignTimingFloat<T>(string paramName, float value, T component) {
+        private void AssignTimingNumber<T>(string paramName, float value, T component) {
             paramName = paramName[0].ToString().ToUpper() + paramName.Substring(1); // "delay" -> "Delay" and so on...
             MethodInfo SetMethod = component.GetType().GetMethod("Set" + (paramName));
             Debug.Log("Trying to invoke method with name: " + "Set" + (paramName));
