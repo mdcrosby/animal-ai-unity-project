@@ -60,7 +60,7 @@ arenas:
       ripenTimes: [3]
       timesBetweenSpawns: [0.5]
       spawnCounts: [50]
-      finalValues: [2]
+      finalValues: [1]
     - !Item
       name: SpawnerDispenser
       positions:

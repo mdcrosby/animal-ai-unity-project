@@ -190,9 +190,10 @@ namespace ArenaBuilders
                 // @TO-DO default values should be stored somewhere more obvious and global !
                 string symbolName           = k < ns[4] ? symbolNames[k] : null;
                 float delay                 = k < ns[5] ? delays[k] : 0;
-                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow") || spawnable.name.Contains("Tree"));
-                float initialValue          = k < ns[6] ? initialValues[k] : (ripen_or_grow?0.5f:2.5f);
-                float finalValue            = k < ns[7] ? finalValues[k] : (ripen_or_grow?2.5f:0.5f);
+                bool tree_ripening          = (spawnable.name.Contains("Tree")); // for SpawnerTree only
+                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow") || tree_ripening);
+                float initialValue          = k < ns[6] ? initialValues[k] : (tree_ripening?0.2f:(ripen_or_grow?0.5f:2.5f));
+                float finalValue            = k < ns[7] ? finalValues[k] : (tree_ripening?1f:(ripen_or_grow?2.5f:0.5f));
                 float changeRate            = k < ns[8] ? changeRates[k] : -0.005f;
                 int spawnCount              = k < ns[9] ? spawnCounts[k] : -1;
                 float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : 1.5f;
