@@ -143,6 +143,7 @@ namespace ArenaBuilders
             List<float> finalValues = spawnable.finalValues;
             List<float> changeRates = spawnable.changeRates;
             List<int> spawnCounts = spawnable.spawnCounts;
+            List<Vector3> spawnColors = spawnable.spawnColors;
             List<float> timesBetweenSpawns = spawnable.timesBetweenSpawns;
             List<float> ripenTimes = spawnable.ripenTimes;
             List<float> doorDelays = spawnable.doorDelays;
@@ -158,6 +159,7 @@ namespace ArenaBuilders
             int numberOfFinalValues = optionalCount(finalValues);
             int numberOfChangeRates = optionalCount(changeRates);
             int numberOfSpawnCounts = optionalCount(spawnCounts);
+            int numberOfSpawnColors = optionalCount(spawnColors);
             int numberOfTimesBetweenSpawns = optionalCount(timesBetweenSpawns);
             int numberOfRipenTimes = optionalCount(ripenTimes);
             int numberOfDoorDelays = optionalCount(doorDelays);
@@ -165,13 +167,14 @@ namespace ArenaBuilders
 
 
             int[] ns = new int[] {
-                numberOfPositions, numberOfRotations,
-                numberOfSizes, numberOfColors,
-                numberOfSymbolNames, numberOfDelays,
-                numberOfInitialValues, numberOfFinalValues,
-                numberOfChangeRates, numberOfSpawnCounts,
-                numberOfTimesBetweenSpawns, numberOfRipenTimes,
-                numberOfDoorDelays, numberOfTimesBetweenDoorOpens,
+                numberOfPositions,      numberOfRotations,
+                numberOfSizes,          numberOfColors,
+                numberOfSymbolNames,    numberOfDelays,
+                numberOfInitialValues,  numberOfFinalValues,
+                numberOfChangeRates,    numberOfSpawnCounts,
+                numberOfSpawnColors,    numberOfTimesBetweenSpawns,
+                numberOfRipenTimes,     numberOfDoorDelays,
+                numberOfTimesBetweenDoorOpens,
             };
             int n = ns.Max();
 
@@ -190,16 +193,17 @@ namespace ArenaBuilders
                 // @TO-DO default values should be stored somewhere more obvious and global !
                 string symbolName           = k < ns[4] ? symbolNames[k] : null;
                 float delay                 = k < ns[5] ? delays[k] : 0;
-                bool tree_ripening          = (spawnable.name.Contains("Tree")); // for SpawnerTree only
-                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow") || tree_ripening);
-                float initialValue          = k < ns[6] ? initialValues[k] : (tree_ripening?0.2f:(ripen_or_grow?0.5f:2.5f));
-                float finalValue            = k < ns[7] ? finalValues[k] : (tree_ripening?1f:(ripen_or_grow?2.5f:0.5f));
+                bool tree                   = (spawnable.name.Contains("Tree")); // for SpawnerTree only
+                bool ripen_or_grow          = (spawnable.name.StartsWith("Anti") || spawnable.name.StartsWith("Grow") || tree);
+                float initialValue          = k < ns[6] ? initialValues[k] : (tree?0.2f:(ripen_or_grow?0.5f:2.5f));
+                float finalValue            = k < ns[7] ? finalValues[k] : (tree?1f:(ripen_or_grow?2.5f:0.5f));
                 float changeRate            = k < ns[8] ? changeRates[k] : -0.005f;
                 int spawnCount              = k < ns[9] ? spawnCounts[k] : -1;
-                float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : (tree_ripening?4f:1.5f);
-                float ripenTime             = k < ns[11]? ripenTimes[k] : 6f;
-                float doorDelay             = k < ns[12]? doorDelays[k] : 10f;
-                float timeBetweenDoorOpens  = k < ns[13]? timesBetweenDoorOpens[k] : -1;
+                Vector3 spawnColor          = k < ns[10]? spawnColors[k] : -Vector3.one; // special case to leave as default (HDR) spawn color
+                float timeBetweenSpawns     = k < ns[11]? timesBetweenSpawns[k] : (tree?4f:1.5f);
+                float ripenTime             = k < ns[12]? ripenTimes[k] : 6f;
+                float doorDelay             = k < ns[13]? doorDelays[k] : 10f;
+                float timeBetweenDoorOpens  = k < ns[14]? timesBetweenDoorOpens[k] : -1;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
                 // each time we add to optional parameters)
@@ -210,6 +214,7 @@ namespace ArenaBuilders
                     {nameof(finalValue),            finalValue},
                     {nameof(changeRate),            changeRate},
                     {nameof(spawnCount),            spawnCount},
+                    {nameof(spawnColor),            spawnColor},
                     {nameof(timeBetweenSpawns),     timeBetweenSpawns},
                     {nameof(ripenTime),             ripenTime},
                     {nameof(doorDelay),             doorDelay},
@@ -277,6 +282,9 @@ namespace ArenaBuilders
                 if (optionals["symbolName"] != null) {
                     AssignSymbolName(gameObjectInstance, (string)optionals["symbolName"], color);
                 }
+                if (optionals["spawnColor"] != null && gameObjectInstance.TryGetComponent(out GoalSpawner GS)) {
+                    GS.SetSpawnColor((Vector3)optionals["spawnColor"]);
+                }
                 // now check all floats relating to timing of changes
                 // each float param has a list of "acceptable types" to which it applies
                 Dictionary<string, List<Type>> paramValidTypeLookup = new Dictionary<string, List<Type>> {
@@ -287,7 +295,7 @@ namespace ArenaBuilders
                     { "changeRate",             new List<Type> { typeof(DecayGoal), typeof(SizeChangeGoal)} },
                     { "spawnCount",             new List<Type> { typeof(GoalSpawner)} },
                     { "timeBetweenSpawns",      new List<Type> { typeof(GoalSpawner)} },
-                    { "ripenTime",              new List<Type> { typeof(GoalSpawner)} }, // TreeSpawners only!
+                    { "ripenTime",              new List<Type> { typeof(GoalSpawner)} }, // TreeSpawners only! Ignored o/wise
                     { "doorDelay",              new List<Type> { typeof(SpawnerStockpiler)} }, // Dispensers/Containers only!
                     { "timeBetweenDoorOpens",   new List<Type> { typeof(SpawnerStockpiler)} },  // Dispensers/Containers only!
                 };

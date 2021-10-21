@@ -42,6 +42,7 @@ public class Item{
     public List<float> finalValues { get; set; } = new List<float>(); // " "
     public List<float> changeRates { get; set; } = new List<float>(); // Decay/SizeChange
     public List<int> spawnCounts { get; set; } = new List<int>(); // Spawners only
+    public List<RGB> spawnColors { get; set; } = new List<RGB>(); // Spawners only
     public List<float> timesBetweenSpawns { get; set; } = new List<float>(); // Spawners only
     public List<float> ripenTimes { get; set; } = new List<float>(); // SpawnerTree only
     public List<float> doorDelays { get; set; } = new List<float>(); // SpawnerDispenser only

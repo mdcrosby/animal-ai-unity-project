@@ -146,17 +146,19 @@ public class Prefab : MonoBehaviour, IPrefab
         else if (!child) { for (int i = 0; i < transform.childCount; ++i) { RescaleUVs(true, (transform.GetChild(i).gameObject)); } }
     }
 
-    private void SetOptionalFloatAbstract(float v, MethodBase method) {
+    private void SetOptAbstract<Type>(Type v, MethodBase method) {
         Debug.Log(method.ToString() + " activated in Prefab with value " + v.ToString());
     }
-    public virtual void SetDelay(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetInitialValue(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetFinalValue(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetChangeRate(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetSpawnCount(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetTimeBetweenSpawns(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetRipenTime(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetDoorDelay(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
-    public virtual void SetTimeBetweenDoorOpens(float v) { MethodBase m = MethodBase.GetCurrentMethod(); SetOptionalFloatAbstract(v, m); }
+    private MethodBase m;
+    public virtual void SetDelay(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetInitialValue(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetFinalValue(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetChangeRate(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetSpawnCount(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetTimeBetweenSpawns(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetRipenTime(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetDoorDelay(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetTimeBetweenDoorOpens(float v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
+    public virtual void SetSpawnColor(Vector3 v) { m = MethodBase.GetCurrentMethod(); SetOptAbstract(v, m); }
 
 }

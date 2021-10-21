@@ -27,6 +27,14 @@ public class GoalSpawner : Prefab
 
     [ColorUsage(true, true)]
     public Color colourOverride;
+    public override void SetSpawnColor(Vector3 v) {
+        // overwrite only if not (-1, -1, -1); this is a substitute for 'null' in the YAML configs
+        if (v != -Vector3.one) {
+            colourOverride.r = v.x / 255f;
+            colourOverride.g = v.y / 255f;
+            colourOverride.b = v.z / 255f;
+        } // HDR intensity constrained automatically at 0 from initial/default colourOverride value
+    }
     private bool willSpawnInfinite() { return spawnCount == -1; }
     private bool canStillSpawn() { return spawnCount!=0; }
 

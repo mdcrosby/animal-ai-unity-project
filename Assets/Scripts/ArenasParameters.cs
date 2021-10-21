@@ -41,6 +41,7 @@ namespace ArenasParameters
         public List<float> finalValues = null;
         public List<float> changeRates = null;
         public List<int> spawnCounts = null;
+        public List<Vector3> spawnColors = null;
         public List<float> timesBetweenSpawns = null;
         public List<float> ripenTimes = null;
         public List<float> doorDelays = null;
@@ -62,10 +63,7 @@ namespace ArenasParameters
             positions               = yamlItem.positions;
             rotations               = yamlItem.rotations;
             sizes                   = yamlItem.sizes;
-            colors = new List<Vector3>();
-            foreach (YAMLDefs.RGB c in yamlItem.colors){
-                colors.Add(new Vector3(c.r, c.g, c.b));
-            }
+            colors                  = initVec3sFromRGBs(yamlItem.colors);
             // ======== EXTRA/OPTIONAL PARAMETERS ========
             // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
             symbolNames             = yamlItem.symbolNames;
@@ -74,11 +72,20 @@ namespace ArenasParameters
             finalValues             = yamlItem.finalValues;
             changeRates             = yamlItem.changeRates;
             spawnCounts             = yamlItem.spawnCounts;
+            spawnColors             = initVec3sFromRGBs(yamlItem.spawnColors);
             timesBetweenSpawns      = yamlItem.timesBetweenSpawns;
             ripenTimes              = yamlItem.ripenTimes;
             doorDelays              = yamlItem.doorDelays;
             timesBetweenDoorOpens   = yamlItem.timesBetweenDoorOpens;
-    }
+        }
+
+        internal List<Vector3> initVec3sFromRGBs(List<YAMLDefs.RGB> yamlList) {
+            List<Vector3> cList = new List<Vector3>();
+            foreach (YAMLDefs.RGB c in yamlList) {
+                cList.Add(new Vector3(c.r, c.g, c.b));
+            }
+            return cList;
+        }
 
     }
 
