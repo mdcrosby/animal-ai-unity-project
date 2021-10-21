@@ -66,7 +66,7 @@ public class GoalSpawner : Prefab
         spawnsRandomObjects = (spawnObjects.Length>1);
         if (spawnsRandomObjects) { RNGs[(int)E.OBJECT] = new System.Random(objSpawnSeed); }
         if (variableSize) { RNGs[(int)E.SIZE] = new System.Random(spawnSizeSeed); }
-        if (variableSpawnPosition) { RNGs[(int)E.ANGLE] = new System.Random(0); }
+        if (variableSpawnPosition) { RNGs[(int)E.ANGLE] = new System.Random(1); }
 
         // by default, ignore initialSpawnSize is there is no 'ripening' phase
         if (timeToRipen <= 0) { initialSpawnSize = ripenedSpawnSize; }

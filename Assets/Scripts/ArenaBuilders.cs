@@ -196,9 +196,9 @@ namespace ArenaBuilders
                 float finalValue            = k < ns[7] ? finalValues[k] : (tree_ripening?1f:(ripen_or_grow?2.5f:0.5f));
                 float changeRate            = k < ns[8] ? changeRates[k] : -0.005f;
                 int spawnCount              = k < ns[9] ? spawnCounts[k] : -1;
-                float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : 1.5f;
-                float ripenTime             = k < ns[11]? ripenTimes[k] : 4;
-                float doorDelay             = k < ns[12]? doorDelays[k] : 10;
+                float timeBetweenSpawns     = k < ns[10]? timesBetweenSpawns[k] : (tree_ripening?4f:1.5f);
+                float ripenTime             = k < ns[11]? ripenTimes[k] : 6f;
+                float doorDelay             = k < ns[12]? doorDelays[k] : 10f;
                 float timeBetweenDoorOpens  = k < ns[13]? timesBetweenDoorOpens[k] : -1;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
