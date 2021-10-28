@@ -36,6 +36,7 @@ public class Item{
 
     // ======== EXTRA/OPTIONAL PARAMETERS ========
     // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+    public List<string> skins { get; set; } = new List<string>(); // Agent only
     public List<string> symbolNames { get; set; } = new List<string>(); // SignPosterboard only
     public List<float> delays { get; set; } = new List<float>(); // all uniques except Posterboard
     public List<float> initialValues { get; set; } = new List<float>(); // all w/value change

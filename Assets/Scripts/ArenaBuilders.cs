@@ -242,11 +242,14 @@ namespace ArenaBuilders
             Vector3 agentSize = _agent.transform.localScale;
             Vector3 position;
             float rotation;
+            string skin;
 
             position = (agentSpawnableFromUser == null || !agentSpawnableFromUser.positions.Any()) ?
                              -Vector3.one : agentSpawnableFromUser.positions[0];
             rotation = (agentSpawnableFromUser == null || !agentSpawnableFromUser.rotations.Any()) ?
                              -1 : agentSpawnableFromUser.rotations[0];
+            skin     = (agentSpawnableFromUser == null || !agentSpawnableFromUser.skins.Any()) ?
+                             "random" : agentSpawnableFromUser.skins[0];
 
             agentToSpawnPosRot = SamplePositionRotation(_agent,
                                                         _maxSpawnAttemptsForAgent,
@@ -258,6 +261,10 @@ namespace ArenaBuilders
             _agentRigidbody.velocity = Vector3.zero;
             _agent.transform.localPosition = agentToSpawnPosRot.Position;
             _agent.transform.rotation = Quaternion.Euler(agentToSpawnPosRot.Rotation);
+
+            AnimalSkinManager ASM = _agent.GetComponentInChildren<AnimalSkinManager>();
+            Debug.Log("setting AnimalSkin with ASM: " + ASM.ToString() + " and skin: " + skin);
+            ASM.SetAnimalSkin(skin);
         }
 
         private void SpawnGameObject(Spawnable spawnable,
@@ -282,6 +289,7 @@ namespace ArenaBuilders
                 if (optionals["symbolName"] != null) {
                     AssignSymbolName(gameObjectInstance, (string)optionals["symbolName"], color);
                 }
+                // check for optional spawnColor for Spawner objects
                 if (optionals["spawnColor"] != null && gameObjectInstance.TryGetComponent(out GoalSpawner GS)) {
                     GS.SetSpawnColor((Vector3)optionals["spawnColor"]);
                 }

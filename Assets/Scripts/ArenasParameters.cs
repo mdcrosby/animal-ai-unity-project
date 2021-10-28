@@ -35,6 +35,7 @@ namespace ArenasParameters
         public List<Vector3> colors = null;
         // ======== EXTRA/OPTIONAL PARAMETERS ========
         // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+        public List<string> skins = null;
         public List<string> symbolNames = null;
         public List<float> delays = null;
         public List<float> initialValues = null;
@@ -66,6 +67,7 @@ namespace ArenasParameters
             colors                  = initVec3sFromRGBs(yamlItem.colors);
             // ======== EXTRA/OPTIONAL PARAMETERS ========
             // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+            skins                   = yamlItem.skins;
             symbolNames             = yamlItem.symbolNames;
             delays                  = yamlItem.delays;
             initialValues           = yamlItem.initialValues;
