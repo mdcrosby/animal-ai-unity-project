@@ -248,6 +248,8 @@ namespace ArenaBuilders
                              -Vector3.one : agentSpawnableFromUser.positions[0];
             rotation = (agentSpawnableFromUser == null || !agentSpawnableFromUser.rotations.Any()) ?
                              -1 : agentSpawnableFromUser.rotations[0];
+            // extra check for skins because optional param is not always initialised as a List<string> in Spawnable class
+            if (agentSpawnableFromUser.skins == null) { agentSpawnableFromUser.skins = new List<string>(); }
             skin     = (agentSpawnableFromUser == null || !agentSpawnableFromUser.skins.Any()) ?
                              "random" : agentSpawnableFromUser.skins[0];
 

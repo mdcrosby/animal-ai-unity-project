@@ -315,6 +315,6 @@ MonoBehaviour:
   stockpiling: 1
   doorOpenDelay: 12
   infiniteDoorOpens: 1
-  timeUntilDoorOpens: 5
-  timeUntilDoorCloses: 0.5
-  minDoorOpenTime: 0
+  timeUntilDoorOpens: 2.5
+  timeUntilDoorCloses: 1.5
+  minDoorOpenTime: 1.4
