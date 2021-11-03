@@ -46,7 +46,7 @@ public class Item{
     public List<RGB> spawnColors { get; set; } = new List<RGB>(); // Spawners only
     public List<float> timesBetweenSpawns { get; set; } = new List<float>(); // Spawners only
     public List<float> ripenTimes { get; set; } = new List<float>(); // SpawnerTree only
-    public List<float> doorDelays { get; set; } = new List<float>(); // SpawnerDispenser only
+    public List<float> doorDelays { get; set; } = new List<float>(); // SpawnerDispenser/Container only
     public List<float> timesBetweenDoorOpens { get; set; } = new List<float>(); // " "
 }
 

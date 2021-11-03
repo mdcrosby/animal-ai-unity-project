@@ -203,7 +203,7 @@ namespace ArenaBuilders
                 float timeBetweenSpawns     = k < ns[11]? timesBetweenSpawns[k] : (tree?4f:1.5f);
                 float ripenTime             = k < ns[12]? ripenTimes[k] : 6f;
                 float doorDelay             = k < ns[13]? doorDelays[k] : 10f;
-                float timeBetweenDoorOpens  = k < ns[14]? timesBetweenDoorOpens[k] : -1;
+                float timeBetweenDoorOpens  = k < ns[14]? timesBetweenDoorOpens[k] : -1f;
                 // group together in dictionary so can pass as one argument to Spawner
                 // (means we won't have to keep updating the arguments of Spawner function
                 // each time we add to optional parameters)
