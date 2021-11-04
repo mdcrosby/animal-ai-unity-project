@@ -25,4 +25,10 @@ public class DeathZone : Goal
         return -0.15f;
     }
 
+    public override void registerNewAAIEvent(bool isExiting = false)
+    {
+        registerNewAAIEvent(EventTimeKeeper.EventType.DeathZoneEntered,
+                            "agent entered " + decloneName(name) + " so episode ended.");
+    }
+
 }

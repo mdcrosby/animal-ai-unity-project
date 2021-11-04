@@ -5,7 +5,7 @@ using static EventTimeKeeper;
 
 namespace AAIEvents
 {
-    public class AAIEvent : ScriptableObject
+    public class AAIEvent// : ScriptableObject
     {
         public int ID;
         public int timeStep;

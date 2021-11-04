@@ -66,8 +66,10 @@ public class DecayGoal : BallGoal
         isDecaying = false;
     }
 
-    void Start()
+    new void Start()
     {
+        base.Start(); // e.g.for ETK
+
         initialReward = Mathf.Clamp(initialReward, 0, sizeMax.x);
         finalReward = Mathf.Clamp(finalReward, 0, sizeMax.x);
 

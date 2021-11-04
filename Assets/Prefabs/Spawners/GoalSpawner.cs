@@ -160,7 +160,7 @@ public class GoalSpawner : Prefab
 
         newGoal.gameObject.GetComponent<Rigidbody>().useGravity = false;
         newGoal.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
+        newGoal.name = "Spawned" + newGoal.name;
         newGoal.enabled = true;
         return newGoal;
     }

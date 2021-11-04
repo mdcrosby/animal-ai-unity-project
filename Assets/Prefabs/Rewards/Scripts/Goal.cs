@@ -60,15 +60,24 @@ public class Goal : Prefab
             }
         }
     }
-
-    public virtual void registerNewAAIEvent() {
+    
+    // Facade method for registering new AAIEvent with a particular event type/description
+    // Overwrite this with a different event type and description for each object
+    public virtual void registerNewAAIEvent(bool isExiting=false) {
+        bool episodeContinues = isMulti && numberOfGoals > 1;
+        registerNewAAIEvent((episodeContinues ? EventTimeKeeper.EventType.GoalGeneric : EventTimeKeeper.EventType.EpisodeEnd),
+                            "agent collided with " + decloneName(name) + (episodeContinues ? "." : " and episode ended."));
+    }
+    public virtual void registerNewAAIEvent(EventTimeKeeper.EventType eType, string eDescription) {
 
         Debug.Log(ETK.nextID + ETK.fixedFramesElapsed);
         AAIEvent e = new AAIEvent(ETK.nextID, ETK.fixedFramesElapsed,
-            EventTimeKeeper.EventType.GoalGeneric, this.transform.position, this.name, "goal collision enter");
+            eType, transform.position, decloneName(name), eDescription);
         Debug.Log("new AAIEvent being registered: " + e);
 
         ETK.LogEvent(e);
     }
+
+    public virtual string decloneName(string name) { return (name.EndsWith("(Clone)")) ? name.Substring(0,name.Length-7) : name; }
 
 }

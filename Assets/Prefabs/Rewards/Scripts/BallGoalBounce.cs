@@ -10,7 +10,7 @@ public class BallGoalBounce : BallGoal
 
     private Rigidbody rBody;
 
-    void Start()
+    new void Start()
     {
         rBody = GetComponent<Rigidbody>();
 

@@ -63,8 +63,10 @@ public class SizeChangeGoal : BallGoal
         if (!rewardSizeTracking) { reward = rewardOverride; }
     }
 
-    void Start()
+    new void Start()
     {
+        base.Start(); // e.g.for ETK
+
         sizeMax = 8 * Vector3Int.one;
         initialSize = Mathf.Clamp(initialSize, 0, sizeMax.x);
         finalSize = Mathf.Clamp(finalSize, 0, sizeMax.x);

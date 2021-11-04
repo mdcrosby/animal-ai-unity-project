@@ -5,7 +5,7 @@ using AAIEvents;
 
 public class EventTimeKeeper : MonoBehaviour
 {
-    public enum EventType { FoodEaten, ZoneEntered, ZoneExited, DetectorEntered, DetectorExited, GoalGeneric };
+    public enum EventType { EpisodeEnd, HotZoneEntered, HotZoneExited, DeathZoneEntered, DetectorEntered, DetectorExited, GoalGeneric };
     public List<AAIEvent> events = new List<AAIEvent>();
     public int nextID = 0;
     public int fixedFramesElapsed = 0;

@@ -42,6 +42,7 @@ public class HotZone : Goal
     {
         if (collision.gameObject.CompareTag("agent"))
         {
+            registerNewAAIEvent(false);
             collision.GetComponent<TrainingAgent>().AddExtraReward(reward);
         }
     }
@@ -56,8 +57,10 @@ public class HotZone : Goal
 
     public void OnTriggerExit(Collider collision)
     {
-        // Used to contain hotZone fog stuff, but replaced with better alternative actually relevant to the active camera
-        // Leaving void here because could be useful in future: if (collision.gameObject.GetComponentInChildren<Camera>() == playerControls.getActiveCam())
+        if (collision.gameObject.CompareTag("agent"))
+        {
+            registerNewAAIEvent(true);
+        }
     }
 
     private void FixedUpdate()
@@ -70,5 +73,14 @@ public class HotZone : Goal
         insideHotZone = !this.GetComponent<BoxCollider>().Raycast(inputRay, out rHit, offset.magnitude * 1.1f);
         hotZoneFog.enabled = insideHotZone;
         this.GetComponent<Renderer>().material.SetFloat("_Cull", playerControls.cameraID==0 ? 2f : 0f);
+    }
+
+    public override void registerNewAAIEvent(bool isExiting = false)
+    {
+        if (ETK != null)
+        {
+            registerNewAAIEvent((isExiting ? EventTimeKeeper.EventType.HotZoneExited : EventTimeKeeper.EventType.HotZoneEntered),
+                                "agent " + (isExiting ? "left " : "entered ") + decloneName(name) + ".");
+        }
     }
 }
