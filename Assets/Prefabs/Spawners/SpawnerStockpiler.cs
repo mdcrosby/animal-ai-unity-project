@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class SpawnerStockpiler : GoalSpawner
 {
-    public override void SetInitialValue(float v) { base.SetInitialValue(Mathf.Min(v, 1f)); }
-    public override void SetFinalValue(float v) { base.SetFinalValue(Mathf.Min(v, 1f)); }
+    public override void SetInitialValue(float v) { base.SetInitialValue(Mathf.Max(Mathf.Min(v, 1f), 0.2f)); }
+    public override void SetFinalValue(float v) { base.SetFinalValue(Mathf.Max(Mathf.Min(v, 1f), 0.2f)); }
     public bool stockpiling = true;
     public int doorOpenDelay = -1; // assuming not using
     public override void SetDoorDelay(float v) {doorOpenDelay = (int)v; }

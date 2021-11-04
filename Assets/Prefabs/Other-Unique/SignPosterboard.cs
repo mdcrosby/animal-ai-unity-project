@@ -117,6 +117,9 @@ public class SignPosterboard : Prefab
 
     public override void SetSize(Vector3 size)
     {
+        for (int i = 0; i < 3; ++i) { // clamping to sensible size range as specified in docs
+            if (size[i] != -1) { size[i] = Mathf.Clamp((float)size[i], 0.5f, 2.5f); }
+        }
         base.SetSize((size==Vector3.one*-1) ? Vector3.one : size);
     }
 
