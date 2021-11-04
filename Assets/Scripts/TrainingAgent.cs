@@ -29,6 +29,8 @@ public class TrainingAgent : Agent, IPrefab
     private float _maxHealth = 100f;
     [HideInInspector]
     public float timeLimit = 0f;
+    private float _nextUpdateHealth = 0f;
+    private bool _nextUpdateEpisodeEnd = false;
 
     public override void Initialize()
     {
@@ -63,8 +65,23 @@ public class TrainingAgent : Agent, IPrefab
         UpdateHealth(_rewardPerStep);//Updates health and adds the reward in mlagents
     }
 
+    public void UpdateHealthNextStep(float updateAmount, bool andEndEpisode = false){
+        /// <summary>
+        /// ML-Agents doesn't guarantee behaviour if an episode ends outside of OnActionReceived
+        /// Therefore we queue any health updates to happen on the next action step.
+        /// </summary>
+        _nextUpdateHealth += updateAmount;
+        if(andEndEpisode){ _nextUpdateEpisodeEnd = true;}
+    }
+
     public void UpdateHealth(float updateAmount, bool andEndEpisode = false){
+        /// <summary>
+        /// Update the health of the agent and reset any queued updates
+        /// If health reaches 0 or the episode is queued to end then call EndEpisode().
+        /// </summary>
         health += 100 * updateAmount; //health = 100*reward
+        health += 100 * _nextUpdateHealth;
+        _nextUpdateHealth = 0;
         AddReward(updateAmount);
         _currentScore = GetCumulativeReward();
         if ( health > _maxHealth ){
@@ -75,7 +92,8 @@ public class TrainingAgent : Agent, IPrefab
             EndEpisode();
             return;
         }
-        if (andEndEpisode){
+        if (andEndEpisode || _nextUpdateEpisodeEnd){
+            _nextUpdateEpisodeEnd = false;
             EndEpisode();
         }
     }

@@ -75,7 +75,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 453cd06096fdb464f9e7abc5f703f5e5, type: 2}
+  - {fileID: 2100000, guid: 29597f4ca31f7e649891c017199e9512, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,3 +131,4 @@ MonoBehaviour:
   canRandomizeColor: 1
   ratioSize: {x: 1, y: 1, z: 1}
   sizeAdjustement: 0.999
+  textureUVOverride: 1

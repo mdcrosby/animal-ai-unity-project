@@ -5,6 +5,6 @@ namespace ArenasParameters
 
     public class ArenasParametersEventArgs : EventArgs
     {
-        public byte[] Proto { get; set; }
+        public byte[] arenas_yaml { get; set; }
     }
 }

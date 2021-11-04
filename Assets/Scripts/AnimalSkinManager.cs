@@ -24,13 +24,23 @@ public class AnimalSkinManager : MonoBehaviour
             animalDict[AnimalNames[i]] = new KeyValuePair<Mesh, Material[]>(AnimalMeshes[i], AnimalMaterials[i].array);
         }
 
+        RefreshSkin();
+    }
+
+    void RefreshSkin() {
         this.GetComponent<MeshFilter>().mesh = animalDict[AnimalNames[AnimalSkinID]].Key;
         this.GetComponent<MeshRenderer>().materials = animalDict[AnimalNames[AnimalSkinID]].Value;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void SetAnimalSkin(string skin) {
+        int id=-1; for(int x=0; x<AnimalCount; ++x) {
+            id = (skin == AnimalNames[x]) ? x : id;
+        }
+        SetAnimalSkin((id == -1) ? Random.Range(0, AnimalCount) : id);
+    }
+    void SetAnimalSkin(int skinID) {
+        if (skinID >= 0 && skinID < AnimalCount)
+        AnimalSkinID = skinID;
+        RefreshSkin();
     }
 }

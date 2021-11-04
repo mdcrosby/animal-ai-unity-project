@@ -76,12 +76,10 @@ public class ProgressBar : MonoBehaviour
         _pass_mark_proportion = HealthProportion(PassMark); Debug.Log("Pass Proportion is " + _pass_mark_proportion);
         // color-pivots are precomputed for optimisation
         // they are used in color interpolation and never changed
-        _min_pass_color_pivot = _pass_mark_proportion / 2; Debug.Log("Min->Pass Pivot is " + _min_pass_color_pivot);
-        _pass_max_color_pivot = (_pass_mark_proportion + 1) / 2; Debug.Log("Pass->Max Pivot is " + _pass_max_color_pivot);
+        _min_pass_color_pivot = _pass_mark_proportion / 2; //Debug.Log("Min->Pass Pivot is " + _min_pass_color_pivot);
+        _pass_max_color_pivot = (_pass_mark_proportion + 1) / 2; //Debug.Log("Pass->Max Pivot is " + _pass_max_color_pivot);
 
-        Debug.Log(_passMarker.transform.localPosition);
         _passMarker.anchoredPosition = new Vector2(77.5f * 2 * (_pass_mark_proportion - 0.5f), 0);
-        Debug.Log(_passMarker.transform.localPosition);
         _bar.fillAmount = HealthProportion(StartHealth);
 
         UpdateColor(_bar.fillAmount);

@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65fa6ff6f75ea1242afec42d5df52b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimalID: 2
+  AnimalSkinID: 0
   AnimalNames:
   - panda
   - pig

@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Lights;
-using AAIOCommunicators;
+using System.Text;
 
 namespace ArenasParameters
 {
     /// <summary>
-    /// The list of prefabs that can be passed as items to spawn in the various arenas instantiatec 
+    /// The list of prefabs that can be passed as items to spawn in the various arenas 
     /// </summary>
     [System.Serializable]
     public class ListOfPrefabs
@@ -33,6 +33,20 @@ namespace ArenasParameters
         public List<float> rotations = null;
         public List<Vector3> sizes = null;
         public List<Vector3> colors = null;
+        // ======== EXTRA/OPTIONAL PARAMETERS ========
+        // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+        public List<string> skins = null;
+        public List<string> symbolNames = null;
+        public List<float> delays = null;
+        public List<float> initialValues = null;
+        public List<float> finalValues = null;
+        public List<float> changeRates = null;
+        public List<int> spawnCounts = null;
+        public List<Vector3> spawnColors = null;
+        public List<float> timesBetweenSpawns = null;
+        public List<float> ripenTimes = null;
+        public List<float> doorDelays = null;
+        public List<float> timesBetweenDoorOpens = null;
 
         public Spawnable(GameObject obj)
         {
@@ -43,26 +57,36 @@ namespace ArenasParameters
             sizes = new List<Vector3>();
             colors = new List<Vector3>();
         }
-
-        internal Spawnable(ItemToSpawnProto proto)
+        
+        internal Spawnable(YAMLDefs.Item yamlItem)
         {
-            name = proto.Name;
-            positions = new List<Vector3>();
-            foreach (VectorProto v in proto.Positions)
-            {
-                positions.Add(new Vector3(v.X, v.Y, v.Z));
+            name                    = yamlItem.name;
+            positions               = yamlItem.positions;
+            rotations               = yamlItem.rotations;
+            sizes                   = yamlItem.sizes;
+            colors                  = initVec3sFromRGBs(yamlItem.colors);
+            // ======== EXTRA/OPTIONAL PARAMETERS ========
+            // use for SignPosterboard symbols, Decay/SizeChange rates, Dispenser settings, etc.
+            skins                   = yamlItem.skins;
+            symbolNames             = yamlItem.symbolNames;
+            delays                  = yamlItem.delays;
+            initialValues           = yamlItem.initialValues;
+            finalValues             = yamlItem.finalValues;
+            changeRates             = yamlItem.changeRates;
+            spawnCounts             = yamlItem.spawnCounts;
+            spawnColors             = initVec3sFromRGBs(yamlItem.spawnColors);
+            timesBetweenSpawns      = yamlItem.timesBetweenSpawns;
+            ripenTimes              = yamlItem.ripenTimes;
+            doorDelays              = yamlItem.doorDelays;
+            timesBetweenDoorOpens   = yamlItem.timesBetweenDoorOpens;
+        }
+
+        internal List<Vector3> initVec3sFromRGBs(List<YAMLDefs.RGB> yamlList) {
+            List<Vector3> cList = new List<Vector3>();
+            foreach (YAMLDefs.RGB c in yamlList) {
+                cList.Add(new Vector3(c.r, c.g, c.b));
             }
-            rotations = new List<float>(proto.Rotations);
-            sizes = new List<Vector3>();
-            foreach (VectorProto v in proto.Sizes)
-            {
-                sizes.Add(new Vector3(v.X, v.Y, v.Z));
-            }
-            colors = new List<Vector3>();
-            foreach (VectorProto v in proto.Colors)
-            {
-                colors.Add(new Vector3(v.X, v.Y, v.Z));
-            }
+            return cList;
         }
 
     }
@@ -78,7 +102,7 @@ namespace ArenasParameters
         public List<Spawnable> spawnables = new List<Spawnable>();
         public LightsSwitch lightsSwitch = new LightsSwitch();
         public bool toUpdate = false;
-        public string protoString = "";
+        public string protoString = "";// @TODO Check functionality with new yaml loaders
 
         public ArenaConfiguration()
         {
@@ -94,22 +118,18 @@ namespace ArenasParameters
             toUpdate = true;
         }
 
-        internal ArenaConfiguration(ArenaConfigurationProto proto)
+        internal ArenaConfiguration(YAMLDefs.Arena yamlArena)
         {
-            T = proto.T;
+            T = yamlArena.t;
             spawnables = new List<Spawnable>();
-            foreach (ItemToSpawnProto item in proto.Items)
+            foreach (YAMLDefs.Item item in yamlArena.items)
             {
                 spawnables.Add(new Spawnable(item));
             }
-            List<int> blackouts = new List<int>();
-            foreach (int blackout in proto.Blackouts)
-            {
-                blackouts.Add(blackout);
-            }
+            List<int> blackouts = yamlArena.blackouts;
             lightsSwitch = new LightsSwitch(T, blackouts);
             toUpdate = true;
-            protoString = proto.ToString();
+            protoString = yamlArena.ToString();//This is holdover from dodgy proto check @TODO UDPATE
         }
 
         public void SetGameObject(List<GameObject> listObj)
@@ -134,55 +154,51 @@ namespace ArenasParameters
         {
             configurations = new Dictionary<int, ArenaConfiguration>();
         }
-
-        internal void Add(int k, ArenaConfigurationProto arenaConfigurationProto)
+    
+        internal void Add(int k, YAMLDefs.Arena yamlConfig)
         {
             if (!configurations.ContainsKey(k))
             {
-                configurations.Add(k, new ArenaConfiguration(arenaConfigurationProto));
+                configurations.Add(k, new ArenaConfiguration(yamlConfig));
             }
             else
             {
-                if (arenaConfigurationProto.ToString() != configurations[k].protoString)
+                if (yamlConfig.ToString() != configurations[k].protoString)
                 {
-                    configurations[k] = new ArenaConfiguration(arenaConfigurationProto);
+                    configurations[k] = new ArenaConfiguration(yamlConfig);
+                }
+            }
+        }
+
+        public void AddAdditionalArenas(YAMLDefs.ArenaConfig yamlArenaConfig){
+            foreach(YAMLDefs.Arena arena in yamlArenaConfig.arenas.Values){
+                int i = configurations.Count;
+                Add(i, arena);
+            }
+        }
+
+        public void UpdateWithYAML(YAMLDefs.ArenaConfig yamlArenaConfig){
+            if (yamlArenaConfig.arenas.ContainsKey(-1)){
+                Debug.Log("We only have one arena key");
+                for(int i = 0; i < numberOfArenas; i++){
+                    Add(i, yamlArenaConfig.arenas[-1]);
+                }
+            }
+            else{
+                Debug.Log("We have multiple arena keys");
+                foreach (KeyValuePair<int, YAMLDefs.Arena> arenaConfiguration in yamlArenaConfig.arenas){
+                    Add(arenaConfiguration.Key, arenaConfiguration.Value);
                 }
             }
         }
 
         public void UpdateWithConfigurationsReceived(object sender, ArenasParametersEventArgs arenasParametersEvent)
         {
-            byte[] arenas = arenasParametersEvent.Proto;
-            ArenasConfigurationsProto arenasConfigurationsProto = ArenasConfigurationsProto.Parser.ParseFrom(arenas);
-
-            if (arenasConfigurationsProto.Arenas.ContainsKey(-1))
-            {
-                // In case we have only a single configuration for all arenas we copy this configuration
-                // to all arenas
-                Debug.Log("We only have one arena key");
-                for (int i = 0; i < numberOfArenas; i++)
-                {
-                    Add(i, arenasConfigurationsProto.Arenas[-1]);
-                }
-            }
-            else
-            {
-
-                Debug.Log("We have multiple arena keys");
-                foreach (KeyValuePair<int, ArenaConfigurationProto> arenaConfiguration in arenasConfigurationsProto.Arenas)
-                {
-                    if (configurations.ContainsKey(arenaConfiguration.Key))
-                    {
-                        // we only update the arenas for which a new configuration was received
-                        Add(arenaConfiguration.Key, arenaConfiguration.Value);
-                    }
-                    else
-                    {
-                        // need to check what to do if we don t have the key already
-                        Add(arenaConfiguration.Key, arenaConfiguration.Value);
-                    }
-                }
-            }
+            byte[] arenas = arenasParametersEvent.arenas_yaml;
+            var YAMLReader = new YAMLDefs.YAMLReader();
+            string utfString = Encoding.UTF8.GetString(arenas, 0, arenas.Length);   
+            var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(utfString);
+            UpdateWithYAML(parsed);
         }
 
         public void SetAllToUpdated()

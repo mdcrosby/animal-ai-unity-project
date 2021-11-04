@@ -7,13 +7,29 @@ public class SizeChangeGoal : BallGoal
 {
     [Header("Size Change Params")]
     public float initialSize = 5;
+    public override void SetInitialValue(float v)
+    {
+        initialSize = v;
+        if (delayCounter > 0) reward = initialSize;
+    }
     public float finalSize = 1;
+    public override void SetFinalValue(float v)
+    {
+        finalSize = v;
+    }
+
     private bool isShrinking;
+    private void CheckIfNeedToFlip()
+    {
+        isShrinking = (finalSize <= initialSize);
+        if (isShrinking == (sizeChangeRate >= 0)) { sizeChangeRate *= -1; }
+    }
     private bool freeToGrow = true;
-    //private Collider[] immovableColliders;
-    //private List<Tuple<GameObject,Vector3>> immoveableObstacles = new List<Tuple<GameObject, Vector3>>();
-    private bool allowSizeChanges = false;
+    
+    //private bool allowSizeChanges = false;
     public float sizeChangeRate; // can be either a constant amount, or an interpolation proportion
+    public override void SetChangeRate(float v) { sizeChangeRate = v; CheckIfNeedToFlip(); }
+
     private float sizeProportion = 0; // used only if linear interpolation
     public enum InterpolationMethod{Constant, Linear}
     public InterpolationMethod interpolationMethod;
@@ -24,6 +40,11 @@ public class SizeChangeGoal : BallGoal
 
     [Header("Grow/Shrink Timing Params")]
     public int fixedFrameDelay = 150; // controls extent of delay before size change commences
+    public override void SetDelay(float v)
+    {
+        fixedFrameDelay = Mathf.RoundToInt(v);
+        delayCounter = fixedFrameDelay; // not sure if need to reset here or not
+    }
     private int delayCounter;
     private bool finishedSizeChange = false;
 
@@ -37,12 +58,12 @@ public class SizeChangeGoal : BallGoal
     {
         // bypasses random size assignment (used e.g. by ArenaBuilder) from parent BallGoal class, fixing to initialSize if this is used
         // otherwise just changes size as usual
-        base.SetSize(((size.x < 0 || size.y < 0 || size.z < 0) ? initialSize * Vector3.one: size));
+        base.SetSize((size.x < 0 || size.y < 0 || size.z < 0 || delayCounter > 0) ? initialSize * Vector3.one: size);
         // retains original reward disconnected from size
         if (!rewardSizeTracking) { reward = rewardOverride; }
     }
 
-    void Awake()
+    void Start()
     {
         sizeMax = 8 * Vector3Int.one;
         initialSize = Mathf.Clamp(initialSize, 0, sizeMax.x);
@@ -61,10 +82,6 @@ public class SizeChangeGoal : BallGoal
 
         //if ((int)interpolationMethod > 0) { sizeProportion = (isShrinking ? 1 : 0); } // start at 1 if shrinking, 0 if growing
 
-        // get collision list script component; deactivate (halt unnecessary computation) if a shrinking goal
-        // (we only use this to check safety of goal growth)
-        //colImpTracker = this.GetComponent<CollisionImpulseTracker>();
-        //colImpTracker.enabled = !isShrinking;
     }
 
     override public void OnCollisionEnter(Collision collision)
@@ -82,7 +99,6 @@ public class SizeChangeGoal : BallGoal
         /*=== RAY COLLISIONS FOR IMMOVEABLES GO HERE ===*/
         if (!isShrinking)
         {
-
             freeToGrow = !Physics.Raycast(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Mathf.Abs(sizeChangeRate));
             //Debug.DrawLine(Vector3.zero, new Vector3(10, 10, 10), Color.green, 0.1f, false);
             //Debug.DrawRay(transform.position + new Vector3(0, transform.localScale.y/2, 0), Vector3.up, Color.green, 0.1f, true);

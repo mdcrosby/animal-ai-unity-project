@@ -20,11 +20,14 @@ public class TrainingArena : MonoBehaviour
     [HideInInspector]
     public TrainingAgent _agent;
     private ArenaBuilder _builder;
+    public ArenaBuilder Builder { get { return _builder; } }
     private ArenaConfiguration _arenaConfiguration = new ArenaConfiguration();
     private AAI3EnvironmentManager _environmentManager;
     private List<Fade> _fades = new List<Fade>();
     private bool _lightStatus = true;
     private int _agentDecisionInterval; // How many frames between decisions, reads from agent's decision requester
+
+    private bool _firstReset = true;
 
     internal void Awake()
     {
@@ -48,10 +51,8 @@ public class TrainingArena : MonoBehaviour
         }
 
         //Each time reset is called we cycle through the defined arenaIDs
-        maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check during once (after environmentManager is initialized).
-        Debug.Log(arenaID);
-        Debug.Log(maxarenaID);
-        if(maxarenaID > 0){
+        maxarenaID = _environmentManager.getMaxArenaID();// Should perform this check once (after environmentManager is initialized).
+        if(maxarenaID > 0 && !_firstReset){
             arenaID = (arenaID + 1) % maxarenaID;
         }
 
@@ -74,6 +75,7 @@ public class TrainingArena : MonoBehaviour
 
         _builder.Build();
         _arenaConfiguration.lightsSwitch.Reset();
+        _firstReset = false;
     }
 
     public void UpdateLigthStatus()

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
@@ -7,6 +8,7 @@ using Unity.MLAgents.SideChannels;
 using Unity.MLAgents.Policies;
 using ArenasParameters;
 using UnityEngineExtensions;//for arena.transform.FindChildWithTag - @TODO check necessary/good practice.
+using YamlDotNet.Serialization;
 
 /// Training scene must start automatically on launch by training process
 /// Academy must reset the scene to a valid starting point for each episode
@@ -20,6 +22,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
 {
     public GameObject arena; // A prefab for the training arena setup
     public GameObject uiCanvas;
+    public string configFile = "";
     public int maximumResolution = 512;
     public int minimumResolution = 4;
     public int defaultResolution = 84;
@@ -49,9 +52,8 @@ public class AAI3EnvironmentManager : MonoBehaviour
         
         //Get all commandline arguments and update starting parameters
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
-
         int paramValue;
-        playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
+        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
         int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
         bool useCamera = (environmentParameters.TryGetValue("useCamera", out paramValue) ? paramValue: 0) > 0;
         int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
@@ -60,9 +62,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
         int raysPerSide = environmentParameters.TryGetValue("raysPerSide", out paramValue) ? paramValue : defaultRaysPerSide;
         int rayMaxDegrees = environmentParameters.TryGetValue("rayMaxDegrees", out paramValue) ? paramValue : defaultRayMaxDegrees;
         int decisionPeriod = environmentParameters.TryGetValue("decisionPeriod", out paramValue) ? paramValue : defaultDecisionPeriod;
+        Debug.Log("Set playermode to " + playerMode);
 
-        if (Application.isEditor)//Default settings for tests in Editor @TODO replace this with custom config settings in editor window for easier testing.
+        if (Application.isEditor)//Default settings for tests in Editor
         {
+            Debug.Log("Using UnityEditor default configuration");
             numberOfArenas = 1;
             playerMode = true;
             useCamera= true;
@@ -70,6 +74,23 @@ public class AAI3EnvironmentManager : MonoBehaviour
             grayscale = false;
             useRayCasts = true;
             raysPerSide = 2;
+            //If in editor mode load whichever config is specified in configFile field in editor
+            if(configFile != ""){
+                var configYAML = Resources.Load<TextAsset>(configFile);
+                if(configYAML!=null){//If config file
+                    var YAMLReader = new YAMLDefs.YAMLReader();
+                    var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(configYAML.ToString());
+                    _arenasConfigurations.UpdateWithYAML(parsed);
+                }
+                else{//If directory, then load all config files in the directory.
+                    var configYAMLS = Resources.LoadAll<TextAsset>(configFile);
+                    var YAMLReader = new YAMLDefs.YAMLReader();
+                    foreach(TextAsset config in configYAMLS){
+                        var parsed = YAMLReader.deserializer.Deserialize<YAMLDefs.ArenaConfig>(config.ToString());
+                        _arenasConfigurations.AddAdditionalArenas(parsed); 
+                    }
+                }
+            }
         }
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
@@ -118,14 +139,14 @@ public class AAI3EnvironmentManager : MonoBehaviour
         }
 
         Debug.Log("Environment loaded with options:" + 
-            "\nPlayerMode: " + playerMode + 
-            "\nNo. Arenas: " + numberOfArenas + 
-            "\nuseCamera: " + useCamera + 
-            "\nResolution: " + resolution + 
-            "\ngrayscale: " + grayscale +
-            "\nuseRayCasts: " + useRayCasts +
-            "\nraysPerSide: " + raysPerSide +
-            "\nrayMaxDegrees: " + rayMaxDegrees            
+            "\n  PlayerMode: " + playerMode + 
+            "\n  No. Arenas: " + numberOfArenas + 
+            "\n  useCamera: " + useCamera + 
+            "\n  Resolution: " + resolution + 
+            "\n  grayscale: " + grayscale +
+            "\n  useRayCasts: " + useRayCasts +
+            "\n  raysPerSide: " + raysPerSide +
+            "\n  rayMaxDegrees: " + rayMaxDegrees            
             );
     }
 
@@ -191,7 +212,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         Dictionary<string, int> environmentParameters = new Dictionary<string, int>();
 
         string[] args = System.Environment.GetCommandLineArgs();
-        // Debug.Log("Command Line Args: " + args);
+        Debug.Log("Command Line Args: " + String.Join(" ", args));
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i])
@@ -234,7 +255,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("Environment Parameters: " + string.Join(Environment.NewLine, environmentParameters));
+        Debug.Log("Args parsed by Unity: " + string.Join(" ", environmentParameters));
         return environmentParameters;
     }
 
@@ -257,8 +278,22 @@ public class AAI3EnvironmentManager : MonoBehaviour
         }
     }
 
-    public void ResetTimeKeeper() {
-        eventTimeKeeper.GetComponent<EventTimeKeeper>().Reset();
+    public static byte[] ReadFully (Stream stream)
+    {
+        byte[] buffer = new byte[32768];
+        using (MemoryStream ms = new MemoryStream())
+        {
+            while (true)
+            {
+                int read = stream.Read (buffer, 0, buffer.Length);
+                if (read <= 0)
+                    return ms.ToArray();
+                ms.Write (buffer, 0, read);
+            }
+        }
     }
 
+	public void ResetTimeKeeper() {
+        eventTimeKeeper.GetComponent<EventTimeKeeper>().Reset();
+	}
 }
