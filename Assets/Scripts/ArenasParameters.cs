@@ -147,7 +147,6 @@ namespace ArenasParameters
     public class ArenasConfigurations
     {
         public Dictionary<int, ArenaConfiguration> configurations;
-        public int numberOfArenas = 1;
         public int seed;
 
         public ArenasConfigurations()
@@ -180,9 +179,7 @@ namespace ArenasParameters
         public void UpdateWithYAML(YAMLDefs.ArenaConfig yamlArenaConfig){
             if (yamlArenaConfig.arenas.ContainsKey(-1)){
                 Debug.Log("We only have one arena key");
-                for(int i = 0; i < numberOfArenas; i++){
-                    Add(i, yamlArenaConfig.arenas[-1]);
-                }
+                Add(0, yamlArenaConfig.arenas[-1]);
             }
             else{
                 Debug.Log("We have multiple arena keys");
