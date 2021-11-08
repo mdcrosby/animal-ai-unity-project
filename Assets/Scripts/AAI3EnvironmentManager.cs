@@ -32,7 +32,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public GameObject playerControls; //Just for camera and reset controls ...@TODO Don't think this should be a GameObject in the scene and linked there (carried over from v2.0)
 
     [HideInInspector]
-    public bool playerMode;
+    public bool playerMode = true;
 
     private ArenasConfigurations _arenasConfigurations;
     private TrainingArena[] _instantiatedArenas;
@@ -52,7 +52,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         //Get all commandline arguments and update starting parameters
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
         int paramValue;
-        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
+        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
         int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
         bool useCamera = (environmentParameters.TryGetValue("useCamera", out paramValue) ? paramValue: 0) > 0;
         int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
