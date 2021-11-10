@@ -33,10 +33,10 @@ public class AAI3EnvironmentManager : MonoBehaviour
     public GameObject eventTimeKeeper; // to reset time-keeper when starting a new run
 
     [HideInInspector]
-    public bool playerMode;
+    public bool playerMode = true;
 
     private ArenasConfigurations _arenasConfigurations;
-    private TrainingArena[] _instantiatedArenas;
+    private TrainingArena _instantiatedArena;
     private ArenasParametersSideChannel _arenasParametersSideChannel;
 
 
@@ -53,8 +53,7 @@ public class AAI3EnvironmentManager : MonoBehaviour
         //Get all commandline arguments and update starting parameters
         Dictionary<string, int> environmentParameters = RetrieveEnvironmentParameters();
         int paramValue;
-        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 0) > 0;
-        int numberOfArenas = environmentParameters.TryGetValue("numberOfArenas", out paramValue) ? paramValue : 1;
+        bool playerMode = (environmentParameters.TryGetValue("playerMode", out paramValue) ? paramValue : 1) > 0;
         bool useCamera = (environmentParameters.TryGetValue("useCamera", out paramValue) ? paramValue: 0) > 0;
         int resolution = environmentParameters.TryGetValue("resolution", out paramValue) ? paramValue : defaultResolution;
         bool grayscale = (environmentParameters.TryGetValue("grayscale", out paramValue) ? paramValue : 0) > 0;
@@ -67,7 +66,6 @@ public class AAI3EnvironmentManager : MonoBehaviour
         if (Application.isEditor)//Default settings for tests in Editor
         {
             Debug.Log("Using UnityEditor default configuration");
-            numberOfArenas = 1;
             playerMode = true;
             useCamera= true;
             resolution = 84;
@@ -94,11 +92,9 @@ public class AAI3EnvironmentManager : MonoBehaviour
         }
 
         resolution = Math.Max(minimumResolution, Math.Min(maximumResolution, resolution));
-        numberOfArenas = playerMode ? 1 : numberOfArenas;//Only ever use 1 arena in playerMode
-        _arenasConfigurations.numberOfArenas = numberOfArenas;
 
-        _instantiatedArenas = new TrainingArena[numberOfArenas];
-        InstantiateArenas(numberOfArenas);//Instantiate every new arena with agent and objects. Agents are currently deactivated until we set the sensors.
+        _instantiatedArena = new TrainingArena();
+        InstantiateArenas();//Instantiate every new arena with agent and objects. Agents are currently deactivated until we set the sensors.
         
         //Add playerControls if in play mode
         playerControls.SetActive(playerMode);
@@ -133,14 +129,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
             }
         }
 
-        //Enable all the agents now that their sensors have been set.
-        foreach (TrainingArena arena in _instantiatedArenas){
-            arena._agent.gameObject.SetActive(true);
-        }
+        //Enable the agent now that their sensors have been set.
+        _instantiatedArena._agent.gameObject.SetActive(true);
 
         Debug.Log("Environment loaded with options:" + 
             "\n  PlayerMode: " + playerMode + 
-            "\n  No. Arenas: " + numberOfArenas + 
             "\n  useCamera: " + useCamera + 
             "\n  Resolution: " + resolution + 
             "\n  grayscale: " + grayscale +
@@ -171,24 +164,11 @@ public class AAI3EnvironmentManager : MonoBehaviour
     /// We organize the arenas in a grid and position the main camera at the center, high enough
     /// to see all arenas at once.
     ///</summary>
-    private void InstantiateArenas(int numberOfArenas)
+    private void InstantiateArenas()
     {
-        Vector3 boundingBox = arena.GetBoundsWithChildren().extents;
-        float width = 2 * boundingBox.x + 5f;
-        float height = 2 * boundingBox.z + 5f;
-        int n = (int)Math.Round(Math.Sqrt(numberOfArenas));
-
-        for (int i = 0; i < numberOfArenas; i++)
-        {
-            float x = (i % n) * width;
-            float y = (i / n) * height;
-            GameObject arenaInst = Instantiate(arena, new Vector3(x, 0f, y), Quaternion.identity);
-            _instantiatedArenas[i] = arenaInst.GetComponent<TrainingArena>();
-            _instantiatedArenas[i].arenaID = i;
-        }
-
-        GameObject.FindGameObjectWithTag("MainCamera").transform.localPosition =
-            new Vector3(n * width / 2, 50 * (float)n, (float)n * height / 2);
+        GameObject arenaInst = Instantiate(arena, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        _instantiatedArena = arenaInst.GetComponent<TrainingArena>();
+        _instantiatedArena.arenaID = 0;
     }
 
     ///<summary>
