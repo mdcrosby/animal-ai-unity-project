@@ -10,8 +10,8 @@ using Unity.MLAgents.Sensors;
 /// Actions are currently discrete. 2 branches of 0,1,2, 0,1,2
 public class TrainingAgent : Agent, IPrefab
 {
-    public float speed = 30f;
-    public float rotationSpeed = 100f;
+    public float speed = 100f;
+    public float rotationSpeed = 150f;
     public float rotationAngle = 0.25f;
     [HideInInspector]
     public int numberOfGoalsCollected = 0;

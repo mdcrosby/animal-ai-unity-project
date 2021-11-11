@@ -360,6 +360,7 @@ MonoBehaviour:
   - Immovable
   - Movable
   - goodGoal
+  - goodGoalMulti
   - badGoal
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 70
