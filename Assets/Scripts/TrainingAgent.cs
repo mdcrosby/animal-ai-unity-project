@@ -10,8 +10,9 @@ using Unity.MLAgents.Sensors;
 /// Actions are currently discrete. 2 branches of 0,1,2, 0,1,2
 public class TrainingAgent : Agent, IPrefab
 {
-    public float speed = 100f;
-    public float rotationSpeed = 150f;
+    public float speed = 25f;
+    public float quickStopRatio = 0.9f;
+    public float rotationSpeed = 100f;
     public float rotationAngle = 0.25f;
     [HideInInspector]
     public int numberOfGoalsCollected = 0;
@@ -102,6 +103,7 @@ public class TrainingAgent : Agent, IPrefab
     {
         Vector3 directionToGo = Vector3.zero;
         Vector3 rotateDirection = Vector3.zero;
+        Vector3 quickStop = Vector3.zero;
 
         if (_isGrounded)
         {
@@ -112,6 +114,9 @@ public class TrainingAgent : Agent, IPrefab
                     break;
                 case 2:
                     directionToGo = transform.forward * -1f;
+                    break;
+                case 0: //Slow down faster than drag with no input
+                    _rigidBody.velocity = _rigidBody.velocity * quickStopRatio;
                     break;
             }
         }
@@ -126,7 +131,7 @@ public class TrainingAgent : Agent, IPrefab
         }
 
         transform.Rotate(rotateDirection, Time.fixedDeltaTime * rotationSpeed);
-        _rigidBody.AddForce(directionToGo * speed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        _rigidBody.AddForce(directionToGo.normalized * speed * 100f * Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut) 

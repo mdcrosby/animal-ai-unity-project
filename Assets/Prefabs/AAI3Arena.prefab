@@ -1627,7 +1627,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 54706170264663100, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: m_Drag
-      value: 5
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 1120385695744362398, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: decisionPeriod
@@ -1647,11 +1647,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7020771223157296603, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: speed
-      value: 100
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7020771223157296603, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: rotationSpeed
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8679969811055685185, guid: 4cb5c9a0a96aaf148b897c3ef63654de, type: 3}
       propertyPath: m_DetectableTags.Array.size
