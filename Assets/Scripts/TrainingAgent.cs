@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Unity.MLAgents;
@@ -32,6 +33,17 @@ public class TrainingAgent : Agent, IPrefab
     public float timeLimit = 0f;
     private float _nextUpdateHealth = 0f;
     private bool _nextUpdateEpisodeEnd = false;
+    private float _freezeDelay = 0f;
+    public float GetFreezeDelay() { return _freezeDelay; }
+    public void SetFreezeDelay(float v) {
+        _freezeDelay = Mathf.Clamp(v, 0f, v);
+        if (v != 0f) {
+            // intended for single use per-episode (at beginning)
+            Debug.Log("starting coroutine unfreezeCountdown() with wait seconds == " + GetFreezeDelay());
+            StartCoroutine(unfreezeCountdown());
+        }
+    }
+    public bool IsFrozen() { return (_freezeDelay > 0f); }
 
     public override void Initialize()
     {
@@ -41,7 +53,6 @@ public class TrainingAgent : Agent, IPrefab
         progBar = GameObject.Find("UI ProgressBar").GetComponent<ProgressBar>();
         progBar.AssignAgent(this);
         health = _maxHealth;
-
     }
 
     // Agent additionally receives local observations of length 7
@@ -60,7 +71,7 @@ public class TrainingAgent : Agent, IPrefab
         //Agent action
         int actionForward = Mathf.FloorToInt(action.DiscreteActions[0]);
         int actionRotate = Mathf.FloorToInt(action.DiscreteActions[1]);
-        MoveAgent(actionForward, actionRotate);
+        if (!IsFrozen()) { MoveAgent(actionForward, actionRotate); }
 
         //Agent health and reward update
         UpdateHealth(_rewardPerStep);//Updates health and adds the reward in mlagents
@@ -243,5 +254,13 @@ public class TrainingAgent : Agent, IPrefab
         return new Vector3(0,
                         rotationY < 0 ? Random.Range(0f, 360f) : rotationY,
                         0);
+    }
+
+
+    private IEnumerator unfreezeCountdown() {
+        yield return new WaitForSeconds(GetFreezeDelay());
+
+        Debug.Log("unfreezing!");
+        SetFreezeDelay(0f); yield return null;
     }
 }

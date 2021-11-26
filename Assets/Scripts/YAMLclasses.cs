@@ -48,6 +48,7 @@ public class Item{
     public List<float> ripenTimes { get; set; } = new List<float>(); // SpawnerTree only
     public List<float> doorDelays { get; set; } = new List<float>(); // SpawnerDispenser/Container only
     public List<float> timesBetweenDoorOpens { get; set; } = new List<float>(); // " "
+    public List<float> frozenAgentDelays { get; set; } = new List<float>(); // Agent only
 }
 
 //Not needed - can just use the Unity Vector3 implementation directly

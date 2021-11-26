@@ -243,6 +243,7 @@ namespace ArenaBuilders
             Vector3 position;
             float rotation;
             string skin;
+            float freezeDelay;
 
             position = (agentSpawnableFromUser == null || !agentSpawnableFromUser.positions.Any()) ?
                              -Vector3.one : agentSpawnableFromUser.positions[0];
@@ -254,6 +255,14 @@ namespace ArenaBuilders
             }
             skin     = (agentSpawnableFromUser == null || !agentSpawnableFromUser.skins.Any()) ?
                              "random" : agentSpawnableFromUser.skins[0];
+
+            // extra check for freeze delay for same reason as above w/skins
+            if (agentSpawnableFromUser != null && agentSpawnableFromUser.frozenAgentDelays == null)
+            {
+                agentSpawnableFromUser.frozenAgentDelays = new List<float>();
+            }
+            freezeDelay = (agentSpawnableFromUser == null || !agentSpawnableFromUser.frozenAgentDelays.Any()) ?
+                             0 : agentSpawnableFromUser.frozenAgentDelays[0];
 
             agentToSpawnPosRot = SamplePositionRotation(_agent,
                                                         _maxSpawnAttemptsForAgent,
@@ -269,6 +278,7 @@ namespace ArenaBuilders
             AnimalSkinManager ASM = _agent.GetComponentInChildren<AnimalSkinManager>();
             Debug.Log("setting AnimalSkin with ASM: " + ASM.ToString() + " and skin: " + skin);
             ASM.SetAnimalSkin(skin);
+            _agent.GetComponent<TrainingAgent>().SetFreezeDelay(freezeDelay);
         }
 
         private void SpawnGameObject(Spawnable spawnable,
