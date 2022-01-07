@@ -91,10 +91,12 @@ public class TrainingAgent : Agent, IPrefab
         /// Update the health of the agent and reset any queued updates
         /// If health reaches 0 or the episode is queued to end then call EndEpisode().
         /// </summary>
-        health += 100 * updateAmount; //health = 100*reward
-        health += 100 * _nextUpdateHealth;
-        _nextUpdateHealth = 0;
-        AddReward(updateAmount);
+        if (!IsFrozen()) {
+            health += 100 * updateAmount; //health = 100*reward
+            health += 100 * _nextUpdateHealth;
+            _nextUpdateHealth = 0;
+            AddReward(updateAmount);
+        }
         _currentScore = GetCumulativeReward();
         if ( health > _maxHealth ){
             health = _maxHealth;
