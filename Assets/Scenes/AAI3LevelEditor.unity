@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 134636523}
   m_Layer: 0
-  m_Name: CanvasContainer (1)
+  m_Name: CanvasContainer
   m_TagString: score
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,52 +304,6 @@ Transform:
   - {fileID: 1150273129}
   - {fileID: 2119619545}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1556747241
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1556747243}
-  - component: {fileID: 1556747242}
-  m_Layer: 0
-  m_Name: PlayerControls
-  m_TagString: PlayerControls
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1556747242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1556747241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26a675a361a32d14db6ae3adba6dffe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: {fileID: 0}
-  prevScore: 0
-  effectCanvas: {fileID: 0}
---- !u!4 &1556747243
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1556747241}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876735587
@@ -382,8 +336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arena: {fileID: 1540725604319108, guid: cb05c844a0de0cd4880c39b9a1aedeef, type: 3}
-  uiCanvas: {fileID: 0}
-  camController: {fileID: 0}
+  uiCanvas: {fileID: 134636522}
+  camController: {fileID: 1307649430}
   savedConfigFile: 
 --- !u!4 &1876735589
 Transform:
@@ -476,7 +430,7 @@ GameObject:
   - component: {fileID: 2025012805}
   - component: {fileID: 2025012804}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: Directional Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
