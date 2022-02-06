@@ -25,10 +25,9 @@ public class LevelEditorManager : MonoBehaviour
         // AlterX() must be called in Awake() so changes are made before first frame
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        uiCanvas.GetComponentInChildren<LE_AddObjectDropdown>().GenerateObjectDropdownList();
     }
 
     private void AlterArenaForLevelEditor()

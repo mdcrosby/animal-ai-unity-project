@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 134636523}
   m_Layer: 0
   m_Name: CanvasContainer
-  m_TagString: score
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1335,6 +1335,7 @@ GameObject:
   - component: {fileID: 1033170610}
   - component: {fileID: 1033170609}
   - component: {fileID: 1033170608}
+  - component: {fileID: 1033170611}
   m_Layer: 5
   m_Name: AddObjectDropdown
   m_TagString: Untagged
@@ -1457,6 +1458,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033170606}
   m_CullTransparentMesh: 1
+--- !u!114 &1033170611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033170606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09491c737db7ea4ca85fd10f4aca934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1071853607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1972,7 +1985,7 @@ GameObject:
   - component: {fileID: 1587495461}
   - component: {fileID: 1587495460}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2095,7 +2108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arena: {fileID: 1540725604319108, guid: cb05c844a0de0cd4880c39b9a1aedeef, type: 3}
-  uiCanvas: {fileID: 134636522}
+  uiCanvas: {fileID: 1587495458}
   camController: {fileID: 1307649430}
   savedConfigFile: 
 --- !u!4 &1876735589
