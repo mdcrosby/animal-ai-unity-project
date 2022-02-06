@@ -16,7 +16,7 @@ public class LE_CamController : MonoBehaviour
         _camera1stPerson.enabled = !usingTopDownCam();
     }
 
-    private float fwd_const = 0.05f;     // z-axis movement const
+    private float fwd_const = 0.0625f;     // z-axis movement const
     private float upd_const = 0.03125f;  // y-axis movement const
     private float rot_const = 0.5f;  // xz-plane rotate const
 
