@@ -5,6 +5,7 @@ using ArenaBuilders;
 using UnityEngineExtensions;
 using ArenasParameters;
 using Holders;
+using Random = UnityEngine.Random;
 
 public class TrainingArena : MonoBehaviour
 {
@@ -74,6 +75,11 @@ public class TrainingArena : MonoBehaviour
         _builder.Build();
         _arenaConfiguration.lightsSwitch.Reset();
         _firstReset = false;
+
+        if (_arenaConfiguration.randomSeed != 0)
+        {
+            Random.InitState(_arenaConfiguration.randomSeed);
+        }
     }
 
     public void UpdateLigthStatus()

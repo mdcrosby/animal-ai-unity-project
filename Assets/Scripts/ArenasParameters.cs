@@ -105,6 +105,7 @@ namespace ArenasParameters
         public LightsSwitch lightsSwitch = new LightsSwitch();
         public bool toUpdate = false;
         public string protoString = "";// @TODO Check functionality with new yaml loaders
+        public int randomSeed = 0;
 
         public ArenaConfiguration()
         {
@@ -132,6 +133,8 @@ namespace ArenasParameters
             lightsSwitch = new LightsSwitch(T, blackouts);
             toUpdate = true;
             protoString = yamlArena.ToString();//This is holdover from dodgy proto check @TODO UDPATE
+
+            randomSeed = yamlArena.random_seed;
         }
 
         public void SetGameObject(List<GameObject> listObj)

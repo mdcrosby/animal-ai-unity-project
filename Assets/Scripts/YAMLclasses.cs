@@ -25,6 +25,7 @@ public class Arena{
     public List<Item> items {get; set;} = new List<Item>();
     public float pass_mark {get; set;} = 0;
     public List<int> blackouts {get; set;} = new List<int>();
+    public int random_seed {get; set;} = 0;
 }
 
 public class Item{
