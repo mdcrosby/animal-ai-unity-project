@@ -1,3 +1,13 @@
+# Deprecated - New Home [Here](https://github.com/Kinds-of-Intelligence-CFI/animal-ai-unity-project).
+
+:bangbang: :no_entry: THIS REPOSITORY IS NO LONGER BEING MAINTAINED OR MONITORED. :no_entry: :bangbang:
+
+We have relocated this repository to a [new home](https://github.com/Kinds-of-Intelligence-CFI/animal-ai-unity-project). Further updates and releases will be published there. The main AnimalAI 3.0 repository is now at [https://github.com/Kinds-of-Intelligence-CFI/animal-ai](https://github.com/Kinds-of-Intelligence-CFI/animal-ai).
+
+~
+~
+
+
 # AnimalAI
 
 Animal-AI-Version3.0 Unity Project
